@@ -35,6 +35,14 @@ Based on the collected user feedback, here is our roadmap for the next phase of 
 
 Inter-contract call: When a user files a report through `clarix_registry::file_report(...)`, it automatically invokes `clarix_reward::reward(reporter_address)` to mint 10 CLRX tokens.
 
+### Smart Contract Source Code (Soroban/Rust)
+The source code for our smart contracts is available in the repository:
+- **ClarixRegistry:** [`/contracts/clarix_registry`](./contracts/clarix_registry)
+- **ClarixReward:** [`/contracts/clarix_reward`](./contracts/clarix_reward)
+- **Workspace Config:** [`/contracts/Cargo.toml`](./contracts/Cargo.toml)
+
+---
+
 ## Error Handling
 
 The application handles three types of blockchain errors natively via the UI:
