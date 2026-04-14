@@ -80,7 +80,7 @@ export function Docs() {
                   </li>
                   <li className="flex gap-2">
                     <span className="text-primary font-bold">•</span>
-                    <span><strong>AI Layer:</strong> xAI Grok Models for pattern recognition and risk assessment.</span>
+                    <span><strong>AI Layer:</strong> Google Gemini Data Models for pattern recognition and risk assessment.</span>
                   </li>
                   <li className="flex gap-2">
                     <span className="text-primary font-bold">•</span>
