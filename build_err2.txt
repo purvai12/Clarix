@@ -1,0 +1,29 @@
+
+> @figma/my-make-file@0.0.1 build
+> vite build
+
+[36mvite v6.3.5 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 2112 modules transformed.
+[31m✗[39m Build failed in 6.42s
+[31merror during build:
+[31msrc/contexts/AuthContext.tsx (6:2): "WalletNetwork" is not exported by "node_modules/.pnpm/@creit.tech+stellar-wallets_47cbe76bc647838ac61c4be37172599a/node_modules/@creit.tech/stellar-wallets-kit/esm/mod.js", imported by "src/contexts/AuthContext.tsx".[31m
+file: [36mC:/Users/Admin/Downloads/Safety wallet website/src/contexts/AuthContext.tsx:6:2[31m
+[33m
+4: import {
+5:   StellarWalletsKit,
+6:   WalletNetwork,
+     ^
+7:   ALLOWED_WALLETS,
+8: } from '@creit.tech/stellar-wallets-kit';
+[31m
+    at getRollupError (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/parseAst.js:406:41)
+    at error (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/parseAst.js:402:42)
+    at Module.error (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:17380:16)
+    at Module.traceVariable (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:17813:29)
+    at ModuleScope.findVariable (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:15403:39)
+    at MemberExpression.bind (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:7395:49)
+    at Property.bind (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:2832:23)
+    at ObjectExpression.bind (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:2828:28)
+    at NewExpression.bind (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:2828:28)
+    at VariableDeclarator.bind (file:///C:/Users/Admin/Downloads/Safety%20wallet%20website/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:2832:23)[39m

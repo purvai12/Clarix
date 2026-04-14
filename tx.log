@@ -1,0 +1,24 @@
+Generating testnet keypair...
+Public Key: GCTIEYPSCI73C4RZSU4DGXYSFKHKW6HJTGYD75VUNZDS2UMGXDJFJTQS
+Funding via Friendbot...
+Funded!
+Building transaction...
+Preparing transaction via Soroban RPC...
+Failed to prepare transaction (Contract might not be deployed or arguments invalid): HostError: Error(WasmVm, UnexpectedSize)
+
+Event log (newest first):
+   0: [Diagnostic Event] contract:CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY, topics:[error, Error(WasmVm, UnexpectedSize)], data:["VM call failed: Func(MismatchingParameterLen)", file_report]
+   1: [Diagnostic Event] topics:[fn_call, CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY, file_report], data:[GCTIEYPSCI73C4RZSU4DGXYSFKHKW6HJTGYD75VUNZDS2UMGXDJFJTQS, "test_fraud_hash_12345"]
+
+Error: HostError: Error(WasmVm, UnexpectedSize)
+
+Event log (newest first):
+   0: [Diagnostic Event] contract:CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY, topics:[error, Error(WasmVm, UnexpectedSize)], data:["VM call failed: Func(MismatchingParameterLen)", file_report]
+   1: [Diagnostic Event] topics:[fn_call, CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY, file_report], data:[GCTIEYPSCI73C4RZSU4DGXYSFKHKW6HJTGYD75VUNZDS2UMGXDJFJTQS, "test_fraud_hash_12345"]
+
+    at RpcServer.<anonymous> (C:\Users\Admin\Downloads\Safety wallet website\node_modules\.pnpm\@stellar+stellar-sdk@15.0.1\node_modules\@stellar\stellar-sdk\lib\rpc\server.js:779:21)
+    at Generator.<anonymous> (C:\Users\Admin\Downloads\Safety wallet website\node_modules\.pnpm\@stellar+stellar-sdk@15.0.1\node_modules\@stellar\stellar-sdk\lib\rpc\server.js:27:1494)
+    at Generator.next (C:\Users\Admin\Downloads\Safety wallet website\node_modules\.pnpm\@stellar+stellar-sdk@15.0.1\node_modules\@stellar\stellar-sdk\lib\rpc\server.js:28:255)
+    at asyncGeneratorStep (C:\Users\Admin\Downloads\Safety wallet website\node_modules\.pnpm\@stellar+stellar-sdk@15.0.1\node_modules\@stellar\stellar-sdk\lib\rpc\server.js:29:70)
+    at _next (C:\Users\Admin\Downloads\Safety wallet website\node_modules\.pnpm\@stellar+stellar-sdk@15.0.1\node_modules\@stellar\stellar-sdk\lib\rpc\server.js:30:163)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
