@@ -144,12 +144,6 @@ export async function chargeFeature(userAddress: string): Promise<string> {
         amount: FEATURE_FEE_XLM.toFixed(7),
       })
     )
-    .addMemo(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (TransactionBuilder as any).buildIncrement
-        ? undefined
-        : undefined
-    )
     .setTimeout(30)
     .build();
 
