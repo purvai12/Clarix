@@ -1,4 +1,4 @@
-import { Shield, Mail, Twitter, Github, Globe } from 'lucide-react';
+import { Shield, Mail, Github } from 'lucide-react';
 import { Link } from 'react-router';
 
 export function Footer() {
@@ -33,9 +33,6 @@ export function Footer() {
             <h3 className="text-sm font-robotic uppercase tracking-widest mb-4">Community</h3>
             <ul className="space-y-2">
               <li><a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Stellar Ecosystem</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Rewards Program</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Partner Program</a></li>
-              <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Status</a></li>
             </ul>
           </div>
 
@@ -43,17 +40,11 @@ export function Footer() {
           <div>
             <h3 className="text-sm font-robotic uppercase tracking-widest mb-4">Connect</h3>
             <div className="flex gap-4 mb-4">
-              <a href="#" className="p-2 bg-muted rounded-lg hover:bg-primary hover:text-primary-foreground transition-all">
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a href="#" className="p-2 bg-muted rounded-lg hover:bg-primary hover:text-primary-foreground transition-all">
+              <a href="https://github.com/purvai12" target="_blank" rel="noopener noreferrer" className="p-2 bg-muted rounded-lg hover:bg-primary hover:text-primary-foreground transition-all">
                 <Github className="w-5 h-5" />
               </a>
               <a href="mailto:support@clarix.io" className="p-2 bg-muted rounded-lg hover:bg-primary hover:text-primary-foreground transition-all">
                 <Mail className="w-5 h-5" />
-              </a>
-              <a href="#" className="p-2 bg-muted rounded-lg hover:bg-primary hover:text-primary-foreground transition-all">
-                <Globe className="w-5 h-5" />
               </a>
             </div>
             <p className="text-xs text-muted-foreground">

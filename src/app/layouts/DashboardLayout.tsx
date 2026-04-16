@@ -89,14 +89,14 @@ export function DashboardLayout() {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors whitespace-nowrap ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors whitespace-nowrap ${
                       isActive
                         ? 'bg-primary text-primary-foreground'
                         : 'hover:bg-muted text-muted-foreground'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
-                    <span className="text-sm">{item.label}</span>
+                    <Icon className="w-3.5 h-3.5" />
+                    <span className="text-xs">{item.label}</span>
                   </Link>
                 );
               })}

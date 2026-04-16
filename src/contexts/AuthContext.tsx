@@ -26,7 +26,7 @@ interface AuthContextType {
   signUp: (email: string, password: string, username: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
-  refreshProfile: () => Promise<void>;
+  refreshProfile: (userId?: string) => Promise<void>;
   refreshBalance: () => Promise<void>;
   connectWallet: () => Promise<string>;
   disconnectWallet: () => void;
@@ -51,12 +51,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [xlmBalance, setXlmBalance]     = useState<string | null>(null);
 
   // ── Profile loader ────────────────────────────────────────────────────────
-  const refreshProfile = async () => {
-    if (!user) return;
+  // Accepts an optional userId so it can be called before React state updates.
+  const refreshProfile = async (userId?: string) => {
+    const id = userId ?? user?.id;
+    if (!id) return;
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
-      .eq('id', user.id)
+      .eq('id', id)
       .single();
     if (!error && data) setProfile(data);
   };
@@ -77,18 +79,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
-      if (session?.user) refreshProfile();
+      // Pass the user id directly — React state hasn't updated yet at this point
+      if (session?.user) refreshProfile(session.user.id);
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
-      if (session?.user) refreshProfile();
+      if (session?.user) refreshProfile(session.user.id);
       else setProfile(null);
     });
 
     return () => subscription.unsubscribe();
-  }, [user?.id]);
+  }, []); // Run once on mount only
 
   // ── Auto-fetch balance when wallet address is known ───────────────────────
   useEffect(() => {
