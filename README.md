@@ -15,12 +15,10 @@ Based on the collected user feedback, here is our roadmap for the next phase of 
 - **Enhanced Mobile UI Elements:** Improve the spacing and contrast for mobile users (based on feedback regarding readability in sunlight).
 - **Expanded Token Integrations:** Incorporate a wider variety of custom tokens mapped to wallet risk profiles.
 - **Improved Smart Contract Reporting:** Collect qualitative metrics alongside the boolean fraud toggles.
-- **Git Commits for Improvements:** See our history for future git commits corresponding to these items.
 
 ## Mobile Responsive View
 
 ![Mobile View](./public/mobile-view.png)
-*(Note: Replace with actual screenshot)*
 
 ## Smart Contract Details (Stellar Testnet)
 
