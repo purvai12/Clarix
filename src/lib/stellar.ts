@@ -16,20 +16,20 @@ import {
 } from '@creit.tech/stellar-wallets-kit';
 
 // ─── Contract / account addresses ────────────────────────────────────────────
-export const CLARIX_REGISTRY_ID  = 'CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY';
-export const CLARIX_REWARD_ID    = 'CDCLUCN5DQWEHQB3FWP7N6D6NT54WBWAXO5EZI6HCVFBZFT3AIAJCEX7';
-export const ADMIN_ADDRESS       = import.meta.env.VITE_TREASURY_ADDRESS as string;
-export const FEATURE_FEE_XLM     = 0.5;
+export const CLARIX_REGISTRY_ID = 'CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY';
+export const CLARIX_REWARD_ID = 'CDCLUCN5DQWEHQB3FWP7N6D6NT54WBWAXO5EZI6HCVFBZFT3AIAJCEX7';
+export const ADMIN_ADDRESS = import.meta.env.VITE_TREASURY_ADDRESS as string;
+export const FEATURE_FEE_XLM = 0.5;
 export const REPORTER_REWARD_XLM = 10;
 
 // ─── Testnet RPC & Horizon ───────────────────────────────────────────────────
-const RPC_URL     = 'https://soroban-testnet.stellar.org';
+const RPC_URL = 'https://soroban-testnet.stellar.org';
 const HORIZON_URL = 'https://horizon-testnet.stellar.org';
-export const server        = new rpc.Server(RPC_URL);
+export const server = new rpc.Server(RPC_URL);
 export const horizonServer = new Horizon.Server(HORIZON_URL);
 
 // ─── Stellar Expert URLs ─────────────────────────────────────────────────────
-export const stellarExpertTxUrl      = (hash: string) =>
+export const stellarExpertTxUrl = (hash: string) =>
   `https://stellar.expert/explorer/testnet/tx/${hash}`;
 export const stellarExpertAccountUrl = (address: string) =>
   `https://stellar.expert/explorer/testnet/account/${address}`;
@@ -75,7 +75,7 @@ export async function signAndSubmitSWK(txXdr: string): Promise<string> {
     const { signedTxXdr } = await StellarWalletsKit.sign({ xdr: txXdr });
 
     const transaction = TransactionBuilder.fromXDR(signedTxXdr, Networks.TESTNET);
-    const response    = await server.sendTransaction(transaction as any);
+    const response = await server.sendTransaction(transaction as any);
 
     if (response.status === 'PENDING') {
       let txResponse = await server.getTransaction(response.hash);
@@ -90,7 +90,7 @@ export async function signAndSubmitSWK(txXdr: string): Promise<string> {
   } catch (error: any) {
     const msg = error?.message ?? '';
     if (msg.includes('User declined') || msg.includes('rejected')) throw new UserRejectedError();
-    if (msg.includes('insufficient'))                                throw new InsufficientFundsError();
+    if (msg.includes('insufficient')) throw new InsufficientFundsError();
     throw new NetworkError(msg);
   }
 }
@@ -98,12 +98,12 @@ export async function signAndSubmitSWK(txXdr: string): Promise<string> {
 // ─── Legacy Freighter sign & submit (kept for backward compat) ───────────────
 export async function signAndSubmit(txXdr: string): Promise<string> {
   try {
-    const signedXdr   = await (window as any).freighter.signTransaction(txXdr, {
+    const signedXdr = await (window as any).freighter.signTransaction(txXdr, {
       network: 'TESTNET',
       networkPassphrase: Networks.TESTNET,
     });
     const transaction = TransactionBuilder.fromXDR(signedXdr, Networks.TESTNET);
-    const response    = await server.sendTransaction(transaction as any);
+    const response = await server.sendTransaction(transaction as any);
 
     if (response.status === 'PENDING') {
       let txResponse = await server.getTransaction(response.hash);
@@ -118,7 +118,7 @@ export async function signAndSubmit(txXdr: string): Promise<string> {
   } catch (error: any) {
     const msg = error?.message ?? '';
     if (msg.includes('User declined')) throw new UserRejectedError();
-    if (msg.includes('insufficient'))  throw new InsufficientFundsError();
+    if (msg.includes('insufficient')) throw new InsufficientFundsError();
     throw new NetworkError(msg);
   }
 }
@@ -140,8 +140,8 @@ export async function chargeFeature(userAddress: string): Promise<string> {
     .addOperation(
       Operation.payment({
         destination: ADMIN_ADDRESS,
-        asset:       Asset.native(),
-        amount:      FEATURE_FEE_XLM.toFixed(7),
+        asset: Asset.native(),
+        amount: FEATURE_FEE_XLM.toFixed(7),
       })
     )
     .addMemo(
@@ -164,7 +164,7 @@ export async function fileReport(
   reporterAddress: string
 ): Promise<string> {
   const sourceAccount = await server.getAccount(reporterAddress);
-  const contract      = new Contract(CLARIX_REGISTRY_ID);
+  const contract = new Contract(CLARIX_REGISTRY_ID);
 
   const transaction = new TransactionBuilder(sourceAccount, {
     fee: BASE_FEE,
@@ -183,7 +183,7 @@ export async function fileReport(
     .build();
 
   const prepared = await server.prepareTransaction(transaction);
-  const txHash   = await signAndSubmitSWK(prepared.toXDR());
+  const txHash = await signAndSubmitSWK(prepared.toXDR());
   return txHash;
 }
 
@@ -201,9 +201,9 @@ export async function getWalletData(address: string) {
       .call();
 
     const transactions = txResponse.records.map((tx) => ({
-      hash:        tx.hash,
-      created_at:  tx.created_at,
-      successful:  tx.successful,
+      hash: tx.hash,
+      created_at: tx.created_at,
+      successful: tx.successful,
       fee_charged: tx.fee_charged,
       explorerUrl: stellarExpertTxUrl(tx.hash),
     }));

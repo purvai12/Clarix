@@ -23,6 +23,10 @@ jobs:
       
     - name: Run Tests
       run: npm test
+      env:
+        VITE_TREASURY_ADDRESS: ${{ secrets.VITE_TREASURY_ADDRESS }}
 
     - name: Build Application
       run: npm run build
+      env:
+        VITE_TREASURY_ADDRESS: ${{ secrets.VITE_TREASURY_ADDRESS }}
