@@ -1,7 +1,8 @@
 [workspace]
 members = [
     "clarix_registry",
-    "clarix_reward"
+    "clarix_reward",
+    "clarix_gateway"
 ]
 resolver = "2"
 

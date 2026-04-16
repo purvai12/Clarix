@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
-import { Shield, Mail, Lock, User, AlertCircle, Wallet, CheckCircle2 } from 'lucide-react';
+import { Shield, Mail, Lock, User, AlertCircle, Wallet, CheckCircle2, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function SignUp() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail]             = useState('');
+  const [password, setPassword]       = useState('');
+  const [username, setUsername]       = useState('');
+  const [error, setError]             = useState('');
+  const [loading, setLoading]         = useState(false);
   const [walletLoading, setWalletLoading] = useState(false);
   const { signUp, connectWallet, walletAddress } = useAuth();
   const navigate = useNavigate();
@@ -29,8 +29,13 @@ export function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
 
+    if (!walletAddress) {
+      setError('You must connect your Stellar wallet before creating an account.');
+      return;
+    }
+
+    setLoading(true);
     try {
       await signUp(email, password, username);
       navigate('/app');
@@ -55,7 +60,7 @@ export function SignUp() {
           <p className="text-muted-foreground">Start protecting your Stellar assets</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 bg-card p-8 rounded-2xl border border-border">
+        <div className="space-y-6 bg-card p-8 rounded-2xl border border-border">
           {error && (
             <div className="flex items-center gap-2 p-3 bg-destructive/10 text-destructive rounded-lg">
               <AlertCircle className="w-5 h-5" />
@@ -63,86 +68,112 @@ export function SignUp() {
             </div>
           )}
 
-          <div>
-            <label className="block text-sm mb-2">Username</label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Choose a username"
-                required
-              />
+          {/* ── Step 1: Connect Wallet ─────────────────────────────────── */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 mb-1">
+              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${walletAddress ? 'bg-green-500 text-white' : 'bg-primary text-primary-foreground'}`}>
+                {walletAddress ? '✓' : '1'}
+              </span>
+              <span className="text-sm font-medium">Connect your Stellar wallet</span>
+              <span className="text-xs text-destructive font-medium ml-auto">Required</span>
             </div>
+
+            {walletAddress ? (
+              <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
+                <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-green-500 font-medium">Wallet connected</p>
+                  <p className="text-xs text-muted-foreground truncate font-mono">{walletAddress}</p>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleConnectWallet}
+                disabled={walletLoading}
+                className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium"
+              >
+                <Wallet className="w-5 h-5" />
+                {walletLoading ? 'Connecting…' : 'Connect Wallet'}
+              </button>
+            )}
           </div>
 
-          <div>
-            <label className="block text-sm mb-2">Email</label>
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value.toLowerCase())}
-                className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="your@email.com"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm mb-2">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                placeholder="Create a strong password"
-                required
-                minLength={6}
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary text-primary-foreground py-3 rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Creating account...' : 'Sign Up'}
-          </button>
-
-          {/* Divider */}
-          <div className="relative flex items-center gap-3">
+          {/* ── Divider ───────────────────────────────────────────────── */}
+          <div className="flex items-center gap-3">
             <div className="flex-1 h-px bg-border" />
-            <span className="text-xs text-muted-foreground">or</span>
+            <ArrowRight className="w-4 h-4 text-muted-foreground" />
             <div className="flex-1 h-px bg-border" />
           </div>
 
-          {/* Connect Wallet */}
-          {walletAddress ? (
-            <div className="flex items-center gap-3 p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
-              <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
-                <p className="text-xs text-green-500 font-medium">Wallet connected</p>
-                <p className="text-xs text-muted-foreground truncate font-mono">{walletAddress}</p>
+          {/* ── Step 2: Account Details ────────────────────────────────── */}
+          <div className="flex items-center gap-2 mb-1">
+            <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${walletAddress ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+              2
+            </span>
+            <span className={`text-sm font-medium ${!walletAddress ? 'text-muted-foreground' : ''}`}>Create your account</span>
+          </div>
+
+          <form onSubmit={handleSubmit} className={`space-y-4 transition-opacity ${!walletAddress ? 'opacity-40 pointer-events-none' : ''}`}>
+            <div>
+              <label className="block text-sm mb-2">Username</label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Choose a username"
+                  required
+                />
               </div>
             </div>
-          ) : (
+
+            <div>
+              <label className="block text-sm mb-2">Email</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
+                  className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm mb-2">Password</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Create a strong password"
+                  required
+                  minLength={6}
+                />
+              </div>
+            </div>
+
             <button
-              type="button"
-              onClick={handleConnectWallet}
-              disabled={walletLoading}
-              className="w-full flex items-center justify-center gap-2 py-3 border border-border rounded-full hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              type="submit"
+              disabled={loading || !walletAddress}
+              className="w-full bg-primary text-primary-foreground py-3 rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Wallet className="w-5 h-5" />
-              {walletLoading ? 'Connecting...' : 'Connect Freighter Wallet'}
+              {loading ? 'Creating account…' : 'Sign Up'}
             </button>
+          </form>
+
+          {!walletAddress && (
+            <p className="text-xs text-center text-muted-foreground">
+              Connect your wallet above to unlock account creation
+            </p>
           )}
 
           <p className="text-center text-sm text-muted-foreground">
@@ -151,7 +182,7 @@ export function SignUp() {
               Sign In
             </Link>
           </p>
-        </form>
+        </div>
       </motion.div>
     </div>
   );

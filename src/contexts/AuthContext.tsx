@@ -6,6 +6,7 @@ import {
   Networks,
 } from '@creit.tech/stellar-wallets-kit';
 import { defaultModules } from '@creit.tech/stellar-wallets-kit/modules/utils';
+import { getWalletData } from '../lib/stellar';
 
 interface Profile {
   id: string;
@@ -21,10 +22,12 @@ interface AuthContextType {
   profile: Profile | null;
   loading: boolean;
   walletAddress: string | null;
+  xlmBalance: string | null;
   signUp: (email: string, password: string, username: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
+  refreshBalance: () => Promise<void>;
   connectWallet: () => Promise<string>;
   disconnectWallet: () => void;
 }
@@ -39,100 +42,109 @@ StellarWalletsKit.init({
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser]                 = useState<User | null>(null);
+  const [profile, setProfile]           = useState<Profile | null>(null);
+  const [loading, setLoading]           = useState(true);
   const [walletAddress, setWalletAddress] = useState<string | null>(
     () => localStorage.getItem(WALLET_STORAGE_KEY)
   );
+  const [xlmBalance, setXlmBalance]     = useState<string | null>(null);
 
+  // ── Profile loader ────────────────────────────────────────────────────────
   const refreshProfile = async () => {
     if (!user) return;
-
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', user.id)
       .single();
+    if (!error && data) setProfile(data);
+  };
 
-    if (!error && data) {
-      setProfile(data);
+  // ── XLM balance loader ────────────────────────────────────────────────────
+  const refreshBalance = async () => {
+    const addr = walletAddress ?? localStorage.getItem(WALLET_STORAGE_KEY);
+    if (!addr) return;
+    try {
+      const { balance } = await getWalletData(addr);
+      setXlmBalance(balance);
+    } catch {
+      setXlmBalance(null);
     }
   };
 
+  // ── Auth state listener ───────────────────────────────────────────────────
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
-      if (session?.user) {
-        refreshProfile();
-      }
+      if (session?.user) refreshProfile();
       setLoading(false);
     });
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
-      if (session?.user) {
-        refreshProfile();
-      } else {
-        setProfile(null);
-      }
+      if (session?.user) refreshProfile();
+      else setProfile(null);
     });
 
     return () => subscription.unsubscribe();
   }, [user?.id]);
 
+  // ── Auto-fetch balance when wallet address is known ───────────────────────
+  useEffect(() => {
+    if (walletAddress) refreshBalance();
+  }, [walletAddress]);
+
+  // ── Wallet connect ────────────────────────────────────────────────────────
   const connectWallet = async (): Promise<string> => {
+    const { address } = await StellarWalletsKit.authModal();
+    setWalletAddress(address);
+    localStorage.setItem(WALLET_STORAGE_KEY, address);
+    // Fetch balance immediately after connect
     try {
-      const { address } = await StellarWalletsKit.authModal();
-      setWalletAddress(address);
-      localStorage.setItem(WALLET_STORAGE_KEY, address);
-      return address;
-    } catch (err: any) {
-      throw err;
+      const { balance } = await getWalletData(address);
+      setXlmBalance(balance);
+    } catch {
+      /* ignore */
     }
+    return address;
   };
 
+  // ── Wallet disconnect ─────────────────────────────────────────────────────
   const disconnectWallet = async () => {
     await StellarWalletsKit.disconnect().catch(console.error);
     setWalletAddress(null);
+    setXlmBalance(null);
     localStorage.removeItem(WALLET_STORAGE_KEY);
   };
 
+  // ── Sign up ───────────────────────────────────────────────────────────────
   const signUp = async (email: string, password: string, username: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-
+    const { data, error } = await supabase.auth.signUp({ email, password });
     if (error) throw error;
 
     if (data.user) {
-      // Create profile
       const { error: profileError } = await supabase.from('profiles').insert({
-        id: data.user.id,
+        id:           data.user.id,
         email,
         username,
         clrx_balance: 0,
-        is_verified: false,
+        is_verified:  false,
+        wallet_address: walletAddress ?? null,
       });
-
       if (profileError) throw profileError;
     }
   };
 
+  // ── Sign in ───────────────────────────────────────────────────────────────
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
+    // Refresh balance after sign-in
+    setTimeout(() => refreshBalance(), 500);
   };
 
+  // ── Sign out ──────────────────────────────────────────────────────────────
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
@@ -145,10 +157,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         profile,
         loading,
         walletAddress,
+        xlmBalance,
         signUp,
         signIn,
         signOut,
         refreshProfile,
+        refreshBalance,
         connectWallet,
         disconnectWallet,
       }}

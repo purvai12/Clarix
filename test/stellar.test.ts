@@ -1,6 +1,4 @@
-import test from 'node:test';
-import assert from 'node:assert';
-
+import { describe, it, expect } from 'vitest';
 import { 
   CLARIX_REGISTRY_ID, 
   CLARIX_REWARD_ID, 
@@ -8,27 +6,28 @@ import {
   UserRejectedError,
   InsufficientFundsError,
   NetworkError
-} from '../src/lib/stellar.ts'; // Wait, node:test running a TS file directly won't work unless using tsx or vitest.
+} from '../src/lib/stellar.ts';
 
-test('Contract and Admin IDs are properly formatted', (t) => {
-  assert.strictEqual(CLARIX_REGISTRY_ID.length, 56, 'Registry ID length should be 56');
-  assert.strictEqual(CLARIX_REWARD_ID.length, 56, 'Reward ID length should be 56');
-  assert.strictEqual(ADMIN_ADDRESS.length, 56, 'Admin address length should be 56');
-});
+describe('Stellar Implementation', () => {
+  it('Contract and Admin IDs are properly formatted', () => {
+    expect(CLARIX_REGISTRY_ID).toHaveLength(56);
+    expect(CLARIX_REWARD_ID).toHaveLength(56);
+    expect(ADMIN_ADDRESS).toHaveLength(56);
+  });
 
-test('Error classes preserve their names', (t) => {
-  const err1 = new UserRejectedError();
-  assert.strictEqual(err1.name, 'UserRejectedError');
+  it('Error classes preserve their names', () => {
+    const err1 = new UserRejectedError();
+    expect(err1.name).toBe('UserRejectedError');
 
-  const err2 = new InsufficientFundsError();
-  assert.strictEqual(err2.name, 'InsufficientFundsError');
+    const err2 = new InsufficientFundsError();
+    expect(err2.name).toBe('InsufficientFundsError');
 
-  const err3 = new NetworkError('testing');
-  assert.strictEqual(err3.name, 'NetworkError');
-  assert.ok(err3.message.includes('testing'));
-});
+    const err3 = new NetworkError('testing');
+    expect(err3.name).toBe('NetworkError');
+    expect(err3.message).toContain('testing');
+  });
 
-test('System is configured for testnet', (t) => {
-  // Simple check
-  assert.ok(CLARIX_REGISTRY_ID !== undefined);
+  it('System is configured for testnet', () => {
+    expect(CLARIX_REGISTRY_ID).toBeDefined();
+  });
 });

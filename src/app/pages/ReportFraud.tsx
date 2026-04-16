@@ -1,148 +1,139 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { AlertTriangle, Loader2, CheckCircle, XCircle, Wallet } from 'lucide-react';
+import { AlertTriangle, Loader2, CheckCircle, XCircle, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { fileReport, checkFreighter, getPublicKey, UserRejectedError, InsufficientFundsError, NetworkError } from '../../lib/stellar';
+import {
+  fileReport,
+  InsufficientFundsError,
+  NetworkError,
+  UserRejectedError,
+  stellarExpertTxUrl,
+  REPORTER_REWARD_XLM,
+} from '../../lib/stellar';
 import { supabase } from '../../lib/supabase';
 
 type TxStatus = 'idle' | 'pending' | 'signing' | 'success' | 'error';
 
 export function ReportFraud() {
-  const { user, profile, refreshProfile } = useAuth();
-  const [walletAddress, setWalletAddress] = useState('');
+  const { user, profile, walletAddress, refreshProfile } = useAuth();
+  const [fraudWallet, setFraudWallet] = useState('');
   const [description, setDescription] = useState('');
-  const [amountLost, setAmountLost] = useState('');
-  const [txStatus, setTxStatus] = useState<TxStatus>('idle');
-  const [error, setError] = useState('');
-  const [txHash, setTxHash] = useState('');
+  const [amountLost, setAmountLost]   = useState('');
+  const [txStatus, setTxStatus]       = useState<TxStatus>('idle');
+  const [error, setError]             = useState('');
+  const [txHash, setTxHash]           = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || !profile) return;
+    if (!user || !profile || !walletAddress) return;
 
     setError('');
     setTxStatus('pending');
 
     try {
-      // Check Freighter wallet
-      const hasFreighter = await checkFreighter();
-      if (!hasFreighter) {
-        throw new Error('Freighter wallet not installed. Please install it to continue.');
-      }
-
-      // Get user's public key
-      const publicKey = await getPublicKey();
-
-      // Create report hash (deterministic)
-      const reportData = `${walletAddress}-${description}-${Date.now()}`;
-      const reportHash = await crypto.subtle.digest(
-        'SHA-256',
-        new TextEncoder().encode(reportData)
-      );
-      const hashString = Array.from(new Uint8Array(reportHash))
-        .map(b => b.toString(16).padStart(2, '0'))
+      // Build deterministic report hash
+      const reportData = `${fraudWallet}-${description}-${Date.now()}`;
+      const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(reportData));
+      const hashString = Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
 
       setTxStatus('signing');
 
-      // File report on blockchain
-      const hash = await fileReport(walletAddress, hashString, publicKey);
+      // File report on blockchain via StellarWalletsKit
+      const hash = await fileReport(fraudWallet, hashString, walletAddress);
       setTxHash(hash);
 
-      // Save to Supabase
+      // Persist report to Supabase
       const { error: dbError } = await supabase.from('fraud_reports').insert({
-        reporter_id: user.id,
-        wallet_address: walletAddress,
+        reporter_id:       user.id,
+        wallet_address:    fraudWallet,
         description,
-        amount_lost: parseFloat(amountLost) || 0,
-        transaction_hash: hashString,
+        amount_lost:       parseFloat(amountLost) || 0,
+        transaction_hash:  hashString,
         blockchain_tx_hash: hash,
       });
+      if (dbError) console.error('DB error:', dbError);
 
-      if (dbError) {
-        console.error('Database error:', dbError);
-      }
-
-      // Update CLRX balance (reward 10 CLRX)
+      // Award 10 CLRX off-chain (on-chain XLM reward requires admin signer)
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ clrx_balance: (profile.clrx_balance || 0) + 10 })
         .eq('id', user.id);
-
-      if (updateError) {
-        console.error('Balance update error:', updateError);
-      }
+      if (updateError) console.error('Balance update error:', updateError);
 
       await refreshProfile();
-
       setTxStatus('success');
-      setWalletAddress('');
+      setFraudWallet('');
       setDescription('');
       setAmountLost('');
     } catch (err: any) {
       setTxStatus('error');
-
-      if (err instanceof UserRejectedError) {
-        setError('Transaction rejected by user.');
-      } else if (err instanceof InsufficientFundsError) {
-        setError('Insufficient XLM to pay the network fee.');
-      } else if (err instanceof NetworkError) {
-        setError(err.message);
-      } else {
-        setError(err.message || 'Failed to submit report');
-      }
+      if (err instanceof UserRejectedError)      setError('Transaction cancelled by user.');
+      else if (err instanceof InsufficientFundsError) setError('Insufficient XLM to pay the network fee.');
+      else if (err instanceof NetworkError)      setError(err.message);
+      else                                        setError(err.message || 'Failed to submit report');
     }
   };
 
+  const busy = txStatus === 'pending' || txStatus === 'signing';
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+
+        {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-block p-4 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl mb-4">
             <AlertTriangle className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-4xl mb-4">Report Fraud</h1>
           <p className="text-xl text-muted-foreground">
-            Submit on-chain fraud reports and earn 10 CLRX tokens
+            Submit on-chain fraud reports — earn <strong>{REPORTER_REWARD_XLM} XLM</strong> per verified report
           </p>
         </div>
 
+        {/* Wallet guard */}
+        {!walletAddress && (
+          <div className="mb-8 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm text-center">
+            Connect your wallet from the navbar before submitting a report.
+          </div>
+        )}
+
         {/* Transaction Status */}
         {txStatus !== 'idle' && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
-          >
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
             {txStatus === 'pending' && (
               <div className="flex items-center gap-3 p-4 bg-blue-500/10 text-blue-500 rounded-xl">
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Preparing transaction...</span>
+                <span>Preparing transaction…</span>
               </div>
             )}
             {txStatus === 'signing' && (
               <div className="flex items-center gap-3 p-4 bg-yellow-500/10 text-yellow-500 rounded-xl">
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Waiting for signature in Freighter wallet...</span>
+                <span>Waiting for signature in your wallet…</span>
               </div>
             )}
             {txStatus === 'success' && (
-              <div className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl">
-                <div className="flex items-center gap-3 mb-3">
+              <div className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl space-y-3">
+                <div className="flex items-center gap-3">
                   <CheckCircle className="w-6 h-6 text-green-500" />
-                  <span className="text-green-500">Report submitted successfully!</span>
+                  <span className="text-green-500 font-medium">Report submitted on-chain!</span>
                 </div>
-                <p className="text-sm text-muted-foreground mb-2">
-                  You've earned 10 CLRX tokens for reporting fraud.
+                <p className="text-sm text-muted-foreground">
+                  You've earned <strong>10 CLRX</strong> instantly. On-chain{' '}
+                  <strong>{REPORTER_REWARD_XLM} XLM</strong> reward is processed by the Clarix treasury.
                 </p>
                 {txHash && (
-                  <p className="text-xs text-muted-foreground break-all">
-                    Transaction hash: {txHash}
-                  </p>
+                  <a
+                    href={stellarExpertTxUrl(txHash)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-green-500 hover:underline"
+                  >
+                    View report transaction on Stellar Expert <ExternalLink className="w-4 h-4" />
+                  </a>
                 )}
               </div>
             )}
@@ -156,17 +147,17 @@ export function ReportFraud() {
         )}
 
         {/* Report Form */}
-        <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-8 space-y-6">
+        <form onSubmit={handleSubmit} className={`bg-card border border-border rounded-2xl p-8 space-y-6 ${!walletAddress ? 'opacity-40 pointer-events-none' : ''}`}>
           <div>
             <label className="block text-sm mb-2">Fraudulent Wallet Address *</label>
             <input
               type="text"
-              value={walletAddress}
-              onChange={(e) => setWalletAddress(e.target.value)}
-              placeholder="GABC..."
+              value={fraudWallet}
+              onChange={(e) => setFraudWallet(e.target.value)}
+              placeholder="GABC…"
               className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
               required
-              disabled={txStatus === 'pending' || txStatus === 'signing'}
+              disabled={busy}
             />
           </div>
 
@@ -175,11 +166,11 @@ export function ReportFraud() {
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe the fraud incident..."
+              placeholder="Describe the fraud incident…"
               rows={4}
               className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
               required
-              disabled={txStatus === 'pending' || txStatus === 'signing'}
+              disabled={busy}
             />
           </div>
 
@@ -192,18 +183,20 @@ export function ReportFraud() {
               onChange={(e) => setAmountLost(e.target.value)}
               placeholder="0.00"
               className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              disabled={txStatus === 'pending' || txStatus === 'signing'}
+              disabled={busy}
             />
           </div>
 
-          <div className="bg-muted/50 border border-border rounded-lg p-4">
+          {/* Reward info box */}
+          <div className="bg-gradient-to-r from-green-500/10 to-transparent border border-green-500/20 rounded-xl p-4">
             <div className="flex items-start gap-3">
-              <Wallet className="w-5 h-5 text-primary mt-0.5" />
-              <div className="flex-1">
-                <h4 className="mb-1">Blockchain Storage</h4>
-                <p className="text-sm text-muted-foreground">
-                  Your report will be permanently stored on Stellar Testnet via the ClarixRegistry
-                  Soroban smart contract. You'll receive 10 CLRX tokens automatically as a reward.
+              <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+              <div>
+                <h4 className="text-sm font-medium text-green-500 mb-1">Reward for reporters</h4>
+                <p className="text-xs text-muted-foreground">
+                  Submit a verified fraud report and earn <strong>10 CLRX</strong> instantly + a{' '}
+                  <strong>{REPORTER_REWARD_XLM} XLM</strong> on-chain reward processed by the Clarix treasury.
+                  Your report is permanently stored on Stellar Testnet via the ClarixRegistry Soroban contract.
                 </p>
               </div>
             </div>
@@ -211,13 +204,13 @@ export function ReportFraud() {
 
           <button
             type="submit"
-            disabled={txStatus === 'pending' || txStatus === 'signing'}
+            disabled={busy || !walletAddress}
             className="w-full bg-primary text-primary-foreground py-4 rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {txStatus === 'pending' || txStatus === 'signing' ? (
+            {busy ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                {txStatus === 'pending' ? 'Preparing...' : 'Signing...'}
+                {txStatus === 'pending' ? 'Preparing…' : 'Signing…'}
               </>
             ) : (
               <>
@@ -228,26 +221,21 @@ export function ReportFraud() {
           </button>
         </form>
 
-        {/* Info */}
+        {/* Contract Details */}
         <div className="mt-8 bg-muted/50 border border-border rounded-2xl p-6">
           <h3 className="mb-4">Smart Contract Details</h3>
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">ClarixRegistry:</span>
-              <span className="font-mono text-xs break-all max-w-[60%] text-right">
-                CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">ClarixReward:</span>
-              <span className="font-mono text-xs break-all max-w-[60%] text-right">
-                CDCLUCN5DQWEHQB3FWP7N6D6NT54WBWAXO5EZI6HCVFBZFT3AIAJCEX7
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Network:</span>
-              <span>Stellar Testnet</span>
-            </div>
+            {[
+              { label: 'ClarixRegistry', value: 'CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY' },
+              { label: 'ClarixReward',   value: 'CDCLUCN5DQWEHQB3FWP7N6D6NT54WBWAXO5EZI6HCVFBZFT3AIAJCEX7' },
+              { label: 'Network',        value: 'Stellar Testnet' },
+              { label: 'Reporter Reward', value: `${REPORTER_REWARD_XLM} XLM (on-chain) + 10 CLRX` },
+            ].map(({ label, value }) => (
+              <div key={label} className="flex justify-between gap-4">
+                <span className="text-muted-foreground flex-shrink-0">{label}:</span>
+                <span className="font-mono text-xs break-all text-right">{value}</span>
+              </div>
+            ))}
           </div>
         </div>
       </motion.div>
