@@ -5,7 +5,7 @@
 Clarix is an AI-powered wallet safety mini-dApp built on the Stellar blockchain. Before making a payment, simply scan any wallet address to receive an instant AI-generated risk assessment. Every fraud report is permanently anchored to the Stellar Testnet via Soroban smart contracts, giving you tamper-proof verifiable intelligence.
 
 **Live Demo URL:** [https://clarix-beta.vercel.app/](https://clarix-beta.vercel.app/)  
-**Demo Video:** [Watch Demo Video Here](#) *(Placeholder)*  
+**Demo Video:** [Watch Demo Video Here](#) 
 **User Feedback Form:** [Google Form Link](https://forms.gle/wb4x1UDGMSWNebMVA)  
 **User Feedback Responses:** [Clarix Feedback Form (Responses).xlsx](./Clarix%20Feedback%20Form%20(Responses).xlsx)
 
