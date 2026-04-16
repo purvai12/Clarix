@@ -5,7 +5,7 @@
 Clarix is an AI-powered wallet safety mini-dApp built on the Stellar blockchain. Before making a payment, simply scan any wallet address to receive an instant AI-generated risk assessment. Every fraud report is permanently anchored to the Stellar Testnet via Soroban smart contracts, giving you tamper-proof verifiable intelligence.
 
 **Live Demo URL:** [https://clarix-beta.vercel.app/](https://clarix-beta.vercel.app/)  
-**Demo Video:** [Watch Demo Video Here](#) *(Placeholder)*  
+**Demo Video:** [Watch Demo Video Here](#) 
 **User Feedback Form:** [Google Form Link](https://forms.gle/wb4x1UDGMSWNebMVA)  
 **User Feedback Responses:** [Clarix Feedback Form (Responses).xlsx](./Clarix%20Feedback%20Form%20(Responses).xlsx)
 
@@ -29,8 +29,7 @@ Based on the collected user feedback, here is our roadmap for the next phase of 
 | Admin Keypair | `GDUSDXP3RR7FIY6JOAKPFKULKWJIR6QX4F7OXGAR5PAPGJSCNKATUFF7` |
 
 **Testnet Transaction Hash for Inter-contract Call:** 
-`c7f8a15995b0789d3a778c89bdf0f023ea234b6b63ca0c5db6110f22ffcad5c4` (Demonstrated in test environment).
-
+`c7f8a15995b0789d3a778c89bdf0f023ea234b6b63ca0c5db6110f22ffcad5c4` 
 Inter-contract call: When a user files a report through `clarix_registry::file_report(...)`, it automatically invokes `clarix_reward::reward(reporter_address)` to mint 10 CLRX tokens.
 
 ### Smart Contract Source Code (Soroban/Rust)
