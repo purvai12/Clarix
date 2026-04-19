@@ -10,10 +10,14 @@ Clarix is an AI-powered wallet safety mini-dApp built on the **Stellar blockchai
 
 ## The App
 
-| Dashboard | AI Risk Report |
+| Feature | Preview |
 |---|---|
-| ![Dashboard](./screenshots/dashboard.png) | ![Risk Report](./screenshots/report.png) | 
-
+| **Landing Page** | ![Landing Page](./screenshots/landingpage.png) |
+| **Dashboard** | ![Dashboard](./screenshots/dashboard.png) |
+| **AI Risk Report** | ![Risk Report](./screenshots/report.png) |
+| **Live Watchlist** | ![Watchlist](./screenshots/watchlist.png) |
+| **Wallet Comparison** | ![Comparison](./screenshots/compare.png) |
+| **Fraud Reporting** | ![Fraud Report](./screenshots/reportfraud.png) |
 
 ---
 
