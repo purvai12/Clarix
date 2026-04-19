@@ -72,19 +72,22 @@ export async function getPublicKey(): Promise<string> {
 // ─── Sign & submit using StellarWalletsKit ───────────────────────────────────
 export async function signAndSubmitSWK(txXdr: string): Promise<string> {
   try {
-    const { signedTxXdr } = await StellarWalletsKit.sign({ xdr: txXdr });
+    const signResult = await StellarWalletsKit.signTransaction(txXdr, {
+      networkPassphrase: Networks.TESTNET,
+    });
+    const signedTxXdr = typeof signResult === 'string' ? signResult : signResult.signedTxXdr;
 
     const transaction = TransactionBuilder.fromXDR(signedTxXdr, Networks.TESTNET);
-    const response = await server.sendTransaction(transaction as any);
+    const txResponse = await server.sendTransaction(transaction as any);
 
-    if (response.status === 'PENDING') {
-      let txResponse = await server.getTransaction(response.hash);
-      while (txResponse.status === 'NOT_FOUND') {
+    if (txResponse.status === 'PENDING') {
+      let finalTx = await server.getTransaction(txResponse.hash);
+      while (finalTx.status === 'NOT_FOUND') {
         await new Promise((r) => setTimeout(r, 1000));
-        txResponse = await server.getTransaction(response.hash);
+        finalTx = await server.getTransaction(txResponse.hash);
       }
-      if (txResponse.status === 'SUCCESS') return response.hash;
-      throw new NetworkError(txResponse.status);
+      if (finalTx.status === 'SUCCESS') return txResponse.hash;
+      throw new NetworkError(finalTx.status);
     }
     throw new NetworkError('Transaction failed to enter PENDING state');
   } catch (error: any) {
@@ -147,7 +150,7 @@ export async function chargeFeature(userAddress: string): Promise<string> {
     .setTimeout(30)
     .build();
 
-  const hash = await signAndSubmit(transaction.toXDR());
+  const hash = await signAndSubmitSWK(transaction.toXDR());
   return hash;
 }
 
@@ -177,7 +180,7 @@ export async function fileReport(
     .build();
 
   const prepared = await server.prepareTransaction(transaction);
-  const txHash = await signAndSubmit(prepared.toXDR());
+  const txHash = await signAndSubmitSWK(prepared.toXDR());
   return txHash;
 }
 
