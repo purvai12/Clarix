@@ -62,15 +62,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .maybeSingle();
     if (!error && data) {
       setProfile(data);
-    } else {
-      setProfile({
+    } else if (user) {
+      // Reconstruct missing profile from user metadata or email fallback
+      const newProfile = {
         id,
-        email: user?.email || 'Unknown',
-        username: user?.user_metadata?.username || 'User',
+        email: user.email || 'Unknown',
+        username: user.user_metadata?.username || user.email?.split('@')[0] || 'User',
         clrx_balance: 0,
         is_verified: false,
-        wallet_address: walletAddress ?? null,
-      } as Profile);
+        created_at: new Date().toISOString(),
+      };
+      // Try to save it so it persists and they don't get stuck with 'User'
+      await supabase.from('profiles').insert(newProfile);
+      setProfile(newProfile as Profile);
     }
   };
 
@@ -134,7 +138,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ── Sign up ───────────────────────────────────────────────────────────────
   const signUp = async (email: string, password: string, username: string) => {
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: { data: { username } }
+    });
     if (error) throw error;
 
     if (data.user) {
@@ -144,7 +152,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         username,
         clrx_balance: 0,
         is_verified:  false,
-        wallet_address: walletAddress ?? null,
       });
       if (profileError) throw profileError;
     }
