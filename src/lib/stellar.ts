@@ -19,7 +19,7 @@ import {
 export const CLARIX_REGISTRY_ID = 'CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY';
 export const CLARIX_REWARD_ID = 'CDCLUCN5DQWEHQB3FWP7N6D6NT54WBWAXO5EZI6HCVFBZFT3AIAJCEX7';
 export const ADMIN_ADDRESS = import.meta.env.VITE_TREASURY_ADDRESS as string;
-export const FEATURE_FEE_XLM = 0.05;
+export const FEATURE_FEE_XLM = 0.5;
 export const REPORTER_REWARD_XLM = 10;
 
 // ─── Testnet RPC & Horizon ───────────────────────────────────────────────────

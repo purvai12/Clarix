@@ -62,19 +62,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .maybeSingle();
     if (!error && data) {
       setProfile(data);
-    } else if (user) {
-      // Reconstruct missing profile from user metadata or email fallback
-      const newProfile = {
-        id,
-        email: user.email || 'Unknown',
-        username: user.user_metadata?.username || user.email?.split('@')[0] || 'User',
-        clrx_balance: 0,
-        is_verified: false,
-        created_at: new Date().toISOString(),
-      };
-      // Try to save it so it persists and they don't get stuck with 'User'
-      await supabase.from('profiles').insert(newProfile);
-      setProfile(newProfile as Profile);
+    } else {
+      // Reconstruct missing profile from actual session to avoid null state closure
+      const { data: sessionData } = await supabase.auth.getSession();
+      const currentUser = sessionData.session?.user;
+      
+      if (currentUser && currentUser.id === id) {
+        const newProfile = {
+          id,
+          email: currentUser.email || 'Unknown',
+          username: currentUser.user_metadata?.username || currentUser.email?.split('@')[0] || 'User',
+          clrx_balance: 0,
+          is_verified: false,
+          created_at: new Date().toISOString(),
+        };
+        // Try to save it so it persists
+        await supabase.from('profiles').insert(newProfile);
+        setProfile(newProfile as Profile);
+      } else {
+        // Absolute fallback so UI doesn't spin infinitely
+        setProfile({
+          id,
+          email: 'Unknown',
+          username: 'User',
+          clrx_balance: 0,
+          is_verified: false,
+          created_at: new Date().toISOString(),
+        } as Profile);
+      }
     }
   };
 

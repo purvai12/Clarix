@@ -78,7 +78,7 @@ export function Scanner() {
           </p>
           <p className="text-sm text-muted-foreground mt-2 flex items-center justify-center gap-1">
             <WalletIcon className="w-4 h-4 text-primary" />
-            <span>Costs <strong className="text-primary">0.05 XLM</strong> per scan</span>
+            <span>Costs <strong className="text-primary">0.5 XLM</strong> per scan</span>
           </p>
         </div>
 
@@ -332,7 +332,7 @@ export function Scanner() {
             <h3 className="text-xl mb-2">How it works</h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Our AI analyzes wallet addresses using advanced pattern recognition and live Stellar blockchain data
-              to provide instant risk assessments. A <strong>0.05 XLM</strong> fee is charged per scan.
+              to provide instant risk assessments. A <strong>0.5 XLM</strong> fee is charged per scan.
               Enter any Stellar address above to get started.
             </p>
           </motion.div>

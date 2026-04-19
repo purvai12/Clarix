@@ -26,7 +26,7 @@ Clarix is an AI-powered wallet safety mini-dApp built on the **Stellar blockchai
 ---
 
 ### AI Wallet Scanner (Fee-Gated)
-- **One-click Risk Analysis** — Paste any Stellar testnet address and pay a flat **0.05 XLM** fee via the connected wallet; the dApp then fetches live Horizon data and runs the full analysis pipeline.
+- **One-click Risk Analysis** — Paste any Stellar testnet address and pay a flat **0.5 XLM** fee via the connected wallet; the dApp then fetches live Horizon data and runs the full analysis pipeline.
 - **Multi-Signal Heuristic Engine** — The `analysisService` evaluates five independent risk signals:
   1. **Wallet Age** — New wallets (< 7 days) receive an automatic danger penalty.
   2. **Burst Transaction Detection** — ≥ 30 operations in a single UTC-hour triggers a high-risk flag consistent with automated draining scripts.
@@ -66,7 +66,7 @@ Clarix is an AI-powered wallet safety mini-dApp built on the **Stellar blockchai
 ---
 
 ### Side-by-Side Wallet Comparison (Fee-Gated)
-- **Dual Analysis** — Enter two Stellar addresses and pay a flat **0.05 XLM** comparison fee; both wallets are analysed in parallel via `Promise.all`.
+- **Dual Analysis** — Enter two Stellar addresses and pay a flat **0.5 XLM** comparison fee; both wallets are analysed in parallel via `Promise.all`.
 - **Comparison Table** — Results are displayed in a three-column layout (Wallet A | Metric | Wallet B) with colour-coded winners for Trust Score, Account Age, XLM Balance, and Total Operations.
 - **Winner Highlighting** — The better-performing wallet value is bolded and coloured green for instant readability.
 
@@ -126,9 +126,9 @@ When a user identifies and submits a malicious wallet with Freighter connected:
 
 | Action | Fee |
 |---|---|
-| Wallet safety scan | 0.05 XLM |
-| Side-by-side wallet comparison | 0.05 XLM |
-| Fraud report (on-chain anchor) | Network gas only (BASE_FEE) |
+| Wallet safety scan | 0.5 XLM |
+| Side-by-side wallet comparison | 0.5 XLM |
+| Fraud report (on-chain anchor) | Free (Network gas only) + 10 CLRX Reward |
 | CLRX → Verified Badge | 50 CLRX |
 
 All XLM fees are collected from the user's connected wallet and sent to the Clarix Treasury address. Fees are enforced by building and submitting a real XLM payment transaction before the premium action is allowed to proceed.
@@ -164,7 +164,7 @@ An automated GitHub Actions pipeline on every push to `main` runs Vitest unit te
 
 ## User Feedback
 
-As part of the MVP phase, we collected live user feedback to evolve the dApp's usability. [View the exported Feedback Spreadsheet](https://docs.google.com/spreadsheets/d/1NhwrciFU4IdOrD3olplpJlSlaDGy4e3ZozChk5jVACs/edit?usp=sharing).
+As part of the MVP phase, we collected live user feedback to evolve the dApp's usability. [View the exported Feedback Spreadsheet](https://docs.google.com/spreadsheets/d/1NhwrciFU4IdOrD3olplpJlSlaDGy4e3ZozChk5jVACs/edit?usp=sharing) and the [Live Feedback Form](https://forms.gle/xmYfnA4ksiP7sjYz9).
 
 | Feedback | Resolution |
 |---|---|
