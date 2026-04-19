@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
-import { Shield, Mail, Lock, User, AlertCircle, Wallet, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Shield, Mail, Lock, User, AlertCircle, Wallet, CheckCircle2, ArrowRight, Unlink } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function SignUp() {
@@ -11,7 +11,7 @@ export function SignUp() {
   const [error, setError]             = useState('');
   const [loading, setLoading]         = useState(false);
   const [walletLoading, setWalletLoading] = useState(false);
-  const { signUp, connectWallet, walletAddress } = useAuth();
+  const { signUp, connectWallet, disconnectWallet, walletAddress } = useAuth();
   const navigate = useNavigate();
 
   const handleConnectWallet = async () => {
@@ -85,6 +85,14 @@ export function SignUp() {
                   <p className="text-xs text-green-500 font-medium">Wallet connected</p>
                   <p className="text-xs text-muted-foreground truncate font-mono">{walletAddress}</p>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => disconnectWallet()}
+                  className="p-2 hover:bg-destructive/10 text-destructive rounded-lg transition-colors flex flex-col items-center gap-1"
+                  title="Disconnect Wallet"
+                >
+                  <Unlink className="w-4 h-4" />
+                </button>
               </div>
             ) : (
               <button
