@@ -65,7 +65,7 @@ Clarix is an AI-powered wallet safety mini-dApp built on the **Stellar blockchai
 
 ---
 
-### Side-by-Side Wallet Comparison (Fee-Gated)
+### Side-by-Side Wallet Comparison
 - **Dual Analysis** — Enter two Stellar addresses and pay a flat **0.5 XLM** comparison fee; both wallets are analysed in parallel via `Promise.all`.
 - **Comparison Table** — Results are displayed in a three-column layout (Wallet A | Metric | Wallet B) with colour-coded winners for Trust Score, Account Age, XLM Balance, and Total Operations.
 - **Winner Highlighting** — The better-performing wallet value is bolded and coloured green for instant readability.
@@ -128,6 +128,7 @@ When a user identifies and submits a malicious wallet with Freighter connected:
 |---|---|
 | Wallet safety scan | 0.5 XLM |
 | Side-by-side wallet comparison | 0.5 XLM |
+| Watch Wallets | 0.5 XLM |
 | Fraud report (on-chain anchor) | Free (Network gas only) + 10 CLRX Reward |
 | CLRX → Verified Badge | 50 CLRX |
 
@@ -176,10 +177,8 @@ As part of the MVP phase, we collected live user feedback to evolve the dApp's u
 
 ## Next Phase Improvements
 
-1. **Decentralized AI Oracles** — Off-chain worker nodes continuously monitoring Stellar Horizon and feeding rolling safety scores natively into Soroban.
-2. **Web3 Auth Aggregation** — Replacing email/password entirely with Web3 passkeys and native Freighter authentication protocols.
-3. **Advanced Tx Simulation** — Real-time mempool simulation integrated into the dashboard, rendering exact state changes a transaction *would* trigger before signing.
-4. **Enhanced Leaderboards** — Transitioning client-side leaderboards into a fully decentralised community ranking index reading from indexing nodes.
+1. **Advanced Tx Simulation** — Real-time mempool simulation integrated into the dashboard, rendering exact state changes a transaction *would* trigger before signing.
+2. **Enhanced Leaderboards** — Transitioning client-side leaderboards into a fully decentralised community ranking index reading from indexing nodes.
 
 ---
 
