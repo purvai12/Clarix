@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Scan, Loader2, Shield, AlertTriangle, CheckCircle, Info, ExternalLink } from 'lucide-react';
+import { useSearchParams, useNavigate } from 'react-router';
+import { Scan, Loader2, Shield, AlertTriangle, CheckCircle, Info, ExternalLink, Trash2, Search, Filter } from 'lucide-react';
 import { analyzeWallet, WalletRiskAssessment } from '../../lib/gemini';
 import { getWalletData, stellarExpertTxUrl, stellarExpertAccountUrl } from '../../lib/stellar';
 import { History, Wallet as WalletIcon, Clock } from 'lucide-react';
+import { historyService, ScanHistoryItem } from '../../lib/historyService';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useFeatureGate, FeatureGateBanner } from '../components/FeatureGate';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -14,6 +17,19 @@ export function Scanner() {
   const [assessment, setAssessment]     = useState<WalletRiskAssessment | null>(null);
   const [blockchainData, setBlockchainData] = useState<{ balance: string; transactions: any[] } | null>(null);
   const [error, setError]               = useState('');
+  const [searchParams]                  = useSearchParams();
+  const navigate                        = useNavigate();
+  const [history, setHistory]           = useState<ScanHistoryItem[]>([]);
+  const [historyFilter, setHistoryFilter] = useState<'all' | 'safe' | 'caution' | 'danger'>('all');
+  const [historySearch, setHistorySearch] = useState('');
+
+  useEffect(() => {
+    setHistory(historyService.getHistory());
+    const addrQuery = searchParams.get('address');
+    if (addrQuery) {
+      setAddress(addrQuery);
+    }
+  }, [searchParams]);
 
   const { gateState, feeHash, error: gateError, charge, reset: resetGate } = useFeatureGate();
 
@@ -36,6 +52,15 @@ export function Scanner() {
       setBlockchainData(data);
       const result = await analyzeWallet(address, data);
       setAssessment(result);
+      
+      const historyItem: ScanHistoryItem = {
+        address,
+        score: result.riskScore,
+        riskLevel: result.riskLevel,
+        timestamp: new Date().toISOString()
+      };
+      historyService.saveScan(historyItem);
+      setHistory(historyService.getHistory());
     } catch (err: any) {
       setError(err.message || 'Failed to analyze wallet');
     } finally {
@@ -221,8 +246,8 @@ export function Scanner() {
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               className="bg-card border border-border rounded-2xl p-8"
             >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div className="md:col-span-1">
                   <div className="flex items-center gap-2 mb-2">
                     <Shield className="w-6 h-6 text-primary" />
                     <h2 className="text-2xl font-robotic uppercase tracking-tight">Clarix AI Risk Grade</h2>
@@ -239,7 +264,7 @@ export function Scanner() {
                     Open in Stellar Expert <ExternalLink className="w-3 h-3" />
                   </a>
                 </div>
-                <div className="text-center">
+                <div className="text-center md:col-span-1 border-y md:border-y-0 md:border-x border-border py-4 md:py-0">
                   <div className="relative inline-block">
                     <svg className="w-32 h-32 transform -rotate-90">
                       <circle cx="64" cy="64" r="56" stroke="currentColor" strokeWidth="8" fill="none" className="text-muted" />
@@ -261,6 +286,24 @@ export function Scanner() {
                   <p className={`mt-2 uppercase tracking-widest text-sm font-robotic ${getRiskColor(assessment.riskLevel)}`}>
                     {assessment.riskLevel} Risk
                   </p>
+                </div>
+                
+                <div className="md:col-span-1 h-48 w-full flex items-center justify-center">
+                  {assessment.subScores && (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <RadarChart outerRadius="65%" data={[
+                        { subject: 'Activity', A: assessment.subScores.activity, fullMark: 100 },
+                        { subject: 'Age', A: assessment.subScores.age, fullMark: 100 },
+                        { subject: 'Pattern', A: assessment.subScores.pattern, fullMark: 100 },
+                        { subject: 'Network', A: assessment.subScores.network, fullMark: 100 },
+                      ]}>
+                        <PolarGrid stroke="var(--color-border)" />
+                        <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--color-muted-foreground)', fontSize: 11, fontFamily: 'monospace' }} />
+                        <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                        <Radar name="Score" dataKey="A" stroke="oklch(var(--primary))" fill="oklch(var(--primary))" fillOpacity={0.2} />
+                      </RadarChart>
+                    </ResponsiveContainer>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -337,6 +380,99 @@ export function Scanner() {
             </p>
           </motion.div>
         )}
+
+        {/* Scan History Module */}
+        <div className="mt-16">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <h3 className="text-xl font-robotic uppercase tracking-tight flex items-center gap-2">
+              <History className="w-5 h-5 text-primary" />
+              Scan History
+            </h3>
+            {history.length > 0 && (
+              <button 
+                onClick={() => { historyService.clearHistory(); setHistory([]); }}
+                className="text-xs text-destructive flex items-center gap-1 hover:bg-destructive/10 px-3 py-1.5 rounded-full transition-colors"
+              >
+                <Trash2 className="w-3.5 h-3.5" /> Clear All
+              </button>
+            )}
+          </div>
+
+          <div className="bg-card border border-border rounded-2xl p-6">
+            <div className="flex flex-col md:flex-row gap-4 mb-6">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <input 
+                  type="text" 
+                  placeholder="Search address..." 
+                  value={historySearch}
+                  onChange={(e) => setHistorySearch(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+                <Filter className="w-4 h-4 text-muted-foreground mr-1 flex-shrink-0" />
+                {['all', 'safe', 'caution', 'danger'].map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setHistoryFilter(f as any)}
+                    className={`px-3 py-1.5 rounded-full text-xs box-border border transition-colors capitalize whitespace-nowrap ${
+                      historyFilter === f 
+                        ? 'bg-primary text-primary-foreground border-primary' 
+                        : 'bg-background text-muted-foreground border-border hover:border-primary/50'
+                    }`}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              {history
+                .filter(h => historyFilter === 'all' || 
+                  (historyFilter === 'safe' && h.riskLevel === 'low') || 
+                  (historyFilter === 'caution' && h.riskLevel === 'medium') || 
+                  (historyFilter === 'danger' && (h.riskLevel === 'high' || h.riskLevel === 'critical'))
+                )
+                .filter(h => h.address.toLowerCase().includes(historySearch.toLowerCase()))
+                .map((item, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setAddress(item.address); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  className="w-full text-left flex items-center justify-between p-3 lg:p-4 bg-background border border-border rounded-xl hover:border-primary/50 transition-colors group"
+                >
+                  <div className="flex items-center gap-3 overflow-hidden">
+                    <div className={`p-2 rounded-lg ${getRiskBgColor(item.riskLevel)}`}>
+                      <Shield className={`w-4 h-4 ${getRiskColor(item.riskLevel)}`} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-mono truncate">{item.address}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(item.timestamp).toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 flex-shrink-0 pl-2">
+                    <div className="text-right hidden sm:block">
+                      <p className={`text-sm font-bold ${getRiskColor(item.riskLevel)}`}>{item.score}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase">{item.riskLevel}</p>
+                    </div>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-xs text-primary bg-primary/10 px-2 py-1 rounded-md">
+                      <Scan className="w-3 h-3" /> Rescan
+                    </div>
+                  </div>
+                </button>
+              ))}
+              {history.length === 0 && (
+                <p className="text-center text-sm text-muted-foreground italic py-8">
+                  No scan history yet.
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
       </motion.div>
     </div>
   );

@@ -7,6 +7,12 @@ export interface WalletRiskAssessment {
   summary: string;
   flags: string[];
   recommendation: string;
+  subScores: {
+    activity: number;
+    age: number;
+    pattern: number;
+    network: number;
+  };
 }
 
 // Retry with exponential backoff on 429 or 503 errors
@@ -76,7 +82,13 @@ export async function analyzeWallet(
   "riskLevel": "<low|medium|high|critical>",
   "summary": "<brief summary>",
   "flags": ["<flag1>", "<flag2>"],
-  "recommendation": "<recommendation for users>"
+  "recommendation": "<recommendation for users>",
+  "subScores": {
+    "activity": <number 0-100>,
+    "age": <number 0-100>,
+    "pattern": <number 0-100>,
+    "network": <number 0-100>
+  }
 }`;
 
   try {
@@ -92,6 +104,12 @@ export async function analyzeWallet(
       summary: 'Unable to complete full risk analysis. Please verify wallet manually.',
       flags: ['Analysis incomplete'],
       recommendation: 'Exercise caution and verify the wallet through multiple sources.',
+      subScores: {
+        activity: 50,
+        age: 50,
+        pattern: 50,
+        network: 50,
+      }
     };
   }
 }

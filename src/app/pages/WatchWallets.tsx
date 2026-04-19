@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Eye, Plus, Trash2, AlertCircle, Wallet as WalletIcon, Loader2, CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { Eye, Plus, Trash2, AlertCircle, Wallet as WalletIcon, Loader2, CheckCircle2, ExternalLink, RefreshCw, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
 import { useFeatureGate, FeatureGateBanner, FeeBadge } from '../components/FeatureGate';
+import { analyzeWallet, WalletRiskAssessment } from '../../lib/gemini';
+import { getWalletData } from '../../lib/stellar';
 
 interface WatchedWallet {
   id: string;
@@ -238,42 +241,142 @@ export function WatchWallets() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {wallets.map((wallet, index) => (
-              <motion.div
-                key={wallet.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h3 className="text-lg mb-1">{wallet.nickname}</h3>
-                    <p className="text-sm text-muted-foreground font-mono break-all lg:break-normal">
-                      {wallet.wallet_address}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => handleDelete(wallet.id)}
-                    className="p-2 hover:bg-destructive/10 text-destructive rounded-lg transition-colors opacity-0 group-hover:opacity-100"
-                    aria-label="Delete wallet"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-                <div className="flex items-center justify-between pt-4 border-t border-border">
-                  <span className="text-xs text-muted-foreground">
-                    Added {new Date(wallet.created_at).toLocaleDateString()}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                    <span className="text-xs text-green-500 font-medium">Live Monitoring Enabled</span>
-                  </div>
-                </div>
-              </motion.div>
+              <WatchlistCard key={wallet.id} wallet={wallet} index={index} onDelete={handleDelete} />
             ))}
           </div>
         )}
       </motion.div>
     </div>
+  );
+}
+
+function WatchlistCard({ wallet, index, onDelete }: { wallet: WatchedWallet, index: number, onDelete: (id: string) => void }) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [assessment, setAssessment] = useState<WalletRiskAssessment | null>(null);
+  const [balance, setBalance] = useState<string>('0');
+  const [opsCount, setOpsCount] = useState<number>(0);
+
+  const performAnalysis = async () => {
+    setLoading(true);
+    try {
+      const data = await getWalletData(wallet.wallet_address);
+      const risk = await analyzeWallet(wallet.wallet_address, data);
+      setAssessment(risk);
+      setBalance(data.balance);
+      setOpsCount(data.transactions.length);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    performAnalysis();
+  }, [wallet.wallet_address]);
+
+  const getRiskColor = (level?: string) => {
+    switch (level) {
+      case 'low':      return 'text-green-500';
+      case 'medium':   return 'text-yellow-500';
+      case 'high':     return 'text-orange-500';
+      case 'critical': return 'text-red-500';
+      default:         return 'text-muted-foreground';
+    }
+  };
+
+  const getRiskBgColor = (level?: string) => {
+    switch (level) {
+      case 'low':      return 'bg-green-500/10';
+      case 'medium':   return 'bg-yellow-500/10';
+      case 'high':     return 'bg-orange-500/10';
+      case 'critical': return 'bg-red-500/10';
+      default:         return 'bg-muted/10';
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: index * 0.1 }}
+      className="bg-card border border-border rounded-2xl p-6 hover:border-primary/50 transition-colors group relative overflow-hidden"
+    >
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="text-lg font-robotic truncate">{wallet.nickname}</h3>
+            {assessment && !loading && (
+              <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded border border-current ${getRiskColor(assessment.riskLevel)}`}>
+                {assessment.riskLevel}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-muted-foreground font-mono break-all line-clamp-1">
+            {wallet.wallet_address}
+          </p>
+        </div>
+        <button
+          onClick={() => onDelete(wallet.id)}
+          className="p-2 hover:bg-destructive/10 text-destructive rounded-lg transition-colors ml-2"
+          aria-label="Delete wallet"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="text-center">
+          <p className="text-[10px] text-muted-foreground uppercase font-robotic mb-1">Trust Score</p>
+          {loading ? (
+            <div className="h-6 w-12 bg-muted animate-pulse rounded mx-auto" />
+          ) : (
+            <p className={`text-xl font-bold font-robotic ${getRiskColor(assessment?.riskLevel)}`}>
+              {assessment?.riskScore ?? '--'}
+            </p>
+          )}
+        </div>
+        <div className="text-center border-x border-border">
+          <p className="text-[10px] text-muted-foreground uppercase font-robotic mb-1">Balance</p>
+          {loading ? (
+            <div className="h-6 w-16 bg-muted animate-pulse rounded mx-auto" />
+          ) : (
+            <p className="text-xl font-bold font-robotic">
+              {parseFloat(balance).toLocaleString(undefined, { maximumFractionDigits: 1 })}
+              <span className="text-[10px] ml-0.5 opacity-50">XLM</span>
+            </p>
+          )}
+        </div>
+        <div className="text-center">
+          <p className="text-[10px] text-muted-foreground uppercase font-robotic mb-1">Operations</p>
+          {loading ? (
+            <div className="h-6 w-8 bg-muted animate-pulse rounded mx-auto" />
+          ) : (
+            <p className="text-xl font-bold font-robotic">{opsCount}</p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between pt-4 border-t border-border">
+        <div className="flex items-center gap-2">
+          {loading ? (
+            <RefreshCw className="w-3 h-3 text-muted-foreground animate-spin" />
+          ) : (
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          )}
+          <span className="text-xs text-muted-foreground font-medium">
+            {loading ? 'Analyzing...' : 'Live Monitoring'}
+          </span>
+        </div>
+        
+        <button 
+          onClick={() => navigate(`/app/scanner?address=${wallet.wallet_address}`)}
+          className="text-[10px] text-primary uppercase font-robotic font-bold flex items-center gap-1 hover:underline"
+        >
+          <Zap className="w-3 h-3" /> Re-scan
+        </button>
+      </div>
+    </motion.div>
   );
 }

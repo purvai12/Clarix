@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Award, CheckCircle, Loader2, AlertCircle, Wallet, Unlink, Link2 } from 'lucide-react';
+import { Award, CheckCircle, Loader2, AlertCircle, Wallet, Unlink, Link2, MessageSquare, Send, Heart } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { chatWithAI } from '../../lib/gemini';
+import { feedbackService } from '../../lib/feedbackService';
 
 export function Profile() {
   const { profile, refreshProfile, walletAddress, connectWallet, disconnectWallet } = useAuth();
@@ -10,6 +12,17 @@ export function Profile() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [walletLoading, setWalletLoading] = useState(false);
+  
+  // AI Help Center state
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState<{ role: 'user' | 'assistant', content: string }[]>([
+    { role: 'assistant', content: 'Hi! I\'m ClarixAI. How can I help you with your profile or rewards today?' }
+  ]);
+  const [chatLoading, setChatLoading] = useState(false);
+  
+  // Feedback form state
+  const [feedbackMsg, setFeedbackMsg] = useState('');
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
 
   const handlePurchaseBadge = async () => {
     if (!profile) return;
@@ -65,6 +78,47 @@ export function Profile() {
   const handleDisconnectWallet = () => {
     disconnectWallet();
     setSuccess('Wallet disconnected.');
+  };
+
+  const handleSendToAI = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim() || chatLoading) return;
+    
+    const userMsg = chatInput.trim();
+    setChatInput('');
+    setChatMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+    setChatLoading(true);
+    
+    try {
+      const context = `You are ClarixAI, assisting a user on their Profile page. The user's username is ${profile?.username}, they have ${profile?.clrx_balance} CLRX, and they are ${profile?.is_verified ? 'verified' : 'not verified'}. Help them understand their rewards, how to get verified (costs 50 CLRX), and general platform features.`;
+      const response = await chatWithAI(userMsg, context);
+      setChatMessages(prev => [...prev, { role: 'assistant', content: response }]);
+    } catch (err) {
+      setChatMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, I hit a snag. Try again?' }]);
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  const handleSubmitFeedback = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!feedbackMsg.trim() || feedbackLoading || !profile) return;
+    
+    setFeedbackLoading(true);
+    try {
+      await feedbackService.submitFeedback({
+        user_id: profile.id,
+        email: profile.email,
+        subject: 'General Feedback',
+        message: feedbackMsg.trim()
+      });
+      setSuccess('Thank you for your feedback! It helps us improve Clarix.');
+      setFeedbackMsg('');
+    } catch (err) {
+      setError('Failed to send feedback. Please try again later.');
+    } finally {
+      setFeedbackLoading(false);
+    }
   };
 
   if (!profile) {
@@ -244,7 +298,7 @@ export function Profile() {
         )}
 
         {profile.is_verified && (
-          <div className="bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-transparent border border-green-500/20 rounded-2xl p-8">
+          <div className="bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-transparent border border-green-500/20 rounded-2xl p-8 mb-8">
             <div className="flex items-center gap-3">
               <CheckCircle className="w-8 h-8 text-green-500" />
               <div>
@@ -256,6 +310,92 @@ export function Profile() {
             </div>
           </div>
         )}
+
+        {/* AI Help Center & Feedback Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+          {/* AI Help Center */}
+          <div className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col min-h-[400px]">
+            <div className="p-6 border-b border-border bg-muted/30">
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <MessageSquare className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-robotic uppercase tracking-tight">AI Help Center</h3>
+                  <p className="text-xs text-muted-foreground">Ask ClarixAI about rewards or features</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="flex-1 p-4 overflow-y-auto space-y-3 max-h-[250px] scrollbar-thin">
+              {chatMessages.map((m, i) => (
+                <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] rounded-2xl px-3 py-2 text-xs ${
+                    m.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted text-foreground'
+                  }`}>
+                    {m.content}
+                  </div>
+                </div>
+              ))}
+              {chatLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-muted rounded-2xl px-3 py-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <form onSubmit={handleSendToAI} className="p-4 border-t border-border mt-auto">
+              <div className="flex gap-2">
+                <input 
+                  type="text" 
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  placeholder="Ask a question..."
+                  className="flex-1 bg-background border border-border rounded-full px-4 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <button 
+                  type="submit" 
+                  disabled={chatLoading || !chatInput.trim()}
+                  className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </form>
+          </div>
+
+          {/* Feature Feedback */}
+          <div className="bg-card border border-border rounded-2xl p-6 flex flex-col">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="p-2 bg-green-500/10 rounded-lg">
+                <Heart className="w-5 h-5 text-green-500" />
+              </div>
+              <div>
+                <h3 className="text-lg font-robotic uppercase tracking-tight">Feedback Form</h3>
+                <p className="text-xs text-muted-foreground">Help us build the future of Clarix</p>
+              </div>
+            </div>
+            
+            <form onSubmit={handleSubmitFeedback} className="flex-1 flex flex-col gap-4">
+              <textarea 
+                value={feedbackMsg}
+                onChange={(e) => setFeedbackMsg(e.target.value)}
+                placeholder="Suggest a feature or report a minor bug..."
+                className="flex-1 w-full bg-background border border-border rounded-xl p-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none min-h-[150px]"
+                required
+              />
+              <button 
+                type="submit"
+                disabled={feedbackLoading || !feedbackMsg.trim()}
+                className="w-full bg-foreground text-background py-3 rounded-full hover:opacity-90 transition-opacity flex items-center justify-center gap-2 font-robotic text-sm uppercase"
+              >
+                {feedbackLoading ? <><Loader2 className="w-4 h-4 animate-spin" /> Submitting...</> : 'Submit Feedback'}
+              </button>
+            </form>
+          </div>
+        </div>
       </motion.div>
     </div>
   );
