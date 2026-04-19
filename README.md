@@ -1,6 +1,6 @@
 # Clarix — AI-Powered Wallet Safety on the Stellar Blockchain
 
-[![Clarix CI/CD Pipeline](https://github.com/purvai12/Clarix/actions/workflows/main.yml/badge.svg)](https://github.com/purvai12/Clarix/actions/workflows/main.yml)
+[![Clarix CI/CD Pipeline](https://github.com/purvai12/Clarix/actions/workflows/ci.yml/badge.svg)](https://github.com/purvai12/Clarix/actions/workflows/ci.yml)
 
 > **Live Demo:** [clarix-beta.vercel.app](https://clarix-beta.vercel.app)
 
@@ -164,7 +164,7 @@ An automated GitHub Actions pipeline on every push to `main` runs Vitest unit te
 
 ## User Feedback
 
-As part of the MVP phase, we collected live user feedback to evolve the dApp's usability. [View the exported Feedback Spreadsheet](./Clarix%20Feedback%20Form%20(Responses).xlsx).
+As part of the MVP phase, we collected live user feedback to evolve the dApp's usability. [View the exported Feedback Spreadsheet](https://docs.google.com/spreadsheets/d/1NhwrciFU4IdOrD3olplpJlSlaDGy4e3ZozChk5jVACs/edit?usp=sharing).
 
 | Feedback | Resolution |
 |---|---|
