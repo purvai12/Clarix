@@ -168,9 +168,9 @@ As part of the MVP phase, we collected live user feedback to evolve the dApp's u
 
 | Feedback | Resolution |
 |---|---|
-| *"Add a reason to report scammers"* | Integrated `ClarixReward` contract awarding **+10 CLRX per report** and introduced the 50 CLRX Verified Badge incentive. |
-| *"Hard to ask questions while scanning"* | Built the **Global floating ClarixAI Chatbot** — available on every screen, including login. |
-| *"Signup doesn't feel secure"* | Implemented strict client-side validation: email format, password strength, confirmation matching, and mandatory wallet connection. |
+| *"work on signup page its isn't the fields arent case sensitive"* | Processed inputs for case insensitivity and implemented strict client-side lowercase enforcement for email fields during authentication for security. |
+| *"You can add a navigation bar and improve the website speed"* | Designed a fully responsive layout navigation bar and implemented heavily optimized Single Page App (SPA) routing for instant, zero-reload page transitions. |
+| *"Make a disconnect wallet feature on the sign in page as well so that i can switch to other wallets"* | Added a dedicated "Disconnect Wallet" un-link button directly on the Auth screens to clear the session and swap wallets without needing to log in first. |
 
 ---
 
