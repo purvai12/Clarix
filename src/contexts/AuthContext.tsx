@@ -60,7 +60,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select('*')
       .eq('id', id)
       .maybeSingle();
-    if (!error && data) setProfile(data);
+    if (!error && data) {
+      setProfile(data);
+    } else {
+      setProfile({
+        id,
+        email: user?.email || 'Unknown',
+        username: user?.user_metadata?.username || 'User',
+        clrx_balance: 0,
+        is_verified: false,
+        wallet_address: walletAddress ?? null,
+      } as Profile);
+    }
   };
 
   // ── XLM balance loader ────────────────────────────────────────────────────

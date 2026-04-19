@@ -147,7 +147,7 @@ export async function chargeFeature(userAddress: string): Promise<string> {
     .setTimeout(30)
     .build();
 
-  const hash = await signAndSubmitSWK(transaction.toXDR());
+  const hash = await signAndSubmit(transaction.toXDR());
   return hash;
 }
 
@@ -177,7 +177,7 @@ export async function fileReport(
     .build();
 
   const prepared = await server.prepareTransaction(transaction);
-  const txHash = await signAndSubmitSWK(prepared.toXDR());
+  const txHash = await signAndSubmit(prepared.toXDR());
   return txHash;
 }
 
