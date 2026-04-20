@@ -160,6 +160,12 @@ export async function fileReport(
   reportHash: string,
   reporterAddress: string
 ): Promise<string> {
+  console.log('--- FILE REPORT DEBUG ---');
+  console.log('Reporter:', reporterAddress);
+  console.log('Target:', walletAddress);
+  console.log('Hash:', reportHash);
+  console.log('Reward ID:', CLARIX_REWARD_ID);
+
   const sourceAccount = await server.getAccount(reporterAddress);
   const contract = new Contract(CLARIX_REGISTRY_ID);
 
@@ -170,10 +176,10 @@ export async function fileReport(
     .addOperation(
       contract.call(
         'file_report',
-        ...[
-          new Address(walletAddress).toScVal(),
-          xdr.ScVal.scvString(reportHash),
-        ]
+        new Address(reporterAddress).toScVal(),
+        xdr.ScVal.scvString(walletAddress),
+        xdr.ScVal.scvString(reportHash),
+        new Address(CLARIX_REWARD_ID).toScVal()
       )
     )
     .setTimeout(30)
