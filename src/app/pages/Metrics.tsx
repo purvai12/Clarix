@@ -80,6 +80,10 @@ const Metrics: React.FC = () => {
         .from('watched_wallets')
         .select('*', { count: 'exact', head: true });
 
+      // 4. Total CLRX Issued (Sum of balances)
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('clrx_balance');
       const totalClrx = profilesData?.reduce((acc, p) => acc + (p.clrx_balance || 0), 0) || 0;
 
       const { data: profileWallets } = await supabase.from('profiles').select('wallet_address');
