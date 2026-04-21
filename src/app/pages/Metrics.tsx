@@ -171,8 +171,8 @@ const Metrics: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
@@ -186,7 +186,7 @@ const Metrics: React.FC = () => {
           </div>
           <button 
             onClick={fetchMetrics}
-            className="flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:bg-zinc-800 transition-colors shadow-sm font-robotic text-xs uppercase tracking-widest font-semibold"
+            className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg hover:bg-muted/50 transition-colors shadow-sm font-robotic text-xs uppercase tracking-widest font-semibold"
           >
             <Clock className="w-4 h-4" />
             Refresh Data
@@ -201,9 +201,9 @@ const Metrics: React.FC = () => {
             ))
           ) : (
             stats.map((stat, i) => (
-              <div key={i} className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-2xl shadow-sm hover:border-primary/50 transition-all group backdrop-blur-sm">
+              <div key={i} className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:border-primary/20 transition-all group">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-zinc-800 rounded-lg text-primary">
+                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
                     {stat.icon}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -230,7 +230,7 @@ const Metrics: React.FC = () => {
         {/* Status Dashboard */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* System Health */}
-          <div className="lg:col-span-1 bg-zinc-900/50 border border-zinc-800 p-6 rounded-2xl shadow-sm backdrop-blur-sm">
+          <div className="lg:col-span-1 bg-card border border-border p-6 rounded-2xl shadow-sm">
             <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
               <Activity className="w-5 h-5 text-primary" />
               Service Status
@@ -251,7 +251,7 @@ const Metrics: React.FC = () => {
           </div>
 
           {/* Activity Dashboard */}
-          <div className="lg:col-span-2 bg-zinc-900/50 border border-zinc-800 p-8 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-center backdrop-blur-sm">
+          <div className="lg:col-span-2 bg-card border border-border p-8 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-center">
             <div className="relative z-10">
               <h2 className="text-3xl font-bold mb-2">Ecosystem Performance</h2>
               <p className="text-slate-500 dark:text-slate-400 max-w-lg">
@@ -273,13 +273,13 @@ const Metrics: React.FC = () => {
         </div>
 
         {/* Wallet Registry Section */}
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden shadow-sm backdrop-blur-sm">
-          <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
+        <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
+          <div className="p-6 border-b border-border flex items-center justify-between">
             <h3 className="text-xl font-bold flex items-center gap-3">
               <Wallet className="w-5 h-5 text-primary" />
               Verified Multi-Wallet Registry
             </h3>
-            <span className="px-4 py-1 bg-zinc-800 border border-zinc-700 rounded-full text-xs font-bold text-white uppercase tracking-widest font-robotic">
+            <span className="px-4 py-1 bg-primary/5 border border-primary/10 rounded-full text-xs font-bold text-primary uppercase tracking-widest font-robotic">
               {platformWallets.length} Addresses Active
             </span>
           </div>
@@ -292,7 +292,7 @@ const Metrics: React.FC = () => {
                   <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest font-robotic text-right">Registry Audit</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800">
+              <tbody className="divide-y divide-border">
                 {platformWallets.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">
