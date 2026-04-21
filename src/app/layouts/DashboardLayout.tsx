@@ -82,7 +82,7 @@ export function DashboardLayout() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1 overflow-x-auto">
+            <div className="hidden lg:flex items-center gap-0.5">
               {navItems.map((item) => {
                 const Icon     = item.icon;
                 const isActive = location.pathname === item.path;
@@ -90,14 +90,14 @@ export function DashboardLayout() {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-colors whitespace-nowrap ${
+                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full transition-colors whitespace-nowrap ${
                       isActive
                         ? 'bg-primary text-primary-foreground'
                         : 'hover:bg-muted text-muted-foreground'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
-                    <span className="text-xs">{item.label}</span>
+                    <span className="text-[11px] font-medium uppercase tracking-tight">{item.label}</span>
                   </Link>
                 );
               })}

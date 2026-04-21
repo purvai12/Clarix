@@ -188,25 +188,25 @@ const Metrics: React.FC = () => {
             </div>
           </div>
 
-          {/* Activity Placeholder */}
-          <div className="lg:col-span-2 bg-gradient-to-br from-indigo-500 to-purple-600 p-8 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-center text-white">
+          {/* Activity Dashboard */}
+          <div className="lg:col-span-2 bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden flex flex-col justify-center">
             <div className="relative z-10">
-              <h2 className="text-2xl font-bold mb-2">Black Belt Status: Active</h2>
-              <p className="text-indigo-100 max-w-md">
-                Our ecosystem is running on the latest Soroban technology. Gasless transactions are currently handled via Clarix Sponsorship.
+              <h2 className="text-2xl font-bold mb-2 text-slate-800 dark:text-white">Ecosystem Performance</h2>
+              <p className="text-slate-500 dark:text-slate-400 max-w-lg">
+                Our ecosystem is optimized for real-time Soroban execution. Gasless transaction flow is prioritized via automated Clarix sponsorship protocols.
               </p>
-              <div className="mt-6 flex gap-4">
-                <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/20">
-                  <div className="text-xs text-indigo-200">DAU Count</div>
-                  <div className="text-lg font-bold font-mono">34/30+ Verified</div>
+              <div className="mt-8 flex gap-5">
+                <div className="bg-slate-50 dark:bg-slate-900/50 px-5 py-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Network Activity</div>
+                  <div className="text-xl font-bold font-mono text-indigo-500">34 Active Verified</div>
                 </div>
-                <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/20">
-                  <div className="text-xs text-indigo-200">Contract Ops</div>
-                  <div className="text-lg font-bold font-mono">1,402</div>
+                <div className="bg-slate-50 dark:bg-slate-900/50 px-5 py-3 rounded-xl border border-slate-100 dark:border-slate-800">
+                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Contract Throughput</div>
+                  <div className="text-xl font-bold font-mono text-purple-500">1,402 API Ops</div>
                 </div>
               </div>
             </div>
-            <BarChart3 className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-white/5 rotate-12" />
+            <BarChart3 className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-slate-100 dark:text-slate-700/20 rotate-12" />
           </div>
         </div>
       </div>
