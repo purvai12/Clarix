@@ -48,6 +48,18 @@ const Metrics: React.FC = () => {
   useEffect(() => {
     fetchMetrics();
     checkHealth();
+
+    // Real-time subscription for Total Users
+    const subscription = supabase
+      .channel('profiles-count')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'profiles' }, () => {
+        fetchMetrics();
+      })
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const fetchMetrics = async () => {
@@ -74,7 +86,11 @@ const Metrics: React.FC = () => {
         .select('clrx_balance');
       const totalClrx = profiles?.reduce((acc, p) => acc + (p.clrx_balance || 0), 0) || 0;
 
-      // ... wait, we calculate this below ...
+      // 1. Total Registered Users
+      const { count: usersCount } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true });
+
       const { data: profileWallets } = await supabase.from('profiles').select('wallet_address');
       const { data: reportWallets } = await supabase.from('fraud_reports').select('wallet_address');
       const { data: watchWallets } = await supabase.from('watched_wallets').select('wallet_address');
@@ -85,15 +101,14 @@ const Metrics: React.FC = () => {
       reportWallets?.forEach(r => r.wallet_address && allWallets.add(r.wallet_address));
       watchWallets?.forEach(w => w.wallet_address && allWallets.add(w.wallet_address));
 
-      const totalActiveCount = allWallets.size;
       const totalClrx = profiles?.reduce((acc, p) => acc + (p.clrx_balance || 0), 0) || 0;
 
       setStats([
         { 
-          label: 'Total Active Users', 
-          value: totalActiveCount, 
+          label: 'Total Registered Users', 
+          value: usersCount || 0, 
           icon: <Users className="w-5 h-5" />, 
-          trend: '+12% from last week',
+          trend: 'Real-time tracking',
           color: 'blue'
         },
         { 
