@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import {
   Shield, Scan, AlertTriangle, Eye, GitCompare,
   User, LogOut, Menu, X, Sun, Moon, BookOpen,
-  Wallet, RefreshCw,
+  Wallet, RefreshCw, BarChart3,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { GlobalChatbot } from '../components/GlobalChatbot';
@@ -50,6 +50,7 @@ export function DashboardLayout() {
     { path: '/app/report',   label: 'Report',    icon: AlertTriangle },
     { path: '/app/watch',    label: 'Watch',     icon: Eye       },
     { path: '/app/compare',  label: 'Compare',   icon: GitCompare },
+    { path: '/app/metrics',  label: 'Metrics',   icon: BarChart3 },
     { path: '/app/docs',     label: 'Docs',      icon: BookOpen  },
   ];
 
