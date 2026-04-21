@@ -22,6 +22,19 @@ interface MetricStat {
   color: string;
 }
 
+const SEED_WALLETS = [
+  'GAN7C2I4436O6GPXOBDOXY5VOW6EQEURFOA6KQSI4Y5XMC7ACFHDTU3R',
+  'GBWDGDXAN4AW22OBEQADIOSK2GE7EFNDLZDTBJV6AP33SEPTGNNGFDAE',
+  'GAL62YYPPKUGNVUDOLJA476Z2JWREWSKPCP5L3JEXADHO4HQM7WMH3DK',
+  'GDYVHISILWDAESQ5T3NZVRP3ETTZ2NB2ON6XHKPS5NP7A7ECBG7WZ2VP',
+  'GBUFEULELCSEWIBPNPFK65YJ36IMP4OBLZZ3UHKVB6GQCUMQH42YBSOZ',
+  'GBS7KYBPL4O4IPOFWK524PCXAGXCW3SASKEZKXED7FCMYVISWYGJO5JS',
+  'GB6RLO6A7DGI5FW6EASTRD2USD5BKOCJMTULELEI63PYHDG4NQMSQ7GK',
+  'GBPUHHUNOTD3Y2HIYGNTZGT2AXDDTN5J2FLTJVBALX4KALPP6LP2L7VH',
+  'GDQOCMTSPH7ROZK5V6ANFY24DGYNSYV5BONU4NRNUVYQN3TLTHLEWJWC',
+  'GAVXFIDQ6MEBFSLEP2DZZEGU5JZX5HXSMQ3N4LDWRRJJN3X6UIKWQIT6'
+];
+
 const Metrics: React.FC = () => {
   const [stats, setStats] = useState<MetricStat[]>([]);
   const [loading, setLoading] = useState(true);
@@ -98,6 +111,10 @@ const Metrics: React.FC = () => {
       const { data: watchWallets } = await supabase.from('watched_wallets').select('wallet_address');
 
       const allWallets = new Set<string>();
+      
+      // Add seed wallets first
+      SEED_WALLETS.forEach(w => allWallets.add(w));
+      
       profileWallets?.forEach(p => p.wallet_address && allWallets.add(p.wallet_address));
       reportWallets?.forEach(r => r.wallet_address && allWallets.add(r.wallet_address));
       watchWallets?.forEach(w => w.wallet_address && allWallets.add(w.wallet_address));
