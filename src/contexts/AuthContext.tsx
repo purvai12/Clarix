@@ -14,6 +14,7 @@ interface Profile {
   username: string;
   clrx_balance: number;
   is_verified: boolean;
+  wallet_address: string;
   created_at: string;
 }
 
@@ -172,11 +173,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (data.user) {
       const { error: profileError } = await supabase.from('profiles').insert({
-        id:           data.user.id,
+        id:             data.user.id,
         email,
         username,
-        clrx_balance: 0,
-        is_verified:  false,
+        wallet_address: walletAddress,
+        clrx_balance:   0,
+        is_verified:    false,
       });
       if (profileError) throw profileError;
     }
