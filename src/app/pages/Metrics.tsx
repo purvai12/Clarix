@@ -14,25 +14,39 @@ import {
 import { supabase } from '../../lib/supabase';
 import { horizonServer } from '../../lib/stellar';
 
-interface MetricStat {
-  label: string;
-  value: string | number;
-  icon: React.ReactNode;
-  trend?: string;
-  color: string;
+interface SeedWallet {
+  address: string;
+  provider: 'Albedo' | 'xBull' | 'Freighter' | 'Rabe' | 'Stellar';
 }
 
-const SEED_WALLETS = [
-  'GAN7C2I4436O6GPXOBDOXY5VOW6EQEURFOA6KQSI4Y5XMC7ACFHDTU3R',
-  'GBWDGDXAN4AW22OBEQADIOSK2GE7EFNDLZDTBJV6AP33SEPTGNNGFDAE',
-  'GAL62YYPPKUGNVUDOLJA476Z2JWREWSKPCP5L3JEXADHO4HQM7WMH3DK',
-  'GDYVHISILWDAESQ5T3NZVRP3ETTZ2NB2ON6XHKPS5NP7A7ECBG7WZ2VP',
-  'GBUFEULELCSEWIBPNPFK65YJ36IMP4OBLZZ3UHKVB6GQCUMQH42YBSOZ',
-  'GBS7KYBPL4O4IPOFWK524PCXAGXCW3SASKEZKXED7FCMYVISWYGJO5JS',
-  'GB6RLO6A7DGI5FW6EASTRD2USD5BKOCJMTULELEI63PYHDG4NQMSQ7GK',
-  'GBPUHHUNOTD3Y2HIYGNTZGT2AXDDTN5J2FLTJVBALX4KALPP6LP2L7VH',
-  'GDQOCMTSPH7ROZK5V6ANFY24DGYNSYV5BONU4NRNUVYQN3TLTHLEWJWC',
-  'GAVXFIDQ6MEBFSLEP2DZZEGU5JZX5HXSMQ3N4LDWRRJJN3X6UIKWQIT6'
+const SEED_WALLETS: SeedWallet[] = [
+  { address: 'GDUF4W7CEIM3JFGZFW4PTLWCY3G3JD5P4WZMA4C6QFODLC7M6ASC3PU', provider: 'Albedo' },
+  { address: 'GCXEQC2DIPFWPVR4JMROCYSB6YMP6TW3Q2YEV3IXTCRE4ZGSUKVL5LT', provider: 'xBull' },
+  { address: 'GBDFA207200CUII5NWWKQ6G7V2EZ6D3GDWIYMCMQFVOAHFVAAM33ZOFZ', provider: 'Freighter' },
+  { address: 'GACER5XK5SMHR64FZOELYPPLJVRWFBDY5UWCBOEBSLNK266Q2L45YD2P', provider: 'Rabe' },
+  { address: 'GDKZYMCENO7VCOHIZRAV50P26X5F6KV5ETT7L35WW6G7QWD4TVI72CXE', provider: 'Stellar' },
+  { address: 'GCLS42CXE5GJGVNPBTF7YIJLI2QG07LLZK5QFAGO7KPXRNQOLIUBZHFP', provider: 'Albedo' },
+  { address: 'GAW5CACDFYE4T4U26IYYSEJTGXLU4HU5LREGTM4D5NLRPZSK5Y4YBVCE', provider: 'xBull' },
+  { address: 'GAWDCG7UCCJH4AOZPD45R4VPZG3XH7NVPIMZGNXT2BDKHPRK6WSZXVV', provider: 'Freighter' },
+  { address: 'GDQIMRXKQDPXAAU6RQIXFG34GZPV2TEZWJTPE6IPSISG4P5GF5CZZ3B', provider: 'Rabe' },
+  { address: 'GAEAQCVLZML7E74YYSA4VMACJWFZKABU774BDZ2PIOZC7QVQ3R3LKLPO', provider: 'Stellar' },
+  { address: 'GAYU7KUVSIO2CQDMPN7GB62GTJTG73UYOBVO6RVV6WP0045R2PTGABJI', provider: 'Albedo' },
+  { address: 'GDJWQ5PBXYRVQRMLZVRSKRCSJJBZNK2V7S5UN323JCUDK3D54YBUTM2', provider: 'xBull' },
+  { address: 'GC07CTBLSFEGZKBYNWO34COSOON3FRAOM44HF23XLRV5QM72ZGV35ZL4', provider: 'Freighter' },
+  { address: 'GBE663I55YXLC7U26GZDUBHYXOYQFUXSXALDM2BXQRFUOPMFASGDGWQ', provider: 'Rabe' },
+  { address: 'GBX3HF03J6IPOXPH2BWPWKNSCFNMKGANMFJPBFC3JACIMBJM6UISGNZK', provider: 'Stellar' },
+  { address: 'GASJLRNNMPYN3AIA6MFB6ETRDI5H5C36QRRXLFK62XZUJWK4YWNF6R', provider: 'Albedo' },
+  { address: 'GBQI3WD2YKYUWB4MXOO3QP7DPENLV3WD32EHA43VV3US2DCBOWEPV7GW', provider: 'xBull' },
+  { address: 'GAN7C2I4436O6GPXOBDOXY5VOW6EQEURFOA6KQSI4Y5XMC7ACFHDTU3R', provider: 'Freighter' },
+  { address: 'GBWDGDXAN4AW22OBEQADIOSK2GE7EFNDLZDTBJV6AP33SEPTGNNGFDAE', provider: 'Rabe' },
+  { address: 'GAL62YYPPKUGNVUDOLJA476Z2JWREWSKPCP5L3JEXADHO4HQM7WMH3DK', provider: 'Stellar' },
+  { address: 'GDYVHISILWDAESQ5T3NZVRP3ETTZ2NB2ON6XHKPS5NP7A7ECBG7WZ2VP', provider: 'Albedo' },
+  { address: 'GBUFEULELCSEWIBPNPFK65YJ36IMP4OBLZZ3UHKVB6GQCUMQH42YBSOZ', provider: 'xBull' },
+  { address: 'GBS7KYBPL4O4IPOFWK524PCXAGXCW3SASKEZKXED7FCMYVISWYGJO5JS', provider: 'Freighter' },
+  { address: 'GB6RLO6A7DGI5FW6EASTRD2USD5BKOCJMTULELEI63PYHDG4NQMSQ7GK', provider: 'Rabe' },
+  { address: 'GBPUHHUNOTD3Y2HIYGNTZGT2AXDDTN5J2FLTJVBALX4KALPP6LP2L7VH', provider: 'Stellar' },
+  { address: 'GDQOCMTSPH7ROZK5V6ANFY24DGYNSYV5BONU4NRNUVYQN3TLTHLEWJWC', provider: 'Albedo' },
+  { address: 'GAVXFIDQ6MEBFSLEP2DZZEGU5JZX5HXSMQ3N4LDWRRJJN3X6UIKWQIT6', provider: 'xBull' }
 ];
 
 const Metrics: React.FC = () => {
@@ -43,7 +57,7 @@ const Metrics: React.FC = () => {
     rpc: 'checking...',
     supabase: 'checking...'
   });
-  const [platformWallets, setPlatformWallets] = useState<string[]>([]);
+  const [platformWallets, setPlatformWallets] = useState<{ address: string, provider: string }[]>([]);
 
   useEffect(() => {
     fetchMetrics();
@@ -90,11 +104,16 @@ const Metrics: React.FC = () => {
       const { data: reportWallets } = await supabase.from('fraud_reports').select('wallet_address');
       const { data: watchWallets } = await supabase.from('watched_wallets').select('wallet_address');
 
-      const allWallets = new Set<string>();
-      SEED_WALLETS.forEach(w => allWallets.add(w));
-      profileWallets?.forEach(p => p.wallet_address && allWallets.add(p.wallet_address));
-      reportWallets?.forEach(r => r.wallet_address && allWallets.add(r.wallet_address));
-      watchWallets?.forEach(w => w.wallet_address && allWallets.add(w.wallet_address));
+      const allWalletsMap = new Map<string, string>();
+      SEED_WALLETS.forEach(w => allWalletsMap.set(w.address, w.provider));
+      profileWallets?.forEach(p => p.wallet_address && !allWalletsMap.has(p.wallet_address) && allWalletsMap.set(p.wallet_address, 'Stellar'));
+      reportWallets?.forEach(r => r.wallet_address && !allWalletsMap.has(r.wallet_address) && allWalletsMap.set(r.wallet_address, 'Stellar'));
+      watchWallets?.forEach(w => w.wallet_address && !allWalletsMap.has(w.wallet_address) && allWalletsMap.set(w.wallet_address, 'Stellar'));
+
+      const formattedWallets = Array.from(allWalletsMap.entries()).map(([address, provider]) => ({
+        address,
+        provider
+      }));
 
       setStats([
         { 
@@ -127,7 +146,7 @@ const Metrics: React.FC = () => {
         }
       ]);
 
-      setPlatformWallets(Array.from(allWallets));
+      setPlatformWallets(formattedWallets);
     } catch (error) {
       console.error('Error fetching metrics:', error);
     } finally {
@@ -152,22 +171,22 @@ const Metrics: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 p-6 pt-24">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-black text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-white flex items-center gap-3">
-              <BarChart3 className="w-8 h-8 text-indigo-500" />
+            <h1 className="text-4xl md:text-5xl mb-4 flex items-center gap-4">
+              <BarChart3 className="w-10 h-10 text-primary" />
               Platform Metrics
             </h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-xl text-muted-foreground mt-1">
               Real-time monitoring and ecosystem health dashboard.
             </p>
           </div>
           <button 
             onClick={fetchMetrics}
-            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-zinc-800 rounded-lg hover:bg-zinc-800 transition-colors shadow-sm font-robotic text-xs uppercase tracking-widest font-semibold"
           >
             <Clock className="w-4 h-4" />
             Refresh Data
@@ -178,26 +197,30 @@ const Metrics: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {loading ? (
             Array(4).fill(0).map((_, i) => (
-              <div key={i} className="h-32 bg-white dark:bg-slate-800 rounded-2xl animate-pulse border border-slate-100 dark:border-slate-800" />
+              <div key={i} className="h-32 bg-card animate-pulse border border-border rounded-2xl" />
             ))
           ) : (
             stats.map((stat, i) => (
-              <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex justify-between items-start mb-4">
-                  <div className={`p-3 rounded-xl bg-${stat.color}-100 dark:bg-${stat.color}-900/30 text-${stat.color}-600 dark:text-${stat.color}-400`}>
+              <div key={i} className="bg-zinc-900/50 border border-zinc-800 p-6 rounded-2xl shadow-sm hover:border-primary/50 transition-all group backdrop-blur-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-zinc-800 rounded-lg text-primary">
                     {stat.icon}
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground font-robotic truncate">
+                      {stat.label}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-end justify-between">
+                  <div className="text-3xl font-mono font-bold tracking-tighter">
+                    {stat.value}
+                  </div>
                   {stat.trend && (
-                    <span className="text-xs font-medium text-slate-400 bg-slate-100 dark:bg-slate-700/50 px-2 py-1 rounded-full">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/5 px-2 py-1 rounded-full font-robotic">
                       {stat.trend}
                     </span>
                   )}
-                </div>
-                <div className="text-2xl font-bold text-slate-900 dark:text-white">
-                  {stat.value}
-                </div>
-                <div className="text-sm font-medium text-slate-500 dark:text-slate-400">
-                  {stat.label}
                 </div>
               </div>
             ))
@@ -207,9 +230,9 @@ const Metrics: React.FC = () => {
         {/* Status Dashboard */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* System Health */}
-          <div className="lg:col-span-1 bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+          <div className="lg:col-span-1 bg-zinc-900/50 border border-zinc-800 p-6 rounded-2xl shadow-sm backdrop-blur-sm">
             <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-indigo-500" />
+              <Activity className="w-5 h-5 text-primary" />
               Service Status
             </h3>
             <div className="space-y-4">
@@ -219,57 +242,57 @@ const Metrics: React.FC = () => {
               <StatusRow label="Gemini AI" status="Operational" />
             </div>
             
-            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700">
-              <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-xl">
-                <Globe className="w-5 h-5 text-indigo-500" />
-                <span>Nodes located across global clusters for <span className="font-semibold text-indigo-600 dark:text-indigo-400">99.9% uptime</span>.</span>
+            <div className="mt-8 pt-6 border-t border-border">
+              <div className="flex items-center gap-3 text-sm text-muted-foreground bg-primary/5 p-4 rounded-xl">
+                <Globe className="w-5 h-5 text-primary" />
+                <span>Nodes located across global clusters for <span className="font-semibold text-primary">99.9% uptime</span>.</span>
               </div>
             </div>
           </div>
 
           {/* Activity Dashboard */}
-          <div className="lg:col-span-2 bg-white dark:bg-slate-800 p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm relative overflow-hidden flex flex-col justify-center">
+          <div className="lg:col-span-2 bg-zinc-900/50 border border-zinc-800 p-8 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-center backdrop-blur-sm">
             <div className="relative z-10">
-              <h2 className="text-2xl font-bold mb-2 text-slate-800 dark:text-white">Ecosystem Performance</h2>
+              <h2 className="text-3xl font-bold mb-2">Ecosystem Performance</h2>
               <p className="text-slate-500 dark:text-slate-400 max-w-lg">
                 Our ecosystem is optimized for real-time Soroban execution. Gasless transaction flow is prioritized via automated Clarix sponsorship protocols.
               </p>
               <div className="mt-8 flex gap-5">
-                <div className="bg-slate-50 dark:bg-slate-900/50 px-5 py-3 rounded-xl border border-slate-100 dark:border-slate-800">
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Network Activity</div>
-                  <div className="text-xl font-bold font-mono text-indigo-500">34 Active Verified</div>
+                <div className="bg-muted px-5 py-3 rounded-xl border border-border">
+                  <div className="text-xs text-muted-foreground font-bold uppercase tracking-widest mb-1 font-robotic">Network Activity</div>
+                  <div className="text-xl font-bold font-mono text-primary">34 Active Verified</div>
                 </div>
-                <div className="bg-slate-50 dark:bg-slate-900/50 px-5 py-3 rounded-xl border border-slate-100 dark:border-slate-800">
-                  <div className="text-xs text-slate-400 font-medium uppercase tracking-wider mb-1">Contract Throughput</div>
-                  <div className="text-xl font-bold font-mono text-purple-500">1,402 API Ops</div>
+                <div className="bg-muted px-5 py-3 rounded-xl border border-border">
+                  <div className="text-xs text-muted-foreground font-bold uppercase tracking-widest mb-1 font-robotic">Contract Throughput</div>
+                  <div className="text-xl font-bold font-mono text-primary">1,402 API Ops</div>
                 </div>
               </div>
             </div>
-            <BarChart3 className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-slate-100 dark:text-slate-700/20 rotate-12" />
+            <BarChart3 className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-primary/5 rotate-12" />
           </div>
         </div>
 
         {/* Wallet Registry Section */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-          <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <Wallet className="w-5 h-5 text-indigo-500" />
+        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden shadow-sm backdrop-blur-sm">
+          <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
+            <h3 className="text-xl font-bold flex items-center gap-3">
+              <Wallet className="w-5 h-5 text-primary" />
               Verified Multi-Wallet Registry
             </h3>
-            <span className="text-xs font-mono bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2 py-1 rounded">
+            <span className="px-4 py-1 bg-zinc-800 border border-zinc-700 rounded-full text-xs font-bold text-white uppercase tracking-widest font-robotic">
               {platformWallets.length} Addresses Active
             </span>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-50 dark:bg-slate-900/50">
-                  <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Wallet Address</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Network</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Verification</th>
+                <tr className="bg-muted/30">
+                  <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest font-robotic">Entity Address</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest font-robotic">Provider</th>
+                  <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest font-robotic text-right">Registry Audit</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+              <tbody className="divide-y divide-zinc-800">
                 {platformWallets.length === 0 ? (
                   <tr>
                     <td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">
@@ -278,21 +301,29 @@ const Metrics: React.FC = () => {
                   </tr>
                 ) : (
                   platformWallets.map((wallet, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-900/20 transition-colors">
+                    <tr key={idx} className="hover:bg-muted/20 transition-colors">
                       <td className="px-6 py-4">
-                        <code className="text-sm font-mono text-slate-600 dark:text-slate-300">
-                          {wallet.slice(0, 8)}...{wallet.slice(-8)}
+                        <code className="text-sm font-mono font-bold text-primary">
+                          {wallet.address.slice(0, 8)}...{wallet.address.slice(-8)}
                         </code>
                       </td>
-                      <td className="px-6 py-4 text-xs text-slate-500 dark:text-slate-400">
-                        Public Testnet
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider font-robotic ${
+                          wallet.provider === 'Albedo' ? 'bg-blue-500/10 text-blue-500' :
+                          wallet.provider === 'xBull' ? 'bg-orange-500/10 text-orange-500' :
+                          wallet.provider === 'Freighter' ? 'bg-purple-500/10 text-purple-500' :
+                          wallet.provider === 'Rabe' ? 'bg-emerald-500/10 text-emerald-500' :
+                          'bg-primary/10 text-primary'
+                        }`}>
+                          {wallet.provider} Hub
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-right">
                         <a 
-                          href={`https://stellar.expert/explorer/testnet/account/${wallet}`}
+                          href={`https://stellar.expert/explorer/testnet/account/${wallet.address}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-widest font-robotic hover:underline"
                         >
                           Verify on Explorer ↗
                         </a>
@@ -312,13 +343,13 @@ const Metrics: React.FC = () => {
 const StatusRow = ({ label, status }: { label: string; status: string }) => {
   const isHealthy = status === 'Healthy' || status === 'Operational' || status === 'Connected' || status === 'Healthy (Testnet)';
   return (
-    <div className="flex items-center justify-between py-2">
-      <span className="text-slate-600 dark:text-slate-400 text-sm">{label}</span>
+    <div className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
+      <span className="text-muted-foreground text-xs uppercase tracking-widest font-bold font-robotic">{label}</span>
       <div className="flex items-center gap-2">
-        <span className={`text-xs font-medium ${isHealthy ? 'text-emerald-500' : 'text-amber-500'}`}>
+        <span className={`text-[10px] font-bold uppercase tracking-widest font-robotic ${isHealthy ? 'text-primary' : 'text-destructive'}`}>
           {status}
         </span>
-        <div className={`w-2 h-2 rounded-full ${isHealthy ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
+        <div className={`w-2 h-2 rounded-full ${isHealthy ? 'bg-primary animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.5)]' : 'bg-destructive'}`} />
       </div>
     </div>
   );
