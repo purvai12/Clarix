@@ -8,7 +8,8 @@ import {
   Clock, 
   Trophy,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Wallet
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { horizonServer } from '../../lib/stellar';
