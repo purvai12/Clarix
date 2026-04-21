@@ -74,10 +74,24 @@ const Metrics: React.FC = () => {
         .select('clrx_balance');
       const totalClrx = profiles?.reduce((acc, p) => acc + (p.clrx_balance || 0), 0) || 0;
 
+      // ... wait, we calculate this below ...
+      const { data: profileWallets } = await supabase.from('profiles').select('wallet_address');
+      const { data: reportWallets } = await supabase.from('fraud_reports').select('wallet_address');
+      const { data: watchWallets } = await supabase.from('watched_wallets').select('wallet_address');
+
+      const allWallets = new Set<string>();
+      SEED_WALLETS.forEach(w => allWallets.add(w));
+      profileWallets?.forEach(p => p.wallet_address && allWallets.add(p.wallet_address));
+      reportWallets?.forEach(r => r.wallet_address && allWallets.add(r.wallet_address));
+      watchWallets?.forEach(w => w.wallet_address && allWallets.add(w.wallet_address));
+
+      const totalActiveCount = allWallets.size;
+      const totalClrx = profiles?.reduce((acc, p) => acc + (p.clrx_balance || 0), 0) || 0;
+
       setStats([
         { 
           label: 'Total Active Users', 
-          value: usersCount || 0, 
+          value: totalActiveCount, 
           icon: <Users className="w-5 h-5" />, 
           trend: '+12% from last week',
           color: 'blue'
@@ -104,20 +118,6 @@ const Metrics: React.FC = () => {
           color: 'amber'
         }
       ]);
-
-      // 5. Fetch all unique wallets used in the app
-      const { data: profileWallets } = await supabase.from('profiles').select('wallet_address');
-      const { data: reportWallets } = await supabase.from('fraud_reports').select('wallet_address');
-      const { data: watchWallets } = await supabase.from('watched_wallets').select('wallet_address');
-
-      const allWallets = new Set<string>();
-      
-      // Add seed wallets first
-      SEED_WALLETS.forEach(w => allWallets.add(w));
-      
-      profileWallets?.forEach(p => p.wallet_address && allWallets.add(p.wallet_address));
-      reportWallets?.forEach(r => r.wallet_address && allWallets.add(r.wallet_address));
-      watchWallets?.forEach(w => w.wallet_address && allWallets.add(w.wallet_address));
 
       setPlatformWallets(Array.from(allWallets));
     } catch (error) {
