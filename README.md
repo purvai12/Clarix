@@ -125,7 +125,6 @@ For full API and AI engine documentation, visit the **Documentation** tab inside
 - [x] **Security Checklist** — [security_checklist.md](./security_checklist.md) completed.
 - [x] **Full Documentation** — [README](./README.md), [Architecture](./architecture.md), and in-app Docs.
 - [x] **30+ Meaningful Commits** — Continuous development history.
-- [x] **Community Contribution** — [View Twitter Post](https://x.com/clarix_safety/status/123456789) (Placeholder).
 
 ## License
 MIT © 2026 Clarix Inc.
