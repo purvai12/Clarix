@@ -80,16 +80,7 @@ const Metrics: React.FC = () => {
         .from('watched_wallets')
         .select('*', { count: 'exact', head: true });
 
-      // 4. Total CLRX Issued (Sum of balances)
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('clrx_balance');
-      const totalClrx = profiles?.reduce((acc, p) => acc + (p.clrx_balance || 0), 0) || 0;
-
-      // 1. Total Registered Users
-      const { count: usersCount } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true });
+      const totalClrx = profilesData?.reduce((acc, p) => acc + (p.clrx_balance || 0), 0) || 0;
 
       const { data: profileWallets } = await supabase.from('profiles').select('wallet_address');
       const { data: reportWallets } = await supabase.from('fraud_reports').select('wallet_address');
@@ -100,8 +91,6 @@ const Metrics: React.FC = () => {
       profileWallets?.forEach(p => p.wallet_address && allWallets.add(p.wallet_address));
       reportWallets?.forEach(r => r.wallet_address && allWallets.add(r.wallet_address));
       watchWallets?.forEach(w => w.wallet_address && allWallets.add(w.wallet_address));
-
-      const totalClrx = profiles?.reduce((acc, p) => acc + (p.clrx_balance || 0), 0) || 0;
 
       setStats([
         { 
