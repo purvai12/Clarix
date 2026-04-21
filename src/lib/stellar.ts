@@ -14,6 +14,7 @@ import {
 import {
   StellarWalletsKit,
 } from '@creit.tech/stellar-wallets-kit';
+import { createSponsoredTransaction } from './feeSponsorship';
 
 // ─── Contract / account addresses ────────────────────────────────────────────
 export const CLARIX_REGISTRY_ID = 'CBLTKX433VCXF4TRKGNP4V26UAWJZ6YXC2VVXYGQM2NDIBFIQFTQZGTY';
@@ -89,13 +90,43 @@ export async function signAndSubmitSWK(txXdr: string): Promise<string> {
       if (finalTx.status === 'SUCCESS') return txResponse.hash;
       throw new NetworkError(finalTx.status);
     }
-    throw new NetworkError('Transaction failed to enter PENDING state');
+    
+    const errorDetail = (txResponse as any).errorResultXdr || txResponse.status;
+    console.error('Transaction injection failed:', txResponse);
+    throw new NetworkError(`Transaction rejected by network (${txResponse.status}). Detail: ${errorDetail}`);
   } catch (error: any) {
     const msg = error?.message ?? '';
     if (msg.includes('User declined') || msg.includes('rejected')) throw new UserRejectedError();
     if (msg.includes('insufficient')) throw new InsufficientFundsError();
     throw new NetworkError(msg);
   }
+}
+
+/**
+ * Sponsors a transaction by wrapping it in a fee bump and signing with Clarix Treasury.
+ */
+export async function sponsorAndSubmit(innerTxXdr: string): Promise<string> {
+  const sponsorSecret = import.meta.env.VITE_SPONSOR_SECRET;
+  if (!sponsorSecret) {
+    throw new Error('VITE_SPONSOR_SECRET is not configured. Gasless transactions are disabled.');
+  }
+
+  const sponsoredXdr = await createSponsoredTransaction(innerTxXdr, sponsorSecret);
+  
+  // Submit to network
+  const transaction = TransactionBuilder.fromXDR(sponsoredXdr, Networks.TESTNET);
+  const response = await server.sendTransaction(transaction as any);
+
+  if (response.status === 'PENDING') {
+    let txResponse = await server.getTransaction(response.hash);
+    while (txResponse.status === 'NOT_FOUND') {
+      await new Promise((r) => setTimeout(r, 1000));
+      txResponse = await server.getTransaction(response.hash);
+    }
+    if (txResponse.status === 'SUCCESS') return response.hash;
+    throw new NetworkError(txResponse.status);
+  }
+  throw new NetworkError('Sponsored transaction submission failed');
 }
 
 // ─── Legacy Freighter sign & submit (kept for backward compat) ───────────────
@@ -186,8 +217,24 @@ export async function fileReport(
     .build();
 
   const prepared = await server.prepareTransaction(transaction);
-  const txHash = await signAndSubmitSWK(prepared.toXDR());
-  return txHash;
+  
+  // Choose submission method
+  const isGasless = !!import.meta.env.VITE_SPONSOR_SECRET;
+  
+  if (isGasless) {
+    console.log('--- GASLESS MODE ACTIVE ---');
+    // First, user signs the inner tx
+    const signResult = await StellarWalletsKit.signTransaction(prepared.toXDR(), {
+      networkPassphrase: Networks.TESTNET,
+    });
+    const signedInnerXdr = typeof signResult === 'string' ? signResult : signResult.signedTxXdr;
+    
+    // Then Clarix signs the fee bump
+    return await sponsorAndSubmit(signedInnerXdr);
+  } else {
+    const txHash = await signAndSubmitSWK(prepared.toXDR());
+    return txHash;
+  }
 }
 
 // ─── Fetch wallet data from Horizon ──────────────────────────────────────────

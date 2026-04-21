@@ -12,6 +12,7 @@ import { WatchWallets } from './pages/WatchWallets';
 import { CompareWallets } from './pages/CompareWallets';
 import { Profile } from './pages/Profile';
 import { Docs } from './pages/Docs';
+import Metrics from './pages/Metrics';
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
           {
             path: 'docs',
             Component: Docs,
+          },
+          {
+            path: 'metrics',
+            Component: Metrics,
           },
         ],
       },
