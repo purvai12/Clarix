@@ -133,6 +133,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { address } = await StellarWalletsKit.authModal();
     setWalletAddress(address);
     localStorage.setItem(WALLET_STORAGE_KEY, address);
+    
+    // Persist wallet address to profile if user is logged in
+    if (user) {
+      await supabase
+        .from('profiles')
+        .update({ wallet_address: address })
+        .eq('id', user.id);
+      refreshProfile(user.id);
+    }
+
     // Fetch balance immediately after connect
     try {
       const { balance } = await getWalletData(address);

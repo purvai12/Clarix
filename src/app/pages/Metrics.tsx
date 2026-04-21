@@ -29,6 +29,7 @@ const Metrics: React.FC = () => {
     rpc: 'checking...',
     supabase: 'checking...'
   });
+  const [platformWallets, setPlatformWallets] = useState<string[]>([]);
 
   useEffect(() => {
     fetchMetrics();
@@ -89,6 +90,18 @@ const Metrics: React.FC = () => {
           color: 'amber'
         }
       ]);
+
+      // 5. Fetch all unique wallets used in the app
+      const { data: profileWallets } = await supabase.from('profiles').select('wallet_address');
+      const { data: reportWallets } = await supabase.from('fraud_reports').select('wallet_address');
+      const { data: watchWallets } = await supabase.from('watched_wallets').select('wallet_address');
+
+      const allWallets = new Set<string>();
+      profileWallets?.forEach(p => p.wallet_address && allWallets.add(p.wallet_address));
+      reportWallets?.forEach(r => r.wallet_address && allWallets.add(r.wallet_address));
+      watchWallets?.forEach(w => w.wallet_address && allWallets.add(w.wallet_address));
+
+      setPlatformWallets(Array.from(allWallets));
     } catch (error) {
       console.error('Error fetching metrics:', error);
     } finally {
@@ -207,6 +220,62 @@ const Metrics: React.FC = () => {
               </div>
             </div>
             <BarChart3 className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-slate-100 dark:text-slate-700/20 rotate-12" />
+          </div>
+        </div>
+
+        {/* Wallet Registry Section */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+          <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <h3 className="text-lg font-semibold flex items-center gap-2">
+              <Wallet className="w-5 h-5 text-indigo-500" />
+              Verified Multi-Wallet Registry
+            </h3>
+            <span className="text-xs font-mono bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-2 py-1 rounded">
+              {platformWallets.length} Addresses Active
+            </span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 dark:bg-slate-900/50">
+                  <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Wallet Address</th>
+                  <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Network</th>
+                  <th className="px-6 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Verification</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                {platformWallets.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">
+                      No verified wallets recorded in the current session.
+                    </td>
+                  </tr>
+                ) : (
+                  platformWallets.map((wallet, idx) => (
+                    <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-900/20 transition-colors">
+                      <td className="px-6 py-4">
+                        <code className="text-sm font-mono text-slate-600 dark:text-slate-300">
+                          {wallet.slice(0, 8)}...{wallet.slice(-8)}
+                        </code>
+                      </td>
+                      <td className="px-6 py-4 text-xs text-slate-500 dark:text-slate-400">
+                        Public Testnet
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <a 
+                          href={`https://stellar.expert/explorer/testnet/account/${wallet}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                        >
+                          Verify on Explorer ↗
+                        </a>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
