@@ -170,54 +170,64 @@ const Metrics: React.FC = () => {
     }
   };
 
+  const [showRegistry, setShowRegistry] = useState(false);
+
+  // Group wallets for the summary view
+  const hubCounts = platformWallets.reduce((acc, w) => {
+    acc[w.provider] = (acc[w.provider] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="space-y-10">
+        {/* Header - More compact */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-border pb-8">
           <div>
-            <h1 className="text-4xl md:text-5xl mb-4 flex items-center gap-4">
-              <BarChart3 className="w-10 h-10 text-primary" />
-              Platform Metrics
-            </h1>
-            <p className="text-xl text-muted-foreground mt-1">
-              Real-time monitoring and ecosystem health dashboard.
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <BarChart3 className="w-5 h-5 text-primary" />
+              </div>
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary/60 font-robotic">Analytics Engine</span>
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight">Platform Metrics</h1>
+            <p className="text-sm text-muted-foreground mt-2 max-w-md">
+              Real-time synchronization of the Clarix ecosystem across Stellar hubs and local database states.
             </p>
           </div>
           <button 
             onClick={fetchMetrics}
-            className="flex items-center gap-2 px-4 py-2 bg-card border border-border rounded-lg hover:bg-muted/50 transition-colors shadow-sm font-robotic text-xs uppercase tracking-widest font-semibold"
+            disabled={loading}
+            className="flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground rounded-full hover:opacity-90 transition-all font-robotic text-[10px] uppercase tracking-widest font-bold shadow-lg shadow-primary/20 disabled:opacity-50"
           >
-            <Clock className="w-4 h-4" />
-            Refresh Data
+            <Clock className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+            {loading ? 'Refreshing...' : 'Refresh Engine'}
           </button>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Stats Grid - Cleaner cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {loading ? (
             Array(4).fill(0).map((_, i) => (
-              <div key={i} className="h-32 bg-card animate-pulse border border-border rounded-2xl" />
+              <div key={i} className="h-28 bg-card/50 animate-pulse border border-border rounded-2xl" />
             ))
           ) : (
             stats.map((stat, i) => (
-              <div key={i} className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:border-primary/20 transition-all group">
+              <div key={i} className="bg-card border border-border p-6 rounded-2xl shadow-sm hover:translate-y-[-2px] transition-all duration-300">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                  <div className="p-2 bg-primary/5 rounded-lg text-primary/70">
                     {stat.icon}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-[11px] uppercase tracking-widest font-bold text-muted-foreground font-robotic truncate">
-                      {stat.label}
-                    </div>
-                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground font-robotic truncate">
+                    {stat.label}
+                  </span>
                 </div>
-                <div className="flex items-end justify-between">
+                <div className="flex items-baseline gap-2">
                   <div className="text-3xl font-mono font-bold tracking-tighter">
                     {stat.value}
                   </div>
                   {stat.trend && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/5 px-2 py-1 rounded-full font-robotic">
+                    <span className="text-[9px] font-bold text-primary/40 uppercase font-robotic">
                       {stat.trend}
                     </span>
                   )}
@@ -227,95 +237,112 @@ const Metrics: React.FC = () => {
           )}
         </div>
 
-        {/* Status Dashboard */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* System Health */}
-          <div className="lg:col-span-1 bg-card border border-border p-6 rounded-2xl shadow-sm">
-            <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
-              <Activity className="w-5 h-5 text-primary" />
-              Service Status
-            </h3>
-            <div className="space-y-4">
-              <StatusRow label="Stellar Horizon" status={systemHealth.horizon} />
-              <StatusRow label="Soroban RPC" status={systemHealth.rpc} />
-              <StatusRow label="Supabase DB" status={systemHealth.supabase} />
-              <StatusRow label="Gemini AI" status="Operational" />
-            </div>
-            
-            <div className="mt-8 pt-6 border-t border-border">
-              <div className="flex items-center gap-3 text-sm text-muted-foreground bg-primary/5 p-4 rounded-xl">
-                <Globe className="w-5 h-5 text-primary" />
-                <span>Nodes located across global clusters for <span className="font-semibold text-primary">99.9% uptime</span>.</span>
+        {/* Middle Section - Operations & Ecosystem Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Section A: Operational Health */}
+          <div className="bg-card border border-border p-8 rounded-3xl shadow-sm relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="text-xl font-bold flex items-center gap-2">
+                  <Activity className="w-5 h-5 text-primary" />
+                  System Operations
+                </h3>
+                <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-[10px] font-bold uppercase tracking-widest font-robotic">
+                  All Systems Nominal
+                </span>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
+                <StatusRow label="Stellar Horizon" status={systemHealth.horizon} />
+                <StatusRow label="Soroban RPC" status={systemHealth.rpc} />
+                <StatusRow label="Supabase DB" status={systemHealth.supabase} />
+                <StatusRow label="Gemini Oracle" status="Live" />
+              </div>
+
+              <div className="mt-8 pt-8 border-t border-border flex items-center gap-4">
+                <div className="p-3 bg-primary/5 rounded-2xl">
+                  <Globe className="w-6 h-6 text-primary" />
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Clarix nodes are synchronized across <span className="text-primary font-semibold">global edge clusters</span>, 
+                  ensuring real-time risk scoring and minimal latency for Soroban contract interaction.
+                </p>
               </div>
             </div>
           </div>
 
-          {/* Activity Dashboard */}
-          <div className="lg:col-span-2 bg-card border border-border p-8 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-center">
-            <div className="relative z-10">
-              <h2 className="text-3xl font-bold mb-2">Ecosystem Performance</h2>
-              <p className="text-slate-500 dark:text-slate-400 max-w-lg">
-                Our ecosystem is optimized for real-time Soroban execution. Gasless transaction flow is prioritized via automated Clarix sponsorship protocols.
-              </p>
-              <div className="mt-8 flex gap-5">
-                <div className="bg-muted px-5 py-3 rounded-xl border border-border">
-                  <div className="text-xs text-muted-foreground font-bold uppercase tracking-widest mb-1 font-robotic">Network Activity</div>
-                  <div className="text-xl font-bold font-mono text-primary">34 Active Verified</div>
+          {/* Section B: Ecosystem Hubs Summary */}
+          <div className="bg-card border border-border p-8 rounded-3xl shadow-sm">
+            <h3 className="text-xl font-bold mb-8 flex items-center gap-2">
+              <ShieldAlert className="w-5 h-5 text-primary" />
+              Ecosystem Regions
+            </h3>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {Object.entries(hubCounts).map(([provider, count]) => (
+                <div key={provider} className="p-4 bg-muted/40 rounded-2xl border border-border hover:bg-muted/60 transition-colors group">
+                  <div className={`text-[10px] font-bold uppercase tracking-widest mb-1 font-robotic ${
+                    provider === 'Albedo' ? 'text-blue-500' :
+                    provider === 'xBull' ? 'text-orange-500' :
+                    provider === 'Freighter' ? 'text-purple-500' :
+                    provider === 'Rabe' ? 'text-emerald-500' :
+                    'text-primary'
+                  }`}>
+                    {provider}
+                  </div>
+                  <div className="flex items-end justify-between">
+                    <div className="text-2xl font-bold font-mono">{count}</div>
+                    <div className="text-[9px] text-muted-foreground font-bold font-robotic uppercase mb-1">Entities</div>
+                  </div>
                 </div>
-                <div className="bg-muted px-5 py-3 rounded-xl border border-border">
-                  <div className="text-xs text-muted-foreground font-bold uppercase tracking-widest mb-1 font-robotic">Contract Throughput</div>
-                  <div className="text-xl font-bold font-mono text-primary">1,402 API Ops</div>
-                </div>
-              </div>
+              ))}
             </div>
-            <BarChart3 className="absolute right-[-20px] bottom-[-20px] w-64 h-64 text-primary/5 rotate-12" />
+
+            <div className="mt-6 flex justify-end">
+              <button 
+                onClick={() => setShowRegistry(!showRegistry)}
+                className="text-xs font-bold text-primary hover:underline flex items-center gap-2 font-robotic uppercase tracking-widest"
+              >
+                {showRegistry ? 'Hide Registry Details' : 'View Full Multi-Wallet Log ↗'}
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Wallet Registry Section */}
-        <div className="bg-card border border-border rounded-2xl overflow-hidden shadow-sm">
-          <div className="p-6 border-b border-border flex items-center justify-between">
-            <h3 className="text-xl font-bold flex items-center gap-3">
-              <Wallet className="w-5 h-5 text-primary" />
-              Verified Multi-Wallet Registry
-            </h3>
-            <span className="px-4 py-1 bg-primary/5 border border-primary/10 rounded-full text-xs font-bold text-primary uppercase tracking-widest font-robotic">
-              {platformWallets.length} Addresses Active
-            </span>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-muted/30">
-                  <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest font-robotic">Entity Address</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest font-robotic">Provider</th>
-                  <th className="px-6 py-4 text-xs font-bold text-muted-foreground uppercase tracking-widest font-robotic text-right">Registry Audit</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {platformWallets.length === 0 ? (
-                  <tr>
-                    <td colSpan={3} className="px-6 py-10 text-center text-slate-400 italic">
-                      No verified wallets recorded in the current session.
-                    </td>
+        {/* Expandable Registry Table */}
+        {showRegistry && (
+          <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-xl animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="p-6 border-b border-border bg-muted/20">
+              <h3 className="text-sm font-bold uppercase tracking-widest font-robotic text-muted-foreground">
+                Verified Asset Audit Log
+              </h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-muted/10 border-b border-border/50">
+                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic">Address Hash</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic">Source Provider</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic text-right">Horizon Audit</th>
                   </tr>
-                ) : (
-                  platformWallets.map((wallet, idx) => (
-                    <tr key={idx} className="hover:bg-muted/20 transition-colors">
+                </thead>
+                <tbody className="divide-y divide-border/30">
+                  {platformWallets.map((wallet, idx) => (
+                    <tr key={idx} className="hover:bg-muted/10 transition-colors group">
                       <td className="px-6 py-4">
-                        <code className="text-sm font-mono font-bold text-primary">
-                          {wallet.address.slice(0, 8)}...{wallet.address.slice(-8)}
+                        <code className="text-xs font-mono font-bold text-primary/80 group-hover:text-primary transition-colors">
+                          {wallet.address}
                         </code>
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider font-robotic ${
+                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-tighter ${
                           wallet.provider === 'Albedo' ? 'bg-blue-500/10 text-blue-500' :
                           wallet.provider === 'xBull' ? 'bg-orange-500/10 text-orange-500' :
                           wallet.provider === 'Freighter' ? 'bg-purple-500/10 text-purple-500' :
                           wallet.provider === 'Rabe' ? 'bg-emerald-500/10 text-emerald-500' :
                           'bg-primary/10 text-primary'
                         }`}>
-                          {wallet.provider} Hub
+                          {wallet.provider}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
@@ -323,36 +350,39 @@ const Metrics: React.FC = () => {
                           href={`https://stellar.expert/explorer/testnet/account/${wallet.address}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-primary uppercase tracking-widest font-robotic hover:underline"
+                          className="text-[10px] font-bold text-muted-foreground hover:text-primary uppercase tracking-widest font-robotic"
                         >
-                          Verify on Explorer ↗
+                          Explorer ↗
                         </a>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
 const StatusRow = ({ label, status }: { label: string; status: string }) => {
-  const isHealthy = status === 'Healthy' || status === 'Operational' || status === 'Connected' || status === 'Healthy (Testnet)';
+  const isHealthy = status === 'Healthy' || status === 'Operational' || status === 'Connected' || status === 'Healthy (Testnet)' || status === 'Live';
   return (
-    <div className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
-      <span className="text-muted-foreground text-xs uppercase tracking-widest font-bold font-robotic">{label}</span>
+    <div className="flex flex-col gap-1">
+      <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground font-robotic">{label}</span>
       <div className="flex items-center gap-2">
-        <span className={`text-[10px] font-bold uppercase tracking-widest font-robotic ${isHealthy ? 'text-primary' : 'text-destructive'}`}>
+        <div className={`w-1.5 h-1.5 rounded-full ${isHealthy ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]' : 'bg-destructive'}`} />
+        <span className={`text-sm font-bold font-mono tracking-tight ${isHealthy ? 'text-primary' : 'text-destructive'}`}>
           {status}
         </span>
-        <div className={`w-2 h-2 rounded-full ${isHealthy ? 'bg-primary animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.5)]' : 'bg-destructive'}`} />
       </div>
     </div>
   );
 };
+
+export default Metrics;
+
 
 export default Metrics;
