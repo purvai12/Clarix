@@ -118,7 +118,7 @@ const Metrics: React.FC = () => {
       setStats([
         { 
           label: 'Total Registered Users', 
-          value: usersCount || 0, 
+          value: formattedWallets.length, 
           icon: <Users className="w-5 h-5" />, 
           trend: 'Real-time tracking',
           color: 'blue'
