@@ -103,7 +103,7 @@ export function CompareWallets() {
 
         {/* Blockchain Data Summary */}
         {blockchainData && (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="bg-background border border-border rounded-xl p-3 text-center">
               <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1">Balance</p>
               <p className="text-sm font-robotic font-bold">
