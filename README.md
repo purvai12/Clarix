@@ -187,12 +187,6 @@ User Feedback Response Sheet (Public): [View Live Responses](https://docs.google
 
 ---
 
-## Next Phase Improvements
-
-1. **Advanced Tx Simulation** — Real-time mempool simulation integrated into the dashboard, rendering exact state changes a transaction *would* trigger before signing.
-2. **Enhanced Leaderboards** — Transitioning client-side leaderboards into a fully decentralised community ranking index reading from indexing nodes.
-
----
 
 ## Documentation
 
