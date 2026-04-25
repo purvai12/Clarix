@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Award, CheckCircle, Loader2, AlertCircle, Wallet, Unlink, Link2, MessageSquare, Send, Heart } from 'lucide-react';
+import { Award, CheckCircle, Loader2, AlertCircle, Wallet, Unlink, Link2, MessageSquare, Send, Heart, ShieldAlert } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { chatWithAI } from '../../lib/gemini';
 import { feedbackService } from '../../lib/feedbackService';
@@ -23,6 +23,29 @@ export function Profile() {
   // Feedback form state
   const [feedbackMsg, setFeedbackMsg] = useState('');
   const [feedbackLoading, setFeedbackLoading] = useState(false);
+
+  // Past reports state
+  const [pastReports, setPastReports] = useState<any[]>([]);
+  const [reportsLoading, setReportsLoading] = useState(false);
+
+  useEffect(() => {
+    if (profile?.id) {
+      const fetchReports = async () => {
+        setReportsLoading(true);
+        const { data } = await supabase
+          .from('fraud_reports')
+          .select('*')
+          .eq('reporter_id', profile.id)
+          .order('created_at', { ascending: false });
+        
+        if (data) {
+          setPastReports(data);
+        }
+        setReportsLoading(false);
+      };
+      fetchReports();
+    }
+  }, [profile?.id]);
 
   const handlePurchaseBadge = async () => {
     if (!profile) return;
@@ -395,6 +418,47 @@ export function Profile() {
               </button>
             </form>
           </div>
+        </div>
+
+        {/* Past Fraud Reports */}
+        <div className="mt-8 bg-card border border-border rounded-2xl p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <div className="p-2 bg-orange-500/10 rounded-lg">
+              <ShieldAlert className="w-5 h-5 text-orange-500" />
+            </div>
+            <div>
+              <h3 className="text-lg font-robotic uppercase tracking-tight">My Fraud Reports</h3>
+              <p className="text-xs text-muted-foreground">Your submitted on-chain fraud warnings</p>
+            </div>
+          </div>
+          
+          {reportsLoading ? (
+            <div className="flex items-center gap-2 text-muted-foreground text-sm">
+              <Loader2 className="w-4 h-4 animate-spin" /> Fetching reports...
+            </div>
+          ) : pastReports.length > 0 ? (
+            <div className="space-y-3">
+              {pastReports.map((report) => (
+                <div key={report.id} className="p-4 bg-muted/30 border border-border rounded-xl">
+                  <div className="flex items-start justify-between mb-2">
+                    <span className="font-mono text-sm text-primary">{report.wallet_address}</span>
+                    <span className="text-xs text-muted-foreground">{new Date(report.created_at).toLocaleDateString()}</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground italic mb-2">"{report.description}"</p>
+                  <div className="flex items-center gap-4 text-xs font-medium">
+                    <span className="text-orange-500">Lost: {report.amount_lost} XLM</span>
+                    {report.blockchain_tx_hash && (
+                      <a href={`https://stellar.expert/explorer/testnet/tx/${report.blockchain_tx_hash}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                        View Tx
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-sm text-muted-foreground italic">You haven't submitted any fraud reports yet.</p>
+          )}
         </div>
       </motion.div>
     </div>
