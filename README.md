@@ -142,9 +142,9 @@ Clarix integrates **PostHog** for real-time product analytics, tracking:
 | 27 | Khushi Yadav | [khushiyadav@57gmail.com](mailto:khushiyadav@57gmail.com) | GDWQ25FKEZ3IRTPNXNO3NGVRTJ4FY265IKJ6WZXOVQZ6PHF4ICCBL5BR |
 | 28 | Sarvesh Naik | [sarveshnaik7@gmail.com](mailto:sarveshnaik7@gmail.com) | GBYBNT65PZIDDA7LQJPFS3WUS63HAPYTGNO4ZLRQO7GDXXMIYJM53UIX |
 | 29 | Shravani | [shravaniprabhune04@gmail.com](mailto:shravaniprabhune04@gmail.com) | GBGQOORD5O5XXZ6QTYNH4INHBSHUUAENDGU3LDZRCLYHATDU7Z5FHRFO |
+| 30 | Swanandi Naik | [swanandi49@gmail.com](mailto:swanandi49@gmail.com) | GDVH3ONEQ2QZPGJIOFS7SQPSKGN3TJQ3YLQNEMBOMJPEESBYUEKVGZEN |
 
-
-Total Registered Users: 30 — All wallets are verified on the [Stellar Testnet Explorer](https://stellar.expert/explorer/testnet)
+Total Registered Users: 31 — All wallets are verified on the [Stellar Testnet Explorer](https://stellar.expert/explorer/testnet)
 
 ---
 
@@ -169,21 +169,21 @@ User Feedback Response Sheet (Public): [View Live Responses](https://docs.google
 | 13 | Sakshi | [sakshichavan15@gmail.com](mailto:sakshichavan15@gmail.com) | GDH2KAYRVCFMKLCFV5V2PF2PWQL74GQYKH5PXCHQATRHRPJXAGILG43T | i love it | N/A |
 | 14 | Nimisha | [nimishakatre617@gmail.com](mailto:nimishakatre617@gmail.com) | GA3FBK2CXTX5JGTHOBIBJSQZ6W4VKFBCYSNYWF3NDDRSGWTSNJXUTTDB | maybe add a bulk scan discount? | N/A |
 | 15 | Manasi | [naikmanasi163@gmail.com](mailto:naikmanasi163@gmail.com) | GD7MMGFNM7J6EQZB6Z7XCBVU4KKOPWCT6GMAIL5YCMVMJNO4LR6SQQDH | Fraud reporting was seamless. Could you add a feature to upload screenshots as evidence for scams? | N/A |
-| 16 | Rahul | [rahul1210@gmail.com](mailto:rahul1210@gmail.com) | GASW26GSYEOW3FIALDZDAZWFDM6R2P2B26ENKDVKRSWJINOUFXAW7VYX | I'd love an option to export the AI risk assessment as a PDF to share with others | N/A |
+| 16 | Rahul | [rahul1210@gmail.com](mailto:rahul1210@gmail.com) | GASW26GSYEOW3FIALDZDAZWFDM6R2P2B26ENKDVKRSWJINOUFXAW7VYX | I'd love an option to export the AI risk assessment as a PDF to share with others | 666c3ba |
 | 17 | Maruti | [maruti3682@gmail.com](mailto:maruti3682@gmail.com) | GCJJON6QVUWAORIGFVGCZ4K5Y3SMYWO4J4XAY2DUSCSF3DV5TYIP6BAX | The side-by-side wallet comparison tool is genius. Would be amazing to compare three wallets at once | N/A |
 | 18 | RUTUJA | [rutujashah12@gmail.com](mailto:rutujashah12@gmail.com) | GCQXPTQRKR7J6T4SGA4T4XUC7HTL725B4TRASLG5SJCJIQYWO2QOXJF7 | Earning 10 CLRX for reporting fraud is a fantastic incentive. Are there plans to make CLRX tradable on DEXes? | N/A |
 | 19 | Aarya | [aaryarakate@gmail.com](mailto:aaryarakate@gmail.com) | GDRMKGH3Y53NWMSSG6BHMFLNQS4TTCNHR3Z4KB6HWZWCIDRVFLP2FNZ6 | Being able to disconnect the wallet directly from the Auth page is a really convenient for testing different accounts. | N/A |
 | 20 | yash bhandari | [yash135@gmail.com](mailto:yash135@gmail.com) | GB3GYELMODXK46WRNKACOGAY3UZQ6JU4XTHMMPNQSP2X7H6VQUPGEK7Q | no none | N/A |
-| 21 | Tirtha | [tirthakumavat56@gmail.com](mailto:tirthakumavat56@gmail.com) | GB6Y7V3YVGCB4TRCM4HHOFUEVQE5Z5GWWOBNG3A2AWF6VRVUMPWJQW3M | improve mobile responsiveness | N/A |
+| 21 | Tirtha | [tirthakumavat56@gmail.com](mailto:tirthakumavat56@gmail.com) | GB6Y7V3YVGCB4TRCM4HHOFUEVQE5Z5GWWOBNG3A2AWF6VRVUMPWJQW3M | improve mobile responsiveness | 968f76e |
 | 22 | Amol | [amollahoti81@gmail.com](mailto:amollahoti81@gmail.com) | GDEDXX2FXQCAVQP22SU42UCGNNCB5TDIJKNU3MJ32GTCEQPRAQJSHZX5 | Can we get special badges for power users? Like a 'Top Reporter' badge for submitting more than 5 verified scams | N/A |
 | 23 | Shweta Shah | [shwetawins34@gmail.com](mailto:shwetawins34@gmail.com) | GAOGQA3FDMSB57NQUMZVLBHPFWSUKSCSTL5YYSX42PO3W7LYFGH2OTOD | Please add support for more wallet extensions. I use Lobstr mostly and would love to connect directly. | N/A |
 | 24 | Rugved | [rugvedmethe@gmail.com](mailto:rugvedmethe@gmail.com) | GBLBNVNW5JAAUTBZMZNPTXX3M3GIMTBIHEAQGWOV7KM7YOSHNBN2IMIL | impprove the ai | N/A |
 | 25 | Jeet Balode | [jeetbalode5@gmail.com](mailto:jeetbalode5@gmail.com) | GANAWY7HGI5BVQGKAG7YUWN4EMJ423INVPOQCIYBZOWJUKQJ65OEWZQM | add sounds after a ai risk analysis is complete | N/A |
 | 26 | Jiya | [jiyasingh@gmail.com](mailto:jiyasingh@gmail.com) | GDYYLHDHYN7YFG5VALWTPLRVZNGXJTNZ2WKFMUB5534SOHDQ2FXJW22V | this app is so cool, all features in one place | N/A |
-| 27 | Khushi Yadav | [khushiyadav@57gmail.com](mailto:khushiyadav@57gmail.com) | GDWQ25FKEZ3IRTPNXNO3NGVRTJ4FY265IKJ6WZXOVQZ6PHF4ICCBL5BR | Is there a way to view all of my past fraud reports in a dedicated tab on my profile? | N/A |
+| 27 | Khushi Yadav | [khushiyadav@57gmail.com](mailto:khushiyadav@57gmail.com) | GDWQ25FKEZ3IRTPNXNO3NGVRTJ4FY265IKJ6WZXOVQZ6PHF4ICCBL5BR | Is there a way to view all of my past fraud reports in a dedicated tab on my profile? | 27b9bda |
 | 28 | Sarvesh Naik | [sarveshnaik7@gmail.com](mailto:sarveshnaik7@gmail.com) | GBYBNT65PZIDDA7LQJPFS3WUS63HAPYTGNO4ZLRQO7GDXXMIYJM53UIX | no not any | N/A |
 | 29 | Shravani | [shravaniprabhune04@gmail.com](mailto:shravaniprabhune04@gmail.com) | GBGQOORD5O5XXZ6QTYNH4INHBSHUUAENDGU3LDZRCLYHATDU7Z5FHRFO | the theme is very aesthetic and cool, i like the metrics page very much | N/A |
-
+| 30 | Swanandi Naik | [swanandi49@gmail.com](mailto:swanandi49@gmail.com) | GDVH3ONEQ2QZPGJIOFS7SQPSKGN3TJQ3YLQNEMBOMJPEESBYUEKVGZEN | very much | N/A |
 
 ---
 
