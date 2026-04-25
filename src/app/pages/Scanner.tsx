@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useSearchParams, useNavigate } from 'react-router';
-import { Scan, Loader2, Shield, AlertTriangle, CheckCircle, Info, ExternalLink, Trash2, Search, Filter } from 'lucide-react';
+import { Scan, Loader2, Shield, AlertTriangle, CheckCircle, Info, ExternalLink, Trash2, Search, Filter, Eye } from 'lucide-react';
 import { analyzeWallet, WalletRiskAssessment } from '../../lib/gemini';
 import { getWalletData, stellarExpertTxUrl, stellarExpertAccountUrl } from '../../lib/stellar';
 import { History, Wallet as WalletIcon, Clock, Printer } from 'lucide-react';
@@ -54,6 +54,12 @@ export function Scanner() {
       setBlockchainData(data);
       const result = await analyzeWallet(address, data);
       setAssessment(result);
+      
+      try {
+        const audio = new Audio('data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
+        audio.play().catch(() => {});
+      } catch (e) {}
+
       
       const historyItem: ScanHistoryItem = {
         address,
@@ -150,9 +156,15 @@ export function Scanner() {
               )}
             </button>
           </div>
+
           {!walletAddress && (
             <p className="text-xs text-destructive mt-2 text-center">Connect your wallet in the navbar to use this feature.</p>
           )}
+          <div className="mt-4 flex items-center justify-center gap-2">
+            <div className="px-2 py-0.5 bg-green-500/10 text-green-500 border border-green-500/20 rounded text-[10px] font-bold uppercase tracking-widest">Pro Feature</div>
+            <p className="text-xs text-muted-foreground">Bulk scan mode coming soon (get 25% off 5+ wallets!)</p>
+          </div>
+
         </form>
 
         {/* Scan Error */}
@@ -174,8 +186,23 @@ export function Scanner() {
             className="space-y-8 print:space-y-4"
           >
             <div className="flex justify-end -mb-4 print:hidden">
+
+              <button 
+                onClick={() => {
+                    const existingStr = localStorage.getItem('clarix_watchlist_local') || '[]';
+                    const existing = JSON.parse(existingStr);
+                    existing.push({ address, addedAt: new Date().toISOString() });
+                    localStorage.setItem('clarix_watchlist_local', JSON.stringify(existing));
+                    alert('Added to watchlist locally!');
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg transition-colors text-sm font-robotic"
+              >
+                <Eye className="w-4 h-4" />
+                Add to Watchlist
+              </button>
               <button 
                 onClick={() => window.print()}
+
                 className="flex items-center gap-2 px-4 py-2 bg-muted/50 hover:bg-muted text-foreground border border-border rounded-lg transition-colors text-sm font-robotic"
               >
                 <Printer className="w-4 h-4" />
