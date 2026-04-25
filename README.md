@@ -1,6 +1,7 @@
 # Clarix — AI-Powered Wallet Safety on the Stellar Blockchain
 
 [![Clarix CI/CD Pipeline](https://github.com/purvai12/Clarix/actions/workflows/ci.yml/badge.svg)](https://github.com/purvai12/Clarix/actions/workflows/ci.yml)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=flat&logo=vercel&logoColor=white)](https://clarix-beta.vercel.app/)
 
 > **Live Demo:** [clarix-beta.vercel.app](https://clarix-beta.vercel.app)
 

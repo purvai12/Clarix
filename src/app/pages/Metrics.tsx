@@ -383,6 +383,3 @@ const StatusRow = ({ label, status }: { label: string; status: string }) => {
 };
 
 export default Metrics;
-
-
-export default Metrics;

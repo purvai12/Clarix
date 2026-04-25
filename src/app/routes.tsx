@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router';
-import { RootLayout } from './layouts/RootLayout';
+import { RootLayout, RootErrorBoundary } from './layouts/RootLayout';
 import { AuthLayout } from './layouts/AuthLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { Landing } from './pages/Landing';
@@ -18,6 +18,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     Component: RootLayout,
+    ErrorBoundary: RootErrorBoundary,
     children: [
       {
         index: true,

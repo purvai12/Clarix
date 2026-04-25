@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { AlertTriangle, Loader2, CheckCircle, XCircle, ExternalLink } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { usePostHog } from '@posthog/react';
 import {
   fileReport,
   InsufficientFundsError,
@@ -16,6 +17,7 @@ type TxStatus = 'idle' | 'pending' | 'signing' | 'success' | 'error';
 
 export function ReportFraud() {
   const { user, profile, walletAddress, refreshProfile } = useAuth();
+  const posthog = usePostHog();
   const [fraudWallet, setFraudWallet] = useState('');
   const [description, setDescription] = useState('');
   const [amountLost, setAmountLost]   = useState('');
@@ -63,11 +65,17 @@ export function ReportFraud() {
       if (updateError) console.error('Balance update error:', updateError);
 
       await refreshProfile();
+      posthog?.capture('fraud_report_submitted', {
+        fraud_wallet: fraudWallet,
+        amount_lost_xlm: parseFloat(amountLost) || 0,
+        blockchain_tx_hash: hash,
+      });
       setTxStatus('success');
       setFraudWallet('');
       setDescription('');
       setAmountLost('');
     } catch (err: any) {
+      posthog?.captureException(err);
       setTxStatus('error');
       if (err instanceof UserRejectedError)      setError('Transaction cancelled by user.');
       else if (err instanceof InsufficientFundsError) setError('Insufficient XLM to pay the network fee.');

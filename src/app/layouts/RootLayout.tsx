@@ -1,5 +1,6 @@
-import { Outlet } from 'react-router';
+import { Outlet, useRouteError, isRouteErrorResponse } from 'react-router';
 import { AuthProvider } from '../../contexts/AuthContext';
+import { usePostHog } from '@posthog/react';
 
 export function RootLayout() {
   return (
@@ -8,5 +9,35 @@ export function RootLayout() {
         <Outlet />
       </div>
     </AuthProvider>
+  );
+}
+
+export function RootErrorBoundary() {
+  const error = useRouteError();
+  const posthog = usePostHog();
+
+  if (error) {
+    posthog?.captureException(error);
+  }
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <h1 className="text-4xl font-bold">{error.status} {error.statusText}</h1>
+        <p className="text-muted-foreground">{error.data}</p>
+      </div>
+    );
+  } else if (error instanceof Error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <h1 className="text-4xl font-bold">Something went wrong</h1>
+        <p className="text-muted-foreground">{error.message}</p>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="text-4xl font-bold">Unknown Error</h1>
+    </div>
   );
 }

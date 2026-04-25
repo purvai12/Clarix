@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { usePostHog } from '@posthog/react';
 import { supabase } from '../lib/supabase';
 import type { User } from '@supabase/supabase-js';
 import {
@@ -43,6 +44,7 @@ StellarWalletsKit.init({
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const posthog = usePostHog();
   const [user, setUser]                 = useState<User | null>(null);
   const [profile, setProfile]           = useState<Profile | null>(null);
   const [loading, setLoading]           = useState(true);
@@ -134,7 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { address } = await StellarWalletsKit.authModal();
     setWalletAddress(address);
     localStorage.setItem(WALLET_STORAGE_KEY, address);
-    
+
     // Persist wallet address to profile if user is logged in
     if (user) {
       await supabase
@@ -151,11 +153,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore */
     }
+    posthog?.capture('wallet_connected', { wallet_address: address });
     return address;
   };
 
   // ── Wallet disconnect ─────────────────────────────────────────────────────
   const disconnectWallet = async () => {
+    posthog?.capture('wallet_disconnected');
     await StellarWalletsKit.disconnect().catch(console.error);
     setWalletAddress(null);
     setXlmBalance(null);
@@ -164,8 +168,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ── Sign up ───────────────────────────────────────────────────────────────
   const signUp = async (email: string, password: string, username: string) => {
-    const { data, error } = await supabase.auth.signUp({ 
-      email, 
+    const { data, error } = await supabase.auth.signUp({
+      email,
       password,
       options: { data: { username } }
     });
@@ -181,13 +185,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         is_verified:    false,
       });
       if (profileError) throw profileError;
+      posthog?.identify(data.user.id, { email, username });
+      posthog?.capture('user_signed_up', { username });
     }
   };
 
   // ── Sign in ───────────────────────────────────────────────────────────────
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
+    if (data.user) {
+      posthog?.identify(data.user.id, { email });
+      posthog?.capture('user_signed_in');
+    }
     // Refresh balance after sign-in
     setTimeout(() => refreshBalance(), 500);
   };
@@ -196,6 +206,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+    posthog?.capture('user_signed_out');
+    posthog?.reset();
   };
 
   return (
