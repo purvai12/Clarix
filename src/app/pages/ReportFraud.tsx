@@ -210,7 +210,18 @@ export function ReportFraud() {
             </div>
           </div>
 
-          <button
+          
+            <div className="space-y-2">
+              <label className="block text-sm uppercase tracking-widest text-muted-foreground font-robotic">Screenshot Evidence <span className="text-[10px] text-muted-foreground lowercase">(Optional)</span></label>
+              <input 
+                type="file" 
+                accept="image/*" 
+                className="w-full px-6 py-4 bg-background border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 transition-all cursor-pointer"
+              />
+            </div>
+            
+            <button
+
             type="submit"
             disabled={busy || !walletAddress}
             className="w-full bg-primary text-primary-foreground py-4 rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
