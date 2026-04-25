@@ -114,7 +114,12 @@ export async function analyzeWallet(
   }
 }
 
+const chatCache = new Map<string, string>();
+
 export async function chatWithAI(message: string, context?: string): Promise<string> {
+  if (chatCache.has(message)) {
+    return chatCache.get(message)!;
+  }
   if (!GEMINI_API_KEY) {
     return '⚠️ AI assistant is not configured. Please add a VITE_GEMINI_API_KEY to your .env file.';
   }
@@ -123,7 +128,9 @@ export async function chatWithAI(message: string, context?: string): Promise<str
     ?? `You are ClarixAI, a helpful assistant for the Clarix wallet safety platform built on Stellar blockchain. Help users with questions about wallet security, fraud detection, CLRX tokens, and Clarix features. Be concise and friendly.`;
 
   try {
-    return await callGemini(systemPrompt, message, 0.7);
+    const response = await callGemini(systemPrompt, message, 0.7);
+    chatCache.set(message, response);
+    return response;
   } catch (error: any) {
     console.error('Gemini chat error:', error?.message);
     if (error?.message === 'rate_limit') {
