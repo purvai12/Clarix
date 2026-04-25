@@ -1,7 +1,7 @@
 import { Outlet, Navigate, Link, useLocation } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
 import {
-  Shield, Scan, AlertTriangle, Eye, GitCompare,
+  Shield, Scan, AlertTriangle, Eye, GitCompare, Trophy,
   User, LogOut, Menu, X, Sun, Moon, BookOpen,
   Wallet, RefreshCw, BarChart3,
 } from 'lucide-react';
@@ -50,6 +50,7 @@ export function DashboardLayout() {
     { path: '/app/report',   label: 'Report',    icon: AlertTriangle },
     { path: '/app/watch',    label: 'Watch',     icon: Eye       },
     { path: '/app/compare',  label: 'Compare',   icon: GitCompare },
+    { path: '/app/leaderboard', label: 'Leaderboard', icon: Trophy },
     { path: '/app/metrics',  label: 'Metrics',   icon: BarChart3 },
     { path: '/app/docs',     label: 'Docs',      icon: BookOpen  },
   ];

@@ -10,6 +10,7 @@ import { Scanner } from './pages/Scanner';
 import { ReportFraud } from './pages/ReportFraud';
 import { WatchWallets } from './pages/WatchWallets';
 import { CompareWallets } from './pages/CompareWallets';
+import { Leaderboard } from './pages/Leaderboard';
 import { Profile } from './pages/Profile';
 import { Docs } from './pages/Docs';
 import Metrics from './pages/Metrics';
@@ -61,6 +62,10 @@ export const router = createBrowserRouter([
           {
             path: 'compare',
             Component: CompareWallets,
+          },
+          {
+            path: 'leaderboard',
+            Component: Leaderboard,
           },
           {
             path: 'profile',
