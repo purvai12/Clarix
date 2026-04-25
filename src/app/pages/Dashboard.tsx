@@ -70,7 +70,26 @@ export function Dashboard() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Welcome */}
-      <motion.div
+      <motion.div>
+
+        {/* Onboarding Banner */}
+        <div className="bg-gradient-to-r from-primary/10 to-primary/5 border border-primary/20 rounded-2xl p-6 mb-8 relative">
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="p-4 bg-primary rounded-xl">
+              <Shield className="w-8 h-8 text-primary-foreground" />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-xl font-robotic uppercase tracking-tight mb-2">Welcome to Clarix</h2>
+              <p className="text-muted-foreground text-sm mb-4">Get started with blockchain security in three simple steps:</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold">1</div><span className="text-xs">Connect Wallet</span></div>
+                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold">2</div><span className="text-xs">Scan Addresses</span></div>
+                <div className="flex items-center gap-2"><div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold">3</div><span className="text-xs">Report Fraud</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }} className="mb-12"
       >
