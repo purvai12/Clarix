@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from 'react-router';
 import { Scan, Loader2, Shield, AlertTriangle, CheckCircle, Info, ExternalLink, Trash2, Search, Filter } from 'lucide-react';
 import { analyzeWallet, WalletRiskAssessment } from '../../lib/gemini';
 import { getWalletData, stellarExpertTxUrl, stellarExpertAccountUrl } from '../../lib/stellar';
-import { History, Wallet as WalletIcon, Clock } from 'lucide-react';
+import { History, Wallet as WalletIcon, Clock, Printer } from 'lucide-react';
 import { historyService, ScanHistoryItem } from '../../lib/historyService';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useFeatureGate, FeatureGateBanner } from '../components/FeatureGate';
@@ -171,8 +171,17 @@ export function Scanner() {
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="space-y-8"
+            className="space-y-8 print:space-y-4"
           >
+            <div className="flex justify-end -mb-4 print:hidden">
+              <button 
+                onClick={() => window.print()}
+                className="flex items-center gap-2 px-4 py-2 bg-muted/50 hover:bg-muted text-foreground border border-border rounded-lg transition-colors text-sm font-robotic"
+              >
+                <Printer className="w-4 h-4" />
+                Export as PDF
+              </button>
+            </div>
             {/* Blockchain Data */}
             {blockchainData && (
               <motion.div
