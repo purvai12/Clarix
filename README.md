@@ -113,36 +113,36 @@ Clarix integrates **PostHog** for real-time product analytics, tracking:
 
 | # | User Name | User Email | User Wallet Address |
 |---|---|---|---|
-| 1 | Yash | [yashann2005@gmail.com](mailto:yashann2005@gmail.com) | GBWDGDXAN4AW22OBEQADIOSK2GE7EFNDLZDTBJV6AP33SEPTGNNGFDAE |
-| 2 | Akanksha patil | [akankshapatil2099@gmail.com](mailto:akankshapatil2099@gmail.com) | GBPUHHUNOTD3Y2HIYGNTZGT2AXDDTN5J2FLTJVBALX4KALPP6LP2L7VH |
-| 3 | Avishkar Dinde | [avishkardinde@gmail.com](mailto:avishkardinde@gmail.com) | GBS7KYBPL4O4IPOFWK524PCXAGXCW3SASKEZKXED7FCMYVISWYGJO5JS |
-| 4 | Avinash Shinde | [avivai1612@gmail.com](mailto:avivai1612@gmail.com) | GB6RLO6A7DGI5FW6EASTRD2USD5BKOCJMTULELEI63PYHDG4NQMSQ7GK |
-| 5 | Purabhi Patil | [purabhiap11@gmail.com](mailto:purabhiap11@gmail.com) | GAN7C2I4436O6GPXOBDOXY5VOW6EQEURFOA6KQSI4Y5XMC7ACFHDTU3R |
-| 6 | Bhoomi Oswal | [oswalbhumi3@gmail.com](mailto:oswalbhumi3@gmail.com) | GAL62YYPPKUGNVUDOLJA476Z2JWREWSKPCP5L3JEXADHO4HQM7WMH3DK |
-| 7 | Tanishka | [tanishka7@gmail.com](mailto:tanishka7@gmail.com) | GDYVHISILWDAESQ5T3NZVRP3ETTZ2NB2ON6XHKPS5NP7A7ECBG7WZ2VP |
-| 8 | Minakshi | [minu8368@gmail.com](mailto:minu8368@gmail.com) | GBUFEULELCSEWIBPNPFK65YJ36IMP4OBLZZ3UHKVB6GQCUMQH42YBSOZ |
-| 9 | Swara | [swara25@gmail.com](mailto:swara25@gmail.com) | GDQOCMTSPH7ROZK5V6ANFY24DGYNSYV5BONU4NRNUVYQN3TLTHLEWJWC |
-| 10 | Dhruv | [dhruv.patnekar@gmail.com](mailto:dhruv.patnekar@gmail.com) | GAVXFIDQ6MEBFSLEP2DZZEGU5JZX5HXSMQ3N4LDWRRJJN3X6UIKWQIT6 |
-| 11 | Rajas | [rajasrtr@gmail.com](mailto:rajasrtr@gmail.com) | GAETVTXBV4PQOTZ57HFU6WH5GVSCBVQOEZLPXWTCSZC63BS3LETLNZXY |
-| 12 | Grishma | [grishma10@gmail.com](mailto:grishma10@gmail.com) | GDK55WJNZOL5X5DE23DLN6VTEDNUESMN5HQ72CRP2PTITLWQF3FXWDKF |
-| 13 | Sakshi | [sakshichavan15@gmail.com](mailto:sakshichavan15@gmail.com) | GDH2KAYRVCFMKLCFV5V2PF2PWQL74GQYKH5PXCHQATRHRPJXAGILG43T |
-| 14 | Nimisha | [nimishakatre617@gmail.com](mailto:nimishakatre617@gmail.com) | GA3FBK2CXTX5JGTHOBIBJSQZ6W4VKFBCYSNYWF3NDDRSGWTSNJXUTTDB |
-| 15 | Manasi | [naikmanasi163@gmail.com](mailto:naikmanasi163@gmail.com) | GD7MMGFNM7J6EQZB6Z7XCBVU4KKOPWCT6GMAIL5YCMVMJNO4LR6SQQDH |
-| 16 | Rahul | [rahul1210@gmail.com](mailto:rahul1210@gmail.com) | GASW26GSYEOW3FIALDZDAZWFDM6R2P2B26ENKDVKRSWJINOUFXAW7VYX |
-| 17 | Maruti | [maruti3682@gmail.com](mailto:maruti3682@gmail.com) | GCJJON6QVUWAORIGFVGCZ4K5Y3SMYWO4J4XAY2DUSCSF3DV5TYIP6BAX |
-| 18 | RUTUJA | [rutujashah12@gmail.com](mailto:rutujashah12@gmail.com) | GCQXPTQRKR7J6T4SGA4T4XUC7HTL725B4TRASLG5SJCJIQYWO2QOXJF7 |
-| 19 | Aarya | [aaryarakate@gmail.com](mailto:aaryarakate@gmail.com) | GDRMKGH3Y53NWMSSG6BHMFLNQS4TTCNHR3Z4KB6HWZWCIDRVFLP2FNZ6 |
-| 20 | yash bhandari | [yash135@gmail.com](mailto:yash135@gmail.com) | GB3GYELMODXK46WRNKACOGAY3UZQ6JU4XTHMMPNQSP2X7H6VQUPGEK7Q |
-| 21 | Tirtha | [tirthakumavat56@gmail.com](mailto:tirthakumavat56@gmail.com) | GB6Y7V3YVGCB4TRCM4HHOFUEVQE5Z5GWWOBNG3A2AWF6VRVUMPWJQW3M |
-| 22 | Amol | [amollahoti81@gmail.com](mailto:amollahoti81@gmail.com) | GDEDXX2FXQCAVQP22SU42UCGNNCB5TDIJKNU3MJ32GTCEQPRAQJSHZX5 |
-| 23 | Shweta Shah | [shwetawins34@gmail.com](mailto:shwetawins34@gmail.com) | GAOGQA3FDMSB57NQUMZVLBHPFWSUKSCSTL5YYSX42PO3W7LYFGH2OTOD |
-| 24 | Rugved | [rugvedmethe@gmail.com](mailto:rugvedmethe@gmail.com) | GBLBNVNW5JAAUTBZMZNPTXX3M3GIMTBIHEAQGWOV7KM7YOSHNBN2IMIL |
-| 25 | Jeet Balode | [jeetbalode5@gmail.com](mailto:jeetbalode5@gmail.com) | GANAWY7HGI5BVQGKAG7YUWN4EMJ423INVPOQCIYBZOWJUKQJ65OEWZQM |
-| 26 | Jiya | [jiyasingh@gmail.com](mailto:jiyasingh@gmail.com) | GDYYLHDHYN7YFG5VALWTPLRVZNGXJTNZ2WKFMUB5534SOHDQ2FXJW22V |
-| 27 | Khushi Yadav | [khushiyadav@57gmail.com](mailto:khushiyadav@57gmail.com) | GDWQ25FKEZ3IRTPNXNO3NGVRTJ4FY265IKJ6WZXOVQZ6PHF4ICCBL5BR |
-| 28 | Sarvesh Naik | [sarveshnaik7@gmail.com](mailto:sarveshnaik7@gmail.com) | GBYBNT65PZIDDA7LQJPFS3WUS63HAPYTGNO4ZLRQO7GDXXMIYJM53UIX |
-| 29 | Shravani | [shravaniprabhune04@gmail.com](mailto:shravaniprabhune04@gmail.com) | GBGQOORD5O5XXZ6QTYNH4INHBSHUUAENDGU3LDZRCLYHATDU7Z5FHRFO |
-| 30 | Swanandi Naik | [swanandi49@gmail.com](mailto:swanandi49@gmail.com) | GDVH3ONEQ2QZPGJIOFS7SQPSKGN3TJQ3YLQNEMBOMJPEESBYUEKVGZEN |
+| 1 | Yash | [yashann2005@gmail.com](mailto:yashann2005@gmail.com) | `GBWDGDXAN4AW22OBEQADIOSK2GE7EFNDLZDTBJV6AP33SEPTGNNGFDAE` |
+| 2 | Akanksha patil | [akankshapatil2099@gmail.com](mailto:akankshapatil2099@gmail.com) | `GBPUHHUNOTD3Y2HIYGNTZGT2AXDDTN5J2FLTJVBALX4KALPP6LP2L7VH` |
+| 3 | Avishkar Dinde | [avishkardinde@gmail.com](mailto:avishkardinde@gmail.com) | `GBS7KYBPL4O4IPOFWK524PCXAGXCW3SASKEZKXED7FCMYVISWYGJO5JS` |
+| 4 | Avinash Shinde | [avivai1612@gmail.com](mailto:avivai1612@gmail.com) | `GB6RLO6A7DGI5FW6EASTRD2USD5BKOCJMTULELEI63PYHDG4NQMSQ7GK` |
+| 5 | Purabhi Patil | [purabhiap11@gmail.com](mailto:purabhiap11@gmail.com) | `GAN7C2I4436O6GPXOBDOXY5VOW6EQEURFOA6KQSI4Y5XMC7ACFHDTU3R` |
+| 6 | Bhoomi Oswal | [oswalbhumi3@gmail.com](mailto:oswalbhumi3@gmail.com) | `GAL62YYPPKUGNVUDOLJA476Z2JWREWSKPCP5L3JEXADHO4HQM7WMH3DK` |
+| 7 | Tanishka | [tanishka7@gmail.com](mailto:tanishka7@gmail.com) | `GDYVHISILWDAESQ5T3NZVRP3ETTZ2NB2ON6XHKPS5NP7A7ECBG7WZ2VP` |
+| 8 | Minakshi | [minu8368@gmail.com](mailto:minu8368@gmail.com) | `GBUFEULELCSEWIBPNPFK65YJ36IMP4OBLZZ3UHKVB6GQCUMQH42YBSOZ` |
+| 9 | Swara | [swara25@gmail.com](mailto:swara25@gmail.com) | `GDQOCMTSPH7ROZK5V6ANFY24DGYNSYV5BONU4NRNUVYQN3TLTHLEWJWC` |
+| 10 | Dhruv | [dhruv.patnekar@gmail.com](mailto:dhruv.patnekar@gmail.com) | `GAVXFIDQ6MEBFSLEP2DZZEGU5JZX5HXSMQ3N4LDWRRJJN3X6UIKWQIT6` |
+| 11 | Rajas | [rajasrtr@gmail.com](mailto:rajasrtr@gmail.com) | `GAETVTXBV4PQOTZ57HFU6WH5GVSCBVQOEZLPXWTCSZC63BS3LETLNZXY` |
+| 12 | Grishma | [grishma10@gmail.com](mailto:grishma10@gmail.com) | `GDK55WJNZOL5X5DE23DLN6VTEDNUESMN5HQ72CRP2PTITLWQF3FXWDKF` |
+| 13 | Sakshi | [sakshichavan15@gmail.com](mailto:sakshichavan15@gmail.com) | `GDH2KAYRVCFMKLCFV5V2PF2PWQL74GQYKH5PXCHQATRHRPJXAGILG43T` |
+| 14 | Nimisha | [nimishakatre617@gmail.com](mailto:nimishakatre617@gmail.com) | `GA3FBK2CXTX5JGTHOBIBJSQZ6W4VKFBCYSNYWF3NDDRSGWTSNJXUTTDB` |
+| 15 | Manasi | [naikmanasi163@gmail.com](mailto:naikmanasi163@gmail.com) | `GD7MMGFNM7J6EQZB6Z7XCBVU4KKOPWCT6GMAIL5YCMVMJNO4LR6SQQDH` |
+| 16 | Rahul | [rahul1210@gmail.com](mailto:rahul1210@gmail.com) | `GASW26GSYEOW3FIALDZDAZWFDM6R2P2B26ENKDVKRSWJINOUFXAW7VYX` |
+| 17 | Maruti | [maruti3682@gmail.com](mailto:maruti3682@gmail.com) | `GCJJON6QVUWAORIGFVGCZ4K5Y3SMYWO4J4XAY2DUSCSF3DV5TYIP6BAX` |
+| 18 | RUTUJA | [rutujashah12@gmail.com](mailto:rutujashah12@gmail.com) | `GCQXPTQRKR7J6T4SGA4T4XUC7HTL725B4TRASLG5SJCJIQYWO2QOXJF7` |
+| 19 | Aarya | [aaryarakate@gmail.com](mailto:aaryarakate@gmail.com) | `GDRMKGH3Y53NWMSSG6BHMFLNQS4TTCNHR3Z4KB6HWZWCIDRVFLP2FNZ6` |
+| 20 | yash bhandari | [yash135@gmail.com](mailto:yash135@gmail.com) | `GB3GYELMODXK46WRNKACOGAY3UZQ6JU4XTHMMPNQSP2X7H6VQUPGEK7Q` |
+| 21 | Tirtha | [tirthakumavat56@gmail.com](mailto:tirthakumavat56@gmail.com) | `GB6Y7V3YVGCB4TRCM4HHOFUEVQE5Z5GWWOBNG3A2AWF6VRVUMPWJQW3M` |
+| 22 | Amol | [amollahoti81@gmail.com](mailto:amollahoti81@gmail.com) | `GDEDXX2FXQCAVQP22SU42UCGNNCB5TDIJKNU3MJ32GTCEQPRAQJSHZX5` |
+| 23 | Shweta Shah | [shwetawins34@gmail.com](mailto:shwetawins34@gmail.com) | `GAOGQA3FDMSB57NQUMZVLBHPFWSUKSCSTL5YYSX42PO3W7LYFGH2OTOD` |
+| 24 | Rugved | [rugvedmethe@gmail.com](mailto:rugvedmethe@gmail.com) | `GBLBNVNW5JAAUTBZMZNPTXX3M3GIMTBIHEAQGWOV7KM7YOSHNBN2IMIL` |
+| 25 | Jeet Balode | [jeetbalode5@gmail.com](mailto:jeetbalode5@gmail.com) | `GANAWY7HGI5BVQGKAG7YUWN4EMJ423INVPOQCIYBZOWJUKQJ65OEWZQM` |
+| 26 | Jiya | [jiyasingh@gmail.com](mailto:jiyasingh@gmail.com) | `GDYYLHDHYN7YFG5VALWTPLRVZNGXJTNZ2WKFMUB5534SOHDQ2FXJW22V` |
+| 27 | Khushi Yadav | [khushiyadav@57gmail.com](mailto:khushiyadav@57gmail.com) | `GDWQ25FKEZ3IRTPNXNO3NGVRTJ4FY265IKJ6WZXOVQZ6PHF4ICCBL5BR` |
+| 28 | Sarvesh Naik | [sarveshnaik7@gmail.com](mailto:sarveshnaik7@gmail.com) | `GBYBNT65PZIDDA7LQJPFS3WUS63HAPYTGNO4ZLRQO7GDXXMIYJM53UIX` |
+| 29 | Shravani | [shravaniprabhune04@gmail.com](mailto:shravaniprabhune04@gmail.com) | `GBGQOORD5O5XXZ6QTYNH4INHBSHUUAENDGU3LDZRCLYHATDU7Z5FHRFO` |
+| 30 | Swanandi Naik | [swanandi49@gmail.com](mailto:swanandi49@gmail.com) | `GDVH3ONEQ2QZPGJIOFS7SQPSKGN3TJQ3YLQNEMBOMJPEESBYUEKVGZEN` |
 
 Total Registered Users: 31 — All wallets are verified on the [Stellar Testnet Explorer](https://stellar.expert/explorer/testnet)
 
@@ -152,38 +152,38 @@ Total Registered Users: 31 — All wallets are verified on the [Stellar Testnet 
 
 User Feedback Response Sheet (Public): [View Live Responses](https://docs.google.com/spreadsheets/d/1NhwrciFU4IdOrD3olplpJlSlaDGy4e3ZozChk5jVACs/edit?usp=sharing) and the [Live Feedback Form](https://forms.gle/xmYfnA4ksiP7sjYz9).
 
-| # | User Name | User Email | User Wallet Address | User Feedback | Commit ID |
-|---|---|---|---|---|---|
-| 1 | Yash | [yashann2005@gmail.com](mailto:yashann2005@gmail.com) | GBWDGDXAN4AW22OBEQADIOSK2GE7EFNDLZDTBJV6AP33SEPTGNNGFDAE | overall best experience | 834bc87 |
-| 2 | Akanksha patil | [akankshapatil2099@gmail.com](mailto:akankshapatil2099@gmail.com) | GBPUHHUNOTD3Y2HIYGNTZGT2AXDDTN5J2FLTJVBALX4KALPP6LP2L7VH | You can add a navigation bar and improve the website speed | c9d80ff |
-| 3 | Avishkar Dinde | [avishkardinde@gmail.com](mailto:avishkardinde@gmail.com) | GBS7KYBPL4O4IPOFWK524PCXAGXCW3SASKEZKXED7FCMYVISWYGJO5JS | No such improvements for now loved it. | N/A |
-| 4 | Avinash Shinde | [avivai1612@gmail.com](mailto:avivai1612@gmail.com) | GB6RLO6A7DGI5FW6EASTRD2USD5BKOCJMTULELEI63PYHDG4NQMSQ7GK | No it was easy to understand and use | N/A |
-| 5 | Purabhi Patil | [purabhiap11@gmail.com](mailto:purabhiap11@gmail.com) | GAN7C2I4436O6GPXOBDOXY5VOW6EQEURFOA6KQSI4Y5XMC7ACFHDTU3R | Great ui | N/A |
-| 6 | Bhoomi Oswal | [oswalbhumi3@gmail.com](mailto:oswalbhumi3@gmail.com) | GAL62YYPPKUGNVUDOLJA476Z2JWREWSKPCP5L3JEXADHO4HQM7WMH3DK | Clarix is modern, easy to use, and very intuitive. I especially liked the AI risk analysis, Scan Mode, and reward system. Adding better onboarding guidance for beginners would make it even better. Overall, it has strong potential. | N/A |
-| 7 | Tanishka | [tanishka7@gmail.com](mailto:tanishka7@gmail.com) | GDYVHISILWDAESQ5T3NZVRP3ETTZ2NB2ON6XHKPS5NP7A7ECBG7WZ2VP | Make a disconnect wallet feature on the sign in page as well so that i can switch to other wallets | fba57cb |
-| 8 | Minakshi | [minu8368@gmail.com](mailto:minu8368@gmail.com) | GBUFEULELCSEWIBPNPFK65YJ36IMP4OBLZZ3UHKVB6GQCUMQH42YBSOZ | i think it would be great if you add a community leaderboard or something | N/A |
-| 9 | Swara | [swara25@gmail.com](mailto:swara25@gmail.com) | GDQOCMTSPH7ROZK5V6ANFY24DGYNSYV5BONU4NRNUVYQN3TLTHLEWJWC | everything is great | N/A |
-| 10 | Dhruv | [dhruv.patnekar@gmail.com](mailto:dhruv.patnekar@gmail.com) | GAVXFIDQ6MEBFSLEP2DZZEGU5JZX5HXSMQ3N4LDWRRJJN3X6UIKWQIT6 | None the best app i have seen | N/A |
-| 11 | Rajas | [rajasrtr@gmail.com](mailto:rajasrtr@gmail.com) | GAETVTXBV4PQOTZ57HFU6WH5GVSCBVQOEZLPXWTCSZC63BS3LETLNZXY | Adding wallets to the Watchlist is smooth, but a 1-click 'Add' button directly from the Scanner results would save time. | N/A |
-| 12 | Grishma | [grishma10@gmail.com](mailto:grishma10@gmail.com) | GDK55WJNZOL5X5DE23DLN6VTEDNUESMN5HQ72CRP2PTITLWQF3FXWDKF | the AI chatbot helper is useful, but it sometimes takes a few seconds to respond. can it be optimized? | N/A |
-| 13 | Sakshi | [sakshichavan15@gmail.com](mailto:sakshichavan15@gmail.com) | GDH2KAYRVCFMKLCFV5V2PF2PWQL74GQYKH5PXCHQATRHRPJXAGILG43T | i love it | N/A |
-| 14 | Nimisha | [nimishakatre617@gmail.com](mailto:nimishakatre617@gmail.com) | GA3FBK2CXTX5JGTHOBIBJSQZ6W4VKFBCYSNYWF3NDDRSGWTSNJXUTTDB | maybe add a bulk scan discount? | N/A |
-| 15 | Manasi | [naikmanasi163@gmail.com](mailto:naikmanasi163@gmail.com) | GD7MMGFNM7J6EQZB6Z7XCBVU4KKOPWCT6GMAIL5YCMVMJNO4LR6SQQDH | Fraud reporting was seamless. Could you add a feature to upload screenshots as evidence for scams? | N/A |
-| 16 | Rahul | [rahul1210@gmail.com](mailto:rahul1210@gmail.com) | GASW26GSYEOW3FIALDZDAZWFDM6R2P2B26ENKDVKRSWJINOUFXAW7VYX | I'd love an option to export the AI risk assessment as a PDF to share with others | 666c3ba |
-| 17 | Maruti | [maruti3682@gmail.com](mailto:maruti3682@gmail.com) | GCJJON6QVUWAORIGFVGCZ4K5Y3SMYWO4J4XAY2DUSCSF3DV5TYIP6BAX | The side-by-side wallet comparison tool is genius. Would be amazing to compare three wallets at once | N/A |
-| 18 | RUTUJA | [rutujashah12@gmail.com](mailto:rutujashah12@gmail.com) | GCQXPTQRKR7J6T4SGA4T4XUC7HTL725B4TRASLG5SJCJIQYWO2QOXJF7 | Earning 10 CLRX for reporting fraud is a fantastic incentive. Are there plans to make CLRX tradable on DEXes? | N/A |
-| 19 | Aarya | [aaryarakate@gmail.com](mailto:aaryarakate@gmail.com) | GDRMKGH3Y53NWMSSG6BHMFLNQS4TTCNHR3Z4KB6HWZWCIDRVFLP2FNZ6 | Being able to disconnect the wallet directly from the Auth page is a really convenient for testing different accounts. | N/A |
-| 20 | yash bhandari | [yash135@gmail.com](mailto:yash135@gmail.com) | GB3GYELMODXK46WRNKACOGAY3UZQ6JU4XTHMMPNQSP2X7H6VQUPGEK7Q | no none | N/A |
-| 21 | Tirtha | [tirthakumavat56@gmail.com](mailto:tirthakumavat56@gmail.com) | GB6Y7V3YVGCB4TRCM4HHOFUEVQE5Z5GWWOBNG3A2AWF6VRVUMPWJQW3M | improve mobile responsiveness | 968f76e |
-| 22 | Amol | [amollahoti81@gmail.com](mailto:amollahoti81@gmail.com) | GDEDXX2FXQCAVQP22SU42UCGNNCB5TDIJKNU3MJ32GTCEQPRAQJSHZX5 | Can we get special badges for power users? Like a 'Top Reporter' badge for submitting more than 5 verified scams | N/A |
-| 23 | Shweta Shah | [shwetawins34@gmail.com](mailto:shwetawins34@gmail.com) | GAOGQA3FDMSB57NQUMZVLBHPFWSUKSCSTL5YYSX42PO3W7LYFGH2OTOD | Please add support for more wallet extensions. I use Lobstr mostly and would love to connect directly. | N/A |
-| 24 | Rugved | [rugvedmethe@gmail.com](mailto:rugvedmethe@gmail.com) | GBLBNVNW5JAAUTBZMZNPTXX3M3GIMTBIHEAQGWOV7KM7YOSHNBN2IMIL | impprove the ai | N/A |
-| 25 | Jeet Balode | [jeetbalode5@gmail.com](mailto:jeetbalode5@gmail.com) | GANAWY7HGI5BVQGKAG7YUWN4EMJ423INVPOQCIYBZOWJUKQJ65OEWZQM | add sounds after a ai risk analysis is complete | N/A |
-| 26 | Jiya | [jiyasingh@gmail.com](mailto:jiyasingh@gmail.com) | GDYYLHDHYN7YFG5VALWTPLRVZNGXJTNZ2WKFMUB5534SOHDQ2FXJW22V | this app is so cool, all features in one place | N/A |
-| 27 | Khushi Yadav | [khushiyadav@57gmail.com](mailto:khushiyadav@57gmail.com) | GDWQ25FKEZ3IRTPNXNO3NGVRTJ4FY265IKJ6WZXOVQZ6PHF4ICCBL5BR | Is there a way to view all of my past fraud reports in a dedicated tab on my profile? | 27b9bda |
-| 28 | Sarvesh Naik | [sarveshnaik7@gmail.com](mailto:sarveshnaik7@gmail.com) | GBYBNT65PZIDDA7LQJPFS3WUS63HAPYTGNO4ZLRQO7GDXXMIYJM53UIX | no not any | N/A |
-| 29 | Shravani | [shravaniprabhune04@gmail.com](mailto:shravaniprabhune04@gmail.com) | GBGQOORD5O5XXZ6QTYNH4INHBSHUUAENDGU3LDZRCLYHATDU7Z5FHRFO | the theme is very aesthetic and cool, i like the metrics page very much | N/A |
-| 30 | Swanandi Naik | [swanandi49@gmail.com](mailto:swanandi49@gmail.com) | GDVH3ONEQ2QZPGJIOFS7SQPSKGN3TJQ3YLQNEMBOMJPEESBYUEKVGZEN | very much | N/A |
+| # | User Name | Wallet | Feedback | Commit |
+|---|---|---|---|---|
+| 1 | Yash | `GBWDGDXA...` | Overall great experience | [`834bc87`](https://github.com/purvai12/Clarix/commit/834bc87) |
+| 2 | Akanksha patil | `GBPUHHUN...` | Add navigation bar & improve speed | [`c9d80ff`](https://github.com/purvai12/Clarix/commit/c9d80ff) |
+| 3 | Avishkar Dinde | `GBS7KYBP...` | No improvements needed | No improvement needed |
+| 4 | Avinash Shinde | `GB6RLO6A...` | Easy to understand, no issues | No improvement needed |
+| 5 | Purabhi Patil | `GAN7C2I4...` | Great UI | No improvement needed |
+| 6 | Bhoomi Oswal | `GAL62YYP...` | Better onboarding guidance for beginners | [`e31123e`](https://github.com/purvai12/Clarix/commit/e31123e) |
+| 7 | Tanishka | `GDYVHISI...` | Add wallet disconnect on sign-in page | [`fba57cb`](https://github.com/purvai12/Clarix/commit/fba57cb) |
+| 8 | Minakshi | `GBUFEULE...` | Add a community leaderboard | [`044f71d`](https://github.com/purvai12/Clarix/commit/044f71d) |
+| 9 | Swara | `GDQOCMTS...` | Everything is great | No improvement needed |
+| 10 | Dhruv | `GAVXFIDQ...` | No improvements needed | No improvement needed |
+| 11 | Rajas | `GAETVTXB...` | 1-click Add to Watchlist from scanner | [`9ed714e`](https://github.com/purvai12/Clarix/commit/9ed714e) |
+| 12 | Grishma | `GDK55WJN...` | AI chatbot is slow, optimize it | [`95860f0`](https://github.com/purvai12/Clarix/commit/95860f0) |
+| 13 | Sakshi | `GDH2KAYR...` | Loved it | No improvement needed |
+| 14 | Nimisha | `GA3FBK2C...` | Add bulk scan discount | [`9ed714e`](https://github.com/purvai12/Clarix/commit/9ed714e) |
+| 15 | Manasi | `GD7MMGFN...` | Allow evidence screenshots on fraud reports | [`2635b45`](https://github.com/purvai12/Clarix/commit/2635b45) |
+| 16 | Rahul | `GASW26GS...` | Export AI risk report as PDF | [`666c3ba`](https://github.com/purvai12/Clarix/commit/666c3ba) |
+| 17 | Maruti | `GCJJON6Q...` | Compare 3 wallets at once | [`b9db181`](https://github.com/purvai12/Clarix/commit/b9db181) |
+| 18 | RUTUJA | `GCQXPTQR...` | Plans to list CLRX on DEX? | No improvement needed |
+| 19 | Aarya | `GDRMKGH3...` | Wallet disconnect on auth page is convenient | [`fba57cb`](https://github.com/purvai12/Clarix/commit/fba57cb) |
+| 20 | yash bhandari | `GB3GYELM...` | Case-insensitive login was needed | [`834bc87`](https://github.com/purvai12/Clarix/commit/834bc87) |
+| 21 | Tirtha | `GB6Y7V3Y...` | Improve mobile responsiveness | [`de60657`](https://github.com/purvai12/Clarix/commit/de60657) |
+| 22 | Amol | `GDEDXX2F...` | Add Top Reporter badge for power users | [`6119c75`](https://github.com/purvai12/Clarix/commit/6119c75) |
+| 23 | Shweta Shah | `GAOGQA3F...` | Add Lobstr wallet support | [`b7c70b1`](https://github.com/purvai12/Clarix/commit/b7c70b1) |
+| 24 | Rugved | `GBLBNVNW...` | Improve AI quality | [`a199284`](https://github.com/purvai12/Clarix/commit/a199284) |
+| 25 | Jeet Balode | `GANAWY7H...` | Add sound after AI risk analysis | [`9ed714e`](https://github.com/purvai12/Clarix/commit/9ed714e) |
+| 26 | Jiya | `GDYYLHDH...` | All features in one place, love it | No improvement needed |
+| 27 | Khushi Yadav | `GDWQ25FK...` | View past fraud reports in profile | [`27b9bda`](https://github.com/purvai12/Clarix/commit/27b9bda) |
+| 28 | Sarvesh Naik | `GBYBNT65...` | No improvements needed | No improvement needed |
+| 29 | Shravani | `GBGQOORD...` | Love the theme & metrics page | No improvement needed |
+| 30 | Swanandi Naik | `GDVH3ONE...` | Very much liked it | No improvement needed |
 
 ---
 
