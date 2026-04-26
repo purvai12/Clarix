@@ -1,5 +1,5 @@
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const GEMINI_MODEL = 'gemini-2.0-flash';
+const AI_API_KEY = import.meta.env.VITE_GROQ_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+const AI_MODEL = 'llama3-8b-8192';
 
 export interface WalletRiskAssessment {
   riskScore: number; // 0-100
@@ -26,38 +26,36 @@ async function fetchWithRetry(url: string, options: RequestInit, retries = 3): P
   return response;
 }
 
-async function callGemini(systemPrompt: string, userMessage: string, temperature = 0.5): Promise<string> {
-  if (!GEMINI_API_KEY) throw new Error('no_key');
+async function callAI(systemPrompt: string, userMessage: string, temperature = 0.5): Promise<string> {
+  if (!AI_API_KEY) throw new Error('no_key');
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://api.groq.com/openai/v1/chat/completions`;
 
   const response = await fetchWithRetry(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${AI_API_KEY}`
     },
     body: JSON.stringify({
-      contents: [
-        { role: "user", parts: [{ text: userMessage }] }
+      model: AI_MODEL,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userMessage }
       ],
-      systemInstruction: {
-        parts: [{ text: systemPrompt }]
-      },
-      generationConfig: {
-        temperature,
-        maxOutputTokens: 1024,
-      }
+      temperature,
+      max_tokens: 1024,
     }),
   });
 
   if (response.status === 429) throw new Error('rate_limit');
   if (!response.ok) {
-    console.error('Gemini API Error:', await response.text());
+    console.error('AI API Error:', await response.text());
     throw new Error(`api_error_${response.status}`);
   }
 
   const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  const text = data.choices?.[0]?.message?.content;
   if (!text) throw new Error('empty_response');
   return text;
 }
@@ -92,7 +90,7 @@ export async function analyzeWallet(
 }`;
 
   try {
-    const text = await callGemini(systemPrompt, userMessage, 0.2); // Lower temp for more deterministic output
+    const text = await callAI(systemPrompt, userMessage, 0.2); // Lower temp for more deterministic output
     const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/\{[\s\S]*\}/);
     const jsonText = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text;
     return JSON.parse(jsonText);
@@ -120,15 +118,15 @@ export async function chatWithAI(message: string, context?: string): Promise<str
   if (chatCache.has(message)) {
     return chatCache.get(message)!;
   }
-  if (!GEMINI_API_KEY) {
-    return '⚠️ AI assistant is not configured. Please add a VITE_GEMINI_API_KEY to your .env file.';
+  if (!AI_API_KEY) {
+    return '⚠️ AI assistant is not configured. Please add a VITE_GROQ_API_KEY to your .env file.';
   }
 
   const systemPrompt = context
     ?? `You are ClarixAI, a helpful assistant for the Clarix wallet safety platform built on Stellar blockchain. Help users with questions about wallet security, fraud detection, CLRX tokens, and Clarix features. Be concise and friendly.`;
 
   try {
-    const response = await callGemini(systemPrompt, message, 0.7);
+    const response = await callAI(systemPrompt, message, 0.7);
     chatCache.set(message, response);
     return response;
   } catch (error: any) {
@@ -137,7 +135,7 @@ export async function chatWithAI(message: string, context?: string): Promise<str
       return '⏳ The AI is receiving too many requests right now. Please wait a moment and try again.';
     }
     if (error?.message === 'no_key') {
-      return '⚠️ AI assistant is not configured. Please add a VITE_GEMINI_API_KEY to your .env file.';
+      return '⚠️ AI assistant is not configured. Please add a VITE_GROQ_API_KEY to your .env file.';
     }
     if (error?.message?.startsWith('api_error_')) {
       const code = error.message.replace('api_error_', '');
