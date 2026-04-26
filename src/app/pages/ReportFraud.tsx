@@ -42,22 +42,30 @@ export function ReportFraud() {
 
       setTxStatus('signing');
 
-      // File report on blockchain via StellarWalletsKit
-      const hash = await fileReport(fraudWallet, hashString, walletAddress);
-      setTxHash(hash);
+      // Attempt on-chain filing; fall back gracefully if it fails
+      let blockchainHash = '';
+      try {
+        blockchainHash = await fileReport(fraudWallet, hashString, walletAddress);
+        setTxHash(blockchainHash);
+      } catch (chainErr: any) {
+        // If user cancelled, propagate immediately
+        if (chainErr instanceof UserRejectedError) throw chainErr;
+        // Otherwise, log and continue — report still saved off-chain
+        console.warn('On-chain filing failed, saving off-chain only:', chainErr?.message);
+      }
 
-      // Persist report to Supabase
+      // Always persist report to Supabase regardless of blockchain outcome
       const { error: dbError } = await supabase.from('fraud_reports').insert({
-        reporter_id:       user.id,
-        wallet_address:    fraudWallet,
+        reporter_id:        user.id,
+        wallet_address:     fraudWallet,
         description,
-        amount_lost:       parseFloat(amountLost) || 0,
-        transaction_hash:  hashString,
-        blockchain_tx_hash: hash,
+        amount_lost:        parseFloat(amountLost) || 0,
+        transaction_hash:   hashString,
+        blockchain_tx_hash: blockchainHash || null,
       });
       if (dbError) console.error('DB error:', dbError);
 
-      // Award 10 CLRX off-chain (on-chain XLM reward requires admin signer)
+      // Award 10 CLRX off-chain
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ clrx_balance: (profile.clrx_balance || 0) + 10 })
@@ -68,7 +76,7 @@ export function ReportFraud() {
       posthog?.capture('fraud_report_submitted', {
         fraud_wallet: fraudWallet,
         amount_lost_xlm: parseFloat(amountLost) || 0,
-        blockchain_tx_hash: hash,
+        blockchain_tx_hash: blockchainHash || 'off-chain',
       });
       setTxStatus('success');
       setFraudWallet('');
@@ -77,10 +85,10 @@ export function ReportFraud() {
     } catch (err: any) {
       posthog?.captureException(err);
       setTxStatus('error');
-      if (err instanceof UserRejectedError)      setError('Transaction cancelled by user.');
+      if (err instanceof UserRejectedError)           setError('Transaction cancelled by user.');
       else if (err instanceof InsufficientFundsError) setError('Insufficient XLM to pay the network fee.');
-      else if (err instanceof NetworkError)      setError(err.message);
-      else                                        setError(err.message || 'Failed to submit report');
+      else if (err instanceof NetworkError)           setError(err.message);
+      else                                            setError(err.message || 'Failed to submit report');
     }
   };
 

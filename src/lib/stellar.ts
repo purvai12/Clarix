@@ -71,10 +71,13 @@ export async function getPublicKey(): Promise<string> {
 }
 
 // ─── Sign & submit using StellarWalletsKit ───────────────────────────────────
-export async function signAndSubmitSWK(txXdr: string): Promise<string> {
+// address is required for Soroban contracts that call require_auth() so
+// Freighter/StellarWalletsKit can sign authorization entries, not just the envelope.
+export async function signAndSubmitSWK(txXdr: string, signerAddress?: string): Promise<string> {
   try {
     const signResult = await StellarWalletsKit.signTransaction(txXdr, {
       networkPassphrase: Networks.TESTNET,
+      address: signerAddress,
     });
     const signedTxXdr = typeof signResult === 'string' ? signResult : signResult.signedTxXdr;
 
@@ -83,22 +86,30 @@ export async function signAndSubmitSWK(txXdr: string): Promise<string> {
 
     if (txResponse.status === 'PENDING') {
       let finalTx = await server.getTransaction(txResponse.hash);
-      while (finalTx.status === 'NOT_FOUND') {
+      let attempts = 0;
+      while (finalTx.status === 'NOT_FOUND' && attempts < 30) {
         await new Promise((r) => setTimeout(r, 1000));
         finalTx = await server.getTransaction(txResponse.hash);
+        attempts++;
       }
       if (finalTx.status === 'SUCCESS') return txResponse.hash;
-      throw new NetworkError(finalTx.status);
+      throw new NetworkError(`Transaction failed on-chain: ${finalTx.status}`);
     }
-    
-    const errorDetail = (txResponse as any).errorResultXdr || txResponse.status;
-    console.error('Transaction injection failed:', txResponse);
-    throw new NetworkError(`Transaction rejected by network (${txResponse.status}). Detail: ${errorDetail}`);
+
+    // Decode the XDR error for a human-readable message
+    const errResult = (txResponse as any).errorResult;
+    let errName = (txResponse as any).status;
+    if (errResult?._attributes?.result?._switch?.name) {
+      errName = errResult._attributes.result._switch.name;
+    }
+    console.error('Transaction injection failed:', txResponse.status, errName);
+    throw new NetworkError(`Blockchain rejected the transaction: ${errName}`);
   } catch (error: any) {
     const msg = error?.message ?? '';
-    if (msg.includes('User declined') || msg.includes('rejected')) throw new UserRejectedError();
+    if (msg.includes('User declined') || msg.includes('rejected') || msg.includes('cancel')) throw new UserRejectedError();
     if (msg.includes('insufficient')) throw new InsufficientFundsError();
-    throw new NetworkError(msg);
+    if (error instanceof NetworkError || error instanceof UserRejectedError || error instanceof InsufficientFundsError) throw error;
+    throw new NetworkError(msg || 'Unknown error during transaction signing');
   }
 }
 
@@ -191,12 +202,6 @@ export async function fileReport(
   reportHash: string,
   reporterAddress: string
 ): Promise<string> {
-  console.log('--- FILE REPORT DEBUG ---');
-  console.log('Reporter:', reporterAddress);
-  console.log('Target:', walletAddress);
-  console.log('Hash:', reportHash);
-  console.log('Reward ID:', CLARIX_REWARD_ID);
-
   const sourceAccount = await server.getAccount(reporterAddress);
   const contract = new Contract(CLARIX_REGISTRY_ID);
 
@@ -213,27 +218,25 @@ export async function fileReport(
         new Address(CLARIX_REWARD_ID).toScVal()
       )
     )
-    .setTimeout(30)
+    .setTimeout(60)
     .build();
 
+  // prepareTransaction sets the correct Soroban resource fees from simulation
   const prepared = await server.prepareTransaction(transaction);
-  
-  // Choose submission method
+
+  // Pass reporterAddress so StellarWalletsKit signs auth entries (fixes txBadAuth)
   const isGasless = !!import.meta.env.VITE_SPONSOR_SECRET;
-  
+
   if (isGasless) {
-    console.log('--- GASLESS MODE ACTIVE ---');
-    // First, user signs the inner tx
     const signResult = await StellarWalletsKit.signTransaction(prepared.toXDR(), {
       networkPassphrase: Networks.TESTNET,
+      address: reporterAddress,
     });
     const signedInnerXdr = typeof signResult === 'string' ? signResult : signResult.signedTxXdr;
-    
-    // Then Clarix signs the fee bump
     return await sponsorAndSubmit(signedInnerXdr);
   } else {
-    const txHash = await signAndSubmitSWK(prepared.toXDR());
-    return txHash;
+    // Pass reporterAddress so Freighter signs the Soroban auth entries too
+    return await signAndSubmitSWK(prepared.toXDR(), reporterAddress);
   }
 }
 
