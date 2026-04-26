@@ -168,12 +168,20 @@ export function Profile() {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <h1 className="text-3xl">{profile.username}</h1>
+
                 {profile.is_verified && (
                   <div className="flex items-center gap-1 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full">
                     <CheckCircle className="w-4 h-4 text-green-500" />
                     <span className="text-xs text-green-500">Verified</span>
                   </div>
                 )}
+                {pastReports.length >= 5 && (
+                  <div className="flex items-center gap-1 px-3 py-1 bg-yellow-500/10 border border-yellow-500/20 rounded-full ml-2 shadow-[0_0_10px_rgba(234,179,8,0.2)]">
+                    <Award className="w-4 h-4 text-yellow-500" />
+                    <span className="text-xs text-yellow-500 font-bold uppercase tracking-wider">Top Reporter</span>
+                  </div>
+                )}
+
               </div>
               <p className="text-muted-foreground">{profile.email}</p>
               <p className="text-sm text-muted-foreground mt-1">
