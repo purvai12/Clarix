@@ -64,7 +64,7 @@ Clarix is built with a mobile-first philosophy, ensuring your wallet safety chec
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_anon_key
    VITE_TREASURY_ADDRESS=your_xlm_treasury_address
-   VITE_GEMINI_API_KEY=your_gemini_api_key
+   VITE_GROQ_API_KEY=your_groq_api_key
    ```
 4. **Start Development Server:**
    ```bash
@@ -76,7 +76,7 @@ Clarix is built with a mobile-first philosophy, ensuring your wallet safety chec
 ## Technical Stack
 - **Frontend**: React 18, Vite, TailwindCSS
 - **Blockchain**: Stellar Testnet, Soroban (Rust)
-- **AI**: Google Gemini API
+- **AI**: Groq API (Llama 3)
 - **Database**: Supabase (PostgreSQL)
 
 ---
