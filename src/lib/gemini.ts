@@ -1,5 +1,5 @@
 const AI_API_KEY = import.meta.env.VITE_GROQ_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
-const AI_MODEL = 'llama3-8b-8192';
+const AI_MODEL = 'llama-3.3-70b-versatile';
 
 export interface WalletRiskAssessment {
   riskScore: number; // 0-100
