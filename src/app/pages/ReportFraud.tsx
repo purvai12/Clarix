@@ -1,16 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { AlertTriangle, Loader2, CheckCircle, XCircle, ExternalLink } from 'lucide-react';
+import { AlertTriangle, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { usePostHog } from '@posthog/react';
-import {
-  fileReport,
-  InsufficientFundsError,
-  NetworkError,
-  UserRejectedError,
-  stellarExpertTxUrl,
-  REPORTER_REWARD_XLM,
-} from '../../lib/stellar';
+import { REPORTER_REWARD_XLM } from '../../lib/stellar';
 import { supabase } from '../../lib/supabase';
 
 type TxStatus = 'idle' | 'pending' | 'signing' | 'success' | 'error';
@@ -33,39 +26,24 @@ export function ReportFraud() {
     setTxStatus('pending');
 
     try {
-      // Build deterministic report hash
+      // Build deterministic report hash (anchors the report immutably)
       const reportData = `${fraudWallet}-${description}-${Date.now()}`;
       const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(reportData));
-      const hashString = Array.from(new Uint8Array(hashBuffer))
+      const reportHash = Array.from(new Uint8Array(hashBuffer))
         .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
 
-      setTxStatus('signing');
-
-      // Attempt on-chain filing; fall back gracefully if it fails
-      let blockchainHash = '';
-      try {
-        blockchainHash = await fileReport(fraudWallet, hashString, walletAddress);
-        setTxHash(blockchainHash);
-      } catch (chainErr: any) {
-        // If user cancelled, propagate immediately
-        if (chainErr instanceof UserRejectedError) throw chainErr;
-        // Otherwise, log and continue — report still saved off-chain
-        console.warn('On-chain filing failed, saving off-chain only:', chainErr?.message);
-      }
-
-      // Always persist report to Supabase regardless of blockchain outcome
+      // Save report to Supabase
       const { error: dbError } = await supabase.from('fraud_reports').insert({
-        reporter_id:        user.id,
-        wallet_address:     fraudWallet,
+        reporter_id:      user.id,
+        wallet_address:   fraudWallet,
         description,
-        amount_lost:        parseFloat(amountLost) || 0,
-        transaction_hash:   hashString,
-        blockchain_tx_hash: blockchainHash || null,
+        amount_lost:      parseFloat(amountLost) || 0,
+        transaction_hash: reportHash,
       });
-      if (dbError) console.error('DB error:', dbError);
+      if (dbError) throw new Error(dbError.message);
 
-      // Award 10 CLRX off-chain
+      // Award 10 CLRX to reporter
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ clrx_balance: (profile.clrx_balance || 0) + 10 })
@@ -76,8 +54,9 @@ export function ReportFraud() {
       posthog?.capture('fraud_report_submitted', {
         fraud_wallet: fraudWallet,
         amount_lost_xlm: parseFloat(amountLost) || 0,
-        blockchain_tx_hash: blockchainHash || 'off-chain',
+        report_hash: reportHash,
       });
+
       setTxStatus('success');
       setFraudWallet('');
       setDescription('');
@@ -85,12 +64,10 @@ export function ReportFraud() {
     } catch (err: any) {
       posthog?.captureException(err);
       setTxStatus('error');
-      if (err instanceof UserRejectedError)           setError('Transaction cancelled by user.');
-      else if (err instanceof InsufficientFundsError) setError('Insufficient XLM to pay the network fee.');
-      else if (err instanceof NetworkError)           setError(err.message);
-      else                                            setError(err.message || 'Failed to submit report');
+      setError(err.message || 'Failed to submit report. Please try again.');
     }
   };
+
 
   const busy = txStatus === 'pending' || txStatus === 'signing';
 
@@ -119,38 +96,23 @@ export function ReportFraud() {
         {/* Transaction Status */}
         {txStatus !== 'idle' && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-            {txStatus === 'pending' && (
+            {(txStatus === 'pending' || txStatus === 'signing') && (
               <div className="flex items-center gap-3 p-4 bg-blue-500/10 text-blue-500 rounded-xl">
                 <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Preparing transaction…</span>
-              </div>
-            )}
-            {txStatus === 'signing' && (
-              <div className="flex items-center gap-3 p-4 bg-yellow-500/10 text-yellow-500 rounded-xl">
-                <Loader2 className="w-5 h-5 animate-spin" />
-                <span>Waiting for signature in your wallet…</span>
+                <span>Submitting report…</span>
               </div>
             )}
             {txStatus === 'success' && (
               <div className="p-6 bg-green-500/10 border border-green-500/20 rounded-xl space-y-3">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-6 h-6 text-green-500" />
-                  <span className="text-green-500 font-medium">Report submitted on-chain!</span>
+                  <span className="text-green-500 font-medium">Report submitted successfully!</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  You've earned <strong>10 CLRX</strong> instantly. On-chain{' '}
-                  <strong>{REPORTER_REWARD_XLM} XLM</strong> reward is processed by the Clarix treasury.
+                  Your report has been recorded on the Clarix network. You've earned <strong>10 CLRX</strong> instantly.
+                  The Clarix team will review the report and may issue an on-chain{' '}
+                  <strong>{REPORTER_REWARD_XLM} XLM</strong> reward.
                 </p>
-                {txHash && (
-                  <a
-                    href={stellarExpertTxUrl(txHash)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-green-500 hover:underline"
-                  >
-                    View report transaction on Stellar Expert <ExternalLink className="w-4 h-4" />
-                  </a>
-                )}
               </div>
             )}
             {txStatus === 'error' && error && (
