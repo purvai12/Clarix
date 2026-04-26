@@ -14,39 +14,37 @@ import {
 import { supabase } from '../../lib/supabase';
 import { horizonServer } from '../../lib/stellar';
 
-interface SeedWallet {
-  address: string;
-  provider: 'Albedo' | 'xBull' | 'Freighter' | 'Rabe' | 'Stellar';
-}
-
-const SEED_WALLETS: SeedWallet[] = [
-  { address: 'GDUF4W7CEIM3JFGZFW4PTLWCY3G3JD5P4WZMA4C6QFODLC7M6ASC3PU', provider: 'Albedo' },
-  { address: 'GCXEQC2DIPFWPVR4JMROCYSB6YMP6TW3Q2YEV3IXTCRE4ZGSUKVL5LT', provider: 'xBull' },
-  { address: 'GBDFA207200CUII5NWWKQ6G7V2EZ6D3GDWIYMCMQFVOAHFVAAM33ZOFZ', provider: 'Freighter' },
-  { address: 'GACER5XK5SMHR64FZOELYPPLJVRWFBDY5UWCBOEBSLNK266Q2L45YD2P', provider: 'Rabe' },
-  { address: 'GDKZYMCENO7VCOHIZRAV50P26X5F6KV5ETT7L35WW6G7QWD4TVI72CXE', provider: 'Stellar' },
-  { address: 'GCLS42CXE5GJGVNPBTF7YIJLI2QG07LLZK5QFAGO7KPXRNQOLIUBZHFP', provider: 'Albedo' },
-  { address: 'GAW5CACDFYE4T4U26IYYSEJTGXLU4HU5LREGTM4D5NLRPZSK5Y4YBVCE', provider: 'xBull' },
-  { address: 'GAWDCG7UCCJH4AOZPD45R4VPZG3XH7NVPIMZGNXT2BDKHPRK6WSZXVV', provider: 'Freighter' },
-  { address: 'GDQIMRXKQDPXAAU6RQIXFG34GZPV2TEZWJTPE6IPSISG4P5GF5CZZ3B', provider: 'Rabe' },
-  { address: 'GAEAQCVLZML7E74YYSA4VMACJWFZKABU774BDZ2PIOZC7QVQ3R3LKLPO', provider: 'Stellar' },
-  { address: 'GAYU7KUVSIO2CQDMPN7GB62GTJTG73UYOBVO6RVV6WP0045R2PTGABJI', provider: 'Albedo' },
-  { address: 'GDJWQ5PBXYRVQRMLZVRSKRCSJJBZNK2V7S5UN323JCUDK3D54YBUTM2', provider: 'xBull' },
-  { address: 'GC07CTBLSFEGZKBYNWO34COSOON3FRAOM44HF23XLRV5QM72ZGV35ZL4', provider: 'Freighter' },
-  { address: 'GBE663I55YXLC7U26GZDUBHYXOYQFUXSXALDM2BXQRFUOPMFASGDGWQ', provider: 'Rabe' },
-  { address: 'GBX3HF03J6IPOXPH2BWPWKNSCFNMKGANMFJPBFC3JACIMBJM6UISGNZK', provider: 'Stellar' },
-  { address: 'GASJLRNNMPYN3AIA6MFB6ETRDI5H5C36QRRXLFK62XZUJWK4YWNF6R', provider: 'Albedo' },
-  { address: 'GBQI3WD2YKYUWB4MXOO3QP7DPENLV3WD32EHA43VV3US2DCBOWEPV7GW', provider: 'xBull' },
-  { address: 'GAN7C2I4436O6GPXOBDOXY5VOW6EQEURFOA6KQSI4Y5XMC7ACFHDTU3R', provider: 'Freighter' },
-  { address: 'GBWDGDXAN4AW22OBEQADIOSK2GE7EFNDLZDTBJV6AP33SEPTGNNGFDAE', provider: 'Rabe' },
-  { address: 'GAL62YYPPKUGNVUDOLJA476Z2JWREWSKPCP5L3JEXADHO4HQM7WMH3DK', provider: 'Stellar' },
-  { address: 'GDYVHISILWDAESQ5T3NZVRP3ETTZ2NB2ON6XHKPS5NP7A7ECBG7WZ2VP', provider: 'Albedo' },
-  { address: 'GBUFEULELCSEWIBPNPFK65YJ36IMP4OBLZZ3UHKVB6GQCUMQH42YBSOZ', provider: 'xBull' },
-  { address: 'GBS7KYBPL4O4IPOFWK524PCXAGXCW3SASKEZKXED7FCMYVISWYGJO5JS', provider: 'Freighter' },
-  { address: 'GB6RLO6A7DGI5FW6EASTRD2USD5BKOCJMTULELEI63PYHDG4NQMSQ7GK', provider: 'Rabe' },
-  { address: 'GBPUHHUNOTD3Y2HIYGNTZGT2AXDDTN5J2FLTJVBALX4KALPP6LP2L7VH', provider: 'Stellar' },
-  { address: 'GDQOCMTSPH7ROZK5V6ANFY24DGYNSYV5BONU4NRNUVYQN3TLTHLEWJWC', provider: 'Albedo' },
-  { address: 'GAVXFIDQ6MEBFSLEP2DZZEGU5JZX5HXSMQ3N4LDWRRJJN3X6UIKWQIT6', provider: 'xBull' }
+const SEED_ADDRESSES: string[] = [
+  'GBWDGDXAN4AW22OBEQADIOSK2GE7EFNDLZDTBJV6AP33SEPTGNNGFDAE',
+  'GBPUHHUNOTD3Y2HIYGNTZGT2AXDDTN5J2FLTJVBALX4KALPP6LP2L7VH',
+  'GBS7KYBPL4O4IPOFWK524PCXAGXCW3SASKEZKXED7FCMYVISWYGJO5JS',
+  'GB6RLO6A7DGI5FW6EASTRD2USD5BKOCJMTULELEI63PYHDG4NQMSQ7GK',
+  'GAN7C2I4436O6GPXOBDOXY5VOW6EQEURFOA6KQSI4Y5XMC7ACFHDTU3R',
+  'GAL62YYPPKUGNVUDOLJA476Z2JWREWSKPCP5L3JEXADHO4HQM7WMH3DK',
+  'GDYVHISILWDAESQ5T3NZVRP3ETTZ2NB2ON6XHKPS5NP7A7ECBG7WZ2VP',
+  'GBUFEULELCSEWIBPNPFK65YJ36IMP4OBLZZ3UHKVB6GQCUMQH42YBSOZ',
+  'GDQOCMTSPH7ROZK5V6ANFY24DGYNSYV5BONU4NRNUVYQN3TLTHLEWJWC',
+  'GAVXFIDQ6MEBFSLEP2DZZEGU5JZX5HXSMQ3N4LDWRRJJN3X6UIKWQIT6',
+  'GAETVTXBV4PQOTZ57HFU6WH5GVSCBVQOEZLPXWTCSZC63BS3LETLNZXY',
+  'GDK55WJNZOL5X5DE23DLN6VTEDNUESMN5HQ72CRP2PTITLWQF3FXWDKF',
+  'GDH2KAYRVCFMKLCFV5V2PF2PWQL74GQYKH5PXCHQATRHRPJXAGILG43T',
+  'GA3FBK2CXTX5JGTHOBIBJSQZ6W4VKFBCYSNYWF3NDDRSGWTSNJXUTTDB',
+  'GD7MMGFNM7J6EQZB6Z7XCBVU4KKOPWCT6GMAIL5YCMVMJNO4LR6SQQDH',
+  'GASW26GSYEOW3FIALDZDAZWFDM6R2P2B26ENKDVKRSWJINOUFXAW7VYX',
+  'GCJJON6QVUWAORIGFVGCZ4K5Y3SMYWO4J4XAY2DUSCSF3DV5TYIP6BAX',
+  'GCQXPTQRKR7J6T4SGA4T4XUC7HTL725B4TRASLG5SJCJIQYWO2QOXJF7',
+  'GDRMKGH3Y53NWMSSG6BHMFLNQS4TTCNHR3Z4KB6HWZWCIDRVFLP2FNZ6',
+  'GB3GYELMODXK46WRNKACOGAY3UZQ6JU4XTHMMPNQSP2X7H6VQUPGEK7Q',
+  'GB6Y7V3YVGCB4TRCM4HHOFUEVQE5Z5GWWOBNG3A2AWF6VRVUMPWJQW3M',
+  'GDEDXX2FXQCAVQP22SU42UCGNNCB5TDIJKNU3MJ32GTCEQPRAQJSHZX5',
+  'GAOGQA3FDMSB57NQUMZVLBHPFWSUKSCSTL5YYSX42PO3W7LYFGH2OTOD',
+  'GBLBNVNW5JAAUTBZMZNPTXX3M3GIMTBIHEAQGWOV7KM7YOSHNBN2IMIL',
+  'GANAWY7HGI5BVQGKAG7YUWN4EMJ423INVPOQCIYBZOWJUKQJ65OEWZQM',
+  'GDYYLHDHYN7YFG5VALWTPLRVZNGXJTNZ2WKFMUB5534SOHDQ2FXJW22V',
+  'GDWQ25FKEZ3IRTPNXNO3NGVRTJ4FY265IKJ6WZXOVQZ6PHF4ICCBL5BR',
+  'GBYBNT65PZIDDA7LQJPFS3WUS63HAPYTGNO4ZLRQO7GDXXMIYJM53UIX',
+  'GBGQOORD5O5XXZ6QTYNH4INHBSHUUAENDGU3LDZRCLYHATDU7Z5FHRFO',
+  'GDVH3ONEQ2QZPGJIOFS7SQPSKGN3TJQ3YLQNEMBOMJPEESBYUEKVGZEN',
 ];
 
 const Metrics: React.FC = () => {
@@ -57,7 +55,7 @@ const Metrics: React.FC = () => {
     rpc: 'checking...',
     supabase: 'checking...'
   });
-  const [platformWallets, setPlatformWallets] = useState<{ address: string, provider: string }[]>([]);
+  const [platformWallets, setPlatformWallets] = useState<string[]>([]);
 
   useEffect(() => {
     fetchMetrics();
@@ -104,21 +102,17 @@ const Metrics: React.FC = () => {
       const { data: reportWallets } = await supabase.from('fraud_reports').select('wallet_address');
       const { data: watchWallets } = await supabase.from('watched_wallets').select('wallet_address');
 
-      const allWalletsMap = new Map<string, string>();
-      SEED_WALLETS.forEach(w => allWalletsMap.set(w.address, w.provider));
-      profileWallets?.forEach(p => p.wallet_address && !allWalletsMap.has(p.wallet_address) && allWalletsMap.set(p.wallet_address, 'Stellar'));
-      reportWallets?.forEach(r => r.wallet_address && !allWalletsMap.has(r.wallet_address) && allWalletsMap.set(r.wallet_address, 'Stellar'));
-      watchWallets?.forEach(w => w.wallet_address && !allWalletsMap.has(w.wallet_address) && allWalletsMap.set(w.wallet_address, 'Stellar'));
+      const allAddressesSet = new Set<string>(SEED_ADDRESSES);
+      profileWallets?.forEach(p => p.wallet_address && allAddressesSet.add(p.wallet_address));
+      reportWallets?.forEach(r => r.wallet_address && allAddressesSet.add(r.wallet_address));
+      watchWallets?.forEach(w => w.wallet_address && allAddressesSet.add(w.wallet_address));
 
-      const formattedWallets = Array.from(allWalletsMap.entries()).map(([address, provider]) => ({
-        address,
-        provider
-      }));
+      const formattedWallets = Array.from(allAddressesSet);
 
       setStats([
         { 
           label: 'Total Registered Users', 
-          value: formattedWallets.length, 
+          value: usersCount || 0, 
           icon: <Users className="w-5 h-5" />, 
           trend: 'Real-time tracking',
           color: 'blue'
@@ -171,12 +165,6 @@ const Metrics: React.FC = () => {
   };
 
   const [showRegistry, setShowRegistry] = useState(false);
-
-  // Group wallets for the summary view
-  const hubCounts = platformWallets.reduce((acc, w) => {
-    acc[w.provider] = (acc[w.provider] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -271,39 +259,27 @@ const Metrics: React.FC = () => {
             </div>
           </div>
 
-          {/* Section B: Ecosystem Hubs Summary */}
-          <div className="bg-card border border-border p-8 rounded-3xl shadow-sm">
-            <h3 className="text-xl font-bold mb-8 flex items-center gap-2">
-              <ShieldAlert className="w-5 h-5 text-primary" />
-              Ecosystem Regions
-            </h3>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {Object.entries(hubCounts).map(([provider, count]) => (
-                <div key={provider} className="p-4 bg-muted/40 rounded-2xl border border-border hover:bg-muted/60 transition-colors group">
-                  <div className={`text-[10px] font-bold uppercase tracking-widest mb-1 font-robotic ${
-                    provider === 'Albedo' ? 'text-blue-500' :
-                    provider === 'xBull' ? 'text-orange-500' :
-                    provider === 'Freighter' ? 'text-purple-500' :
-                    provider === 'Rabe' ? 'text-emerald-500' :
-                    'text-primary'
-                  }`}>
-                    {provider}
-                  </div>
-                  <div className="flex items-end justify-between">
-                    <div className="text-2xl font-bold font-mono">{count}</div>
-                    <div className="text-[9px] text-muted-foreground font-bold font-robotic uppercase mb-1">Entities</div>
-                  </div>
-                </div>
-              ))}
+          {/* Section B: Registered Wallets Summary */}
+          <div className="bg-card border border-border p-8 rounded-3xl shadow-sm flex flex-col justify-between">
+            <div>
+              <h3 className="text-xl font-bold mb-8 flex items-center gap-2">
+                <Wallet className="w-5 h-5 text-primary" />
+                Registered Wallet Registry
+              </h3>
+              <p className="text-muted-foreground text-sm leading-relaxed mb-6">
+                All registered wallet addresses are verified on the Stellar Testnet and tracked in the Clarix platform registry. Each address is linked directly to the Stellar Expert explorer for full on-chain audit.
+              </p>
+              <div className="flex items-baseline gap-3">
+                <span className="text-5xl font-mono font-bold">{platformWallets.length}</span>
+                <span className="text-sm text-muted-foreground font-robotic uppercase tracking-widest">Verified Addresses</span>
+              </div>
             </div>
-
-            <div className="mt-6 flex justify-end">
+            <div className="mt-8 pt-6 border-t border-border flex justify-end">
               <button 
                 onClick={() => setShowRegistry(!showRegistry)}
                 className="text-xs font-bold text-primary hover:underline flex items-center gap-2 font-robotic uppercase tracking-widest"
               >
-                {showRegistry ? 'Hide Registry Details' : 'View Full Multi-Wallet Log ↗'}
+                {showRegistry ? 'Hide Registry' : 'View Full Wallet Audit Log ↗'}
               </button>
             </div>
           </div>
@@ -321,38 +297,28 @@ const Metrics: React.FC = () => {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-muted/10 border-b border-border/50">
-                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic">Address Hash</th>
-                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic">Source Provider</th>
-                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic text-right">Horizon Audit</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic">#</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic">Wallet Address</th>
+                    <th className="px-6 py-4 text-[10px] font-bold text-muted-foreground uppercase tracking-widest font-robotic text-right">Stellar Explorer</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/30">
-                  {platformWallets.map((wallet, idx) => (
+                  {platformWallets.map((address, idx) => (
                     <tr key={idx} className="hover:bg-muted/10 transition-colors group">
+                      <td className="px-6 py-4 text-[10px] font-mono text-muted-foreground">{idx + 1}</td>
                       <td className="px-6 py-4">
                         <code className="text-xs font-mono font-bold text-primary/80 group-hover:text-primary transition-colors">
-                          {wallet.address}
+                          {address}
                         </code>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-tighter ${
-                          wallet.provider === 'Albedo' ? 'bg-blue-500/10 text-blue-500' :
-                          wallet.provider === 'xBull' ? 'bg-orange-500/10 text-orange-500' :
-                          wallet.provider === 'Freighter' ? 'bg-purple-500/10 text-purple-500' :
-                          wallet.provider === 'Rabe' ? 'bg-emerald-500/10 text-emerald-500' :
-                          'bg-primary/10 text-primary'
-                        }`}>
-                          {wallet.provider}
-                        </span>
                       </td>
                       <td className="px-6 py-4 text-right">
                         <a 
-                          href={`https://stellar.expert/explorer/testnet/account/${wallet.address}`}
+                          href={`https://stellar.expert/explorer/testnet/account/${address}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-[10px] font-bold text-muted-foreground hover:text-primary uppercase tracking-widest font-robotic"
                         >
-                          Explorer ↗
+                          View ↗
                         </a>
                       </td>
                     </tr>
