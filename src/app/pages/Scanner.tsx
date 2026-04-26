@@ -185,15 +185,31 @@ export function Scanner() {
             transition={{ duration: 0.6 }}
             className="space-y-8 print:space-y-4"
           >
-            <div className="flex justify-end -mb-4 print:hidden">
-
+            <div className="flex justify-end gap-3 mb-4 print:hidden">
               <button 
-                onClick={() => {
+                onClick={async () => {
+                  try {
+                    const { data: { user } } = await (await import('../../lib/supabase')).supabase.auth.getUser();
+                    if (user) {
+                      const { supabase } = await import('../../lib/supabase');
+                      const { error } = await supabase.from('watched_wallets').insert({
+                        user_id: user.id,
+                        wallet_address: address,
+                        nickname: `Scanned ${new Date().toLocaleDateString()}`,
+                      });
+                      if (error && error.code !== '23505') throw error;
+                    }
+                    // Also persist locally as fallback
                     const existingStr = localStorage.getItem('clarix_watchlist_local') || '[]';
                     const existing = JSON.parse(existingStr);
-                    existing.push({ address, addedAt: new Date().toISOString() });
-                    localStorage.setItem('clarix_watchlist_local', JSON.stringify(existing));
-                    alert('Added to watchlist locally!');
+                    if (!existing.find((w: any) => w.address === address)) {
+                      existing.push({ address, addedAt: new Date().toISOString() });
+                      localStorage.setItem('clarix_watchlist_local', JSON.stringify(existing));
+                    }
+                    alert('✅ Added to Watchlist!');
+                  } catch (err: any) {
+                    alert('Added to local watchlist.');
+                  }
                 }}
                 className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg transition-colors text-sm font-robotic"
               >
@@ -202,7 +218,6 @@ export function Scanner() {
               </button>
               <button 
                 onClick={() => window.print()}
-
                 className="flex items-center gap-2 px-4 py-2 bg-muted/50 hover:bg-muted text-foreground border border-border rounded-lg transition-colors text-sm font-robotic"
               >
                 <Printer className="w-4 h-4" />
