@@ -202,7 +202,7 @@ export function CompareWallets() {
 
         {/* Compare Form */}
         <form onSubmit={handleCompare} className="mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="space-y-2">
               <label className="block text-xs uppercase tracking-widest text-muted-foreground font-robotic">First Wallet Address</label>
               <input
@@ -225,6 +225,19 @@ export function CompareWallets() {
                 disabled={loading || gateState === 'charging'}
               />
             </div>
+            <div className="space-y-2 relative group">
+              <div className="absolute inset-0 bg-background/50 z-10 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm cursor-not-allowed">
+                <span className="px-3 py-1 bg-primary text-primary-foreground text-xs font-bold uppercase rounded-full tracking-widest shadow-lg">Pro Feature</span>
+              </div>
+              <label className="block text-xs uppercase tracking-widest text-muted-foreground font-robotic">Third Wallet Address</label>
+              <input
+                type="text"
+                placeholder="Coming Soon..."
+                className="w-full px-6 py-4 bg-card border border-border rounded-2xl focus:outline-none font-mono text-sm shadow-sm opacity-50 cursor-not-allowed"
+                disabled
+              />
+            </div>
+
           </div>
 
           <button
