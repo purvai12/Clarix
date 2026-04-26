@@ -92,7 +92,7 @@ export async function analyzeWallet(
 }`;
 
   try {
-    const text = await callGemini(systemPrompt, userMessage, 0.4);
+    const text = await callGemini(systemPrompt, userMessage, 0.2); // Lower temp for more deterministic output
     const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/\{[\s\S]*\}/);
     const jsonText = jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : text;
     return JSON.parse(jsonText);
