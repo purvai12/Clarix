@@ -188,6 +188,9 @@ export function Scanner() {
             <div className="flex justify-end gap-3 mb-4 print:hidden">
               <button 
                 onClick={async () => {
+                  const paid = await charge();
+                  if (!paid) return;
+
                   try {
                     const { data: { user } } = await (await import('../../lib/supabase')).supabase.auth.getUser();
                     if (user) {
@@ -211,10 +214,11 @@ export function Scanner() {
                     alert('Added to local watchlist.');
                   }
                 }}
-                className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg transition-colors text-sm font-robotic"
+                disabled={gateState === 'charging'}
+                className="flex items-center gap-2 px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg transition-colors text-sm font-robotic disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Eye className="w-4 h-4" />
-                Add to Watchlist
+                {gateState === 'charging' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Eye className="w-4 h-4" />}
+                {gateState === 'charging' ? 'Charging...' : 'Add to Watchlist'}
               </button>
               <button 
                 onClick={() => window.print()}
