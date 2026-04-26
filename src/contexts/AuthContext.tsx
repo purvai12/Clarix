@@ -6,7 +6,7 @@ import {
   StellarWalletsKit,
   Networks,
 } from '@creit.tech/stellar-wallets-kit';
-import { defaultModules, lobstrWallet } from '@creit.tech/stellar-wallets-kit/modules/utils';
+import { defaultModules } from '@creit.tech/stellar-wallets-kit/modules/utils';
 import { getWalletData } from '../lib/stellar';
 
 interface Profile {
@@ -39,7 +39,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const WALLET_STORAGE_KEY = 'clarix_wallet_address';
 
 StellarWalletsKit.init({
-  modules: [...defaultModules(), lobstrWallet()],
+  modules: defaultModules(),
   network: Networks.TESTNET,
 });
 
