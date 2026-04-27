@@ -69,14 +69,9 @@ export function Scanner() {
       };
       historyService.saveScan(historyItem);
       setHistory(historyService.getHistory());
-      ('wallet_scanned', {
-        scanned_address: address,
-        risk_level: result.riskLevel,
-        risk_score: result.riskScore,
-        flags_count: result.flags?.length ?? 0,
-      });
+
     } catch (err: any) {
-      Exception(err);
+
       setError(err.message || 'Failed to analyze wallet');
     } finally {
       setLoading(false);

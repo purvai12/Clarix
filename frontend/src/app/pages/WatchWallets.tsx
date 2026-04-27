@@ -72,17 +72,14 @@ export function WatchWallets() {
         return;
       }
 
-      ('watched_wallet_added', {
-        watched_address: address,
-        nickname: nickname || address.substring(0, 8) + '...',
-      });
+
       setAddress('');
       setNickname('');
       setShowAddForm(false);
       resetGate();
       loadWallets();
     } catch (err: any) {
-      Exception(err);
+
       setError(err.message || 'Failed to add wallet');
     } finally {
       setAddLoading(false);
@@ -93,7 +90,7 @@ export function WatchWallets() {
     const { error } = await supabase.from('watched_wallets').delete().eq('id', id);
 
     if (!error) {
-      ('watched_wallet_removed');
+
       loadWallets();
     }
   };

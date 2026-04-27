@@ -16,9 +16,7 @@ export function RootErrorBoundary() {
   const error = useRouteError();
   
 
-  if (error) {
-    Exception(error);
-  }
+
 
   if (isRouteErrorResponse(error)) {
     return (

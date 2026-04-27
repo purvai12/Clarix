@@ -153,13 +153,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       /* ignore */
     }
-    ('wallet_connected', { wallet_address: address });
     return address;
   };
 
   // ── Wallet disconnect ─────────────────────────────────────────────────────
   const disconnectWallet = async () => {
-    ('wallet_disconnected');
     await StellarWalletsKit.disconnect().catch(console.error);
     setWalletAddress(null);
     setXlmBalance(null);
@@ -185,8 +183,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         is_verified:    false,
       });
       if (profileError) throw profileError;
-      (data.user.id, { email, username });
-      ('user_signed_up', { username });
     }
   };
 
@@ -195,8 +191,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) throw error;
     if (data.user) {
-      (data.user.id, { email });
-      ('user_signed_in');
     }
     // Refresh balance after sign-in
     setTimeout(() => refreshBalance(), 500);
@@ -206,8 +200,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
-    ('user_signed_out');
-    ();
   };
 
   return (

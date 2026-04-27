@@ -51,18 +51,14 @@ export function ReportFraud() {
       if (updateError) console.error('Balance update error:', updateError);
 
       await refreshProfile();
-      ('fraud_report_submitted', {
-        fraud_wallet: fraudWallet,
-        amount_lost_xlm: parseFloat(amountLost) || 0,
-        report_hash: reportHash,
-      });
+
 
       setTxStatus('success');
       setFraudWallet('');
       setDescription('');
       setAmountLost('');
     } catch (err: any) {
-      Exception(err);
+
       setTxStatus('error');
       setError(err.message || 'Failed to submit report. Please try again.');
     }
