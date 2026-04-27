@@ -9,11 +9,11 @@ import { historyService, ScanHistoryItem } from '../../lib/historyService';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useFeatureGate, FeatureGateBanner } from '../components/FeatureGate';
 import { useAuth } from '../../contexts/AuthContext';
-import { usePostHog } from '@posthog/react';
+
 
 export function Scanner() {
   const { walletAddress } = useAuth();
-  const posthog = usePostHog();
+  
   const [address, setAddress]           = useState('');
   const [loading, setLoading]           = useState(false);
   const [assessment, setAssessment]     = useState<WalletRiskAssessment | null>(null);
@@ -69,14 +69,14 @@ export function Scanner() {
       };
       historyService.saveScan(historyItem);
       setHistory(historyService.getHistory());
-      posthog?.capture('wallet_scanned', {
+      ('wallet_scanned', {
         scanned_address: address,
         risk_level: result.riskLevel,
         risk_score: result.riskScore,
         flags_count: result.flags?.length ?? 0,
       });
     } catch (err: any) {
-      posthog?.captureException(err);
+      Exception(err);
       setError(err.message || 'Failed to analyze wallet');
     } finally {
       setLoading(false);

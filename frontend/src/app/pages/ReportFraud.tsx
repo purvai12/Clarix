@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { AlertTriangle, Loader2, CheckCircle, XCircle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { usePostHog } from '@posthog/react';
+
 import { REPORTER_REWARD_XLM } from '../../lib/stellar';
 import { supabase } from '../../lib/supabase';
 
@@ -10,7 +10,7 @@ type TxStatus = 'idle' | 'pending' | 'signing' | 'success' | 'error';
 
 export function ReportFraud() {
   const { user, profile, walletAddress, refreshProfile } = useAuth();
-  const posthog = usePostHog();
+  
   const [fraudWallet, setFraudWallet] = useState('');
   const [description, setDescription] = useState('');
   const [amountLost, setAmountLost]   = useState('');
@@ -51,7 +51,7 @@ export function ReportFraud() {
       if (updateError) console.error('Balance update error:', updateError);
 
       await refreshProfile();
-      posthog?.capture('fraud_report_submitted', {
+      ('fraud_report_submitted', {
         fraud_wallet: fraudWallet,
         amount_lost_xlm: parseFloat(amountLost) || 0,
         report_hash: reportHash,
@@ -62,7 +62,7 @@ export function ReportFraud() {
       setDescription('');
       setAmountLost('');
     } catch (err: any) {
-      posthog?.captureException(err);
+      Exception(err);
       setTxStatus('error');
       setError(err.message || 'Failed to submit report. Please try again.');
     }

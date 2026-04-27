@@ -4,8 +4,6 @@ interface ImportMetaEnv {
   readonly VITE_SUPABASE_URL: string;
   readonly VITE_SUPABASE_ANON_KEY: string;
   readonly VITE_GEMINI_API_KEY: string;
-  readonly VITE_PUBLIC_POSTHOG_PROJECT_TOKEN: string;
-  readonly VITE_PUBLIC_POSTHOG_HOST: string;
 }
 
 interface ImportMeta {

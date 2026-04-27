@@ -1,6 +1,6 @@
 import { Outlet, useRouteError, isRouteErrorResponse } from 'react-router';
 import { AuthProvider } from '../../contexts/AuthContext';
-import { usePostHog } from '@posthog/react';
+
 
 export function RootLayout() {
   return (
@@ -14,10 +14,10 @@ export function RootLayout() {
 
 export function RootErrorBoundary() {
   const error = useRouteError();
-  const posthog = usePostHog();
+  
 
   if (error) {
-    posthog?.captureException(error);
+    Exception(error);
   }
 
   if (isRouteErrorResponse(error)) {

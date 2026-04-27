@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useNavigate } from 'react-router';
 import { Eye, Plus, Trash2, AlertCircle, Wallet as WalletIcon, Loader2, CheckCircle2, ExternalLink, RefreshCw, Shield, Zap } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { usePostHog } from '@posthog/react';
+
 import { supabase } from '../../lib/supabase';
 import { useFeatureGate, FeatureGateBanner, FeeBadge } from '../components/FeatureGate';
 import { analyzeWallet, WalletRiskAssessment } from '../../lib/gemini';
@@ -18,7 +18,7 @@ interface WatchedWallet {
 
 export function WatchWallets() {
   const { user, walletAddress } = useAuth();
-  const posthog = usePostHog();
+  
   const [wallets, setWallets] = useState<WatchedWallet[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -72,7 +72,7 @@ export function WatchWallets() {
         return;
       }
 
-      posthog?.capture('watched_wallet_added', {
+      ('watched_wallet_added', {
         watched_address: address,
         nickname: nickname || address.substring(0, 8) + '...',
       });
@@ -82,7 +82,7 @@ export function WatchWallets() {
       resetGate();
       loadWallets();
     } catch (err: any) {
-      posthog?.captureException(err);
+      Exception(err);
       setError(err.message || 'Failed to add wallet');
     } finally {
       setAddLoading(false);
@@ -93,7 +93,7 @@ export function WatchWallets() {
     const { error } = await supabase.from('watched_wallets').delete().eq('id', id);
 
     if (!error) {
-      posthog?.capture('watched_wallet_removed');
+      ('watched_wallet_removed');
       loadWallets();
     }
   };
