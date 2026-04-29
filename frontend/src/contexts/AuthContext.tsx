@@ -167,8 +167,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log('Static Connect Success:', address);
 
       // Get the selected module to persist it
-      const selectedId = (StellarWalletsKit as any).selectedModule;
-      if (selectedId) {
+      const selectedModule = (StellarWalletsKit as any).selectedModule;
+      const selectedId = typeof selectedModule === 'string' ? selectedModule : (selectedModule?.id || selectedModule);
+      
+      if (selectedId && typeof selectedId === 'string') {
         localStorage.setItem(WALLET_ID_KEY, selectedId);
         setWalletId(selectedId);
       }
