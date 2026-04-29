@@ -4,6 +4,12 @@ import { supabase } from '../lib/supabase';
 import { User } from '@supabase/supabase-js';
 import { Networks as WalletNetwork } from '@creit.tech/stellar-wallets-kit';
 import { getWalletData, kit } from '../lib/stellar';
+import { StellarWalletsKit } from '@creit.tech/stellar-wallets-kit';
+import { FreighterModule } from '@creit.tech/stellar-wallets-kit/modules/freighter';
+import { AlbedoModule } from '@creit.tech/stellar-wallets-kit/modules/albedo';
+import { xBullModule } from '@creit.tech/stellar-wallets-kit/modules/xbull';
+import { HanaModule } from '@creit.tech/stellar-wallets-kit/modules/hana';
+import { LobstrModule } from '@creit.tech/stellar-wallets-kit/modules/lobstr';
 
 interface Profile {
   id: string;
@@ -136,14 +142,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ── Wallet connect ────────────────────────────────────────────────────────
   const connectWallet = async (): Promise<string> => {
-    // Add a small delay to ensure extension is fully initialized
-    await new Promise(r => setTimeout(r, 500));
-    
-    console.log('Starting connectWallet process...', { kit });
+    // Initialize kit directly to rule out export issues
+    const localKit = new StellarWalletsKit({
+      network: WalletNetwork.TESTNET,
+      modules: [
+        new FreighterModule(),
+        new AlbedoModule(),
+        new xBullModule(),
+        new HanaModule(),
+        new LobstrModule(),
+      ],
+    });
+
+    console.log('Starting connectWallet process...', { 
+      kit: localKit,
+      methods: Object.keys(localKit),
+      hasOpenModal: typeof (localKit as any).openModal === 'function'
+    });
     
     let result;
     try {
-      result = await kit.openModal({
+      result = await (localKit as any).openModal({
         modalTitle: 'Connect to Clarix',
         onWalletSelected: async (option) => {
           try {
