@@ -75,7 +75,7 @@ export function DashboardLayout() {
       {/* ── Top Navigation ─────────────────────────────────────────────── */}
       <nav className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-start h-16 gap-4">
             {/* Logo */}
             <Link to="/app" className="flex items-center gap-2 group flex-shrink-0 mr-4 sm:mr-8">
               <img src="/logo.png" alt="Clarix Logo" className="w-10 h-10 object-contain rounded-lg transition-transform group-hover:scale-110" />
@@ -105,7 +105,7 @@ export function DashboardLayout() {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 ml-auto">
               {/* XLM Balance chip */}
               {walletAddress && (
                 <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted border border-border text-sm">
