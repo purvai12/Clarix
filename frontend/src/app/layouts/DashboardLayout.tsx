@@ -83,7 +83,7 @@ export function DashboardLayout() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1 overflow-x-auto">
+            <div className="hidden lg:flex items-center gap-1.5">
               {navItems.map((item) => {
                 const Icon     = item.icon;
                 const isActive = location.pathname === item.path;
