@@ -139,14 +139,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Add a small delay to ensure extension is fully initialized
     await new Promise(r => setTimeout(r, 500));
     
+    console.log('Starting connectWallet process...', { kitModules: kit.modules });
+    
     const result = await kit.openModal({
       modalTitle: 'Connect to Clarix',
       onWalletSelected: async (option) => {
-        kit.setWallet(option.id);
-        localStorage.setItem(WALLET_ID_KEY, option.id);
-        setWalletId(option.id);
-        const publicKey = await kit.getPublicKey();
-        return { address: publicKey, network: WalletNetwork.TESTNET };
+        try {
+          console.log('Connecting to:', option.id);
+          kit.setWallet(option.id);
+          
+          // Persistence
+          localStorage.setItem(WALLET_ID_KEY, option.id);
+          setWalletId(option.id);
+
+          const publicKey = await kit.getPublicKey();
+          console.log('Public Key retrieved:', publicKey);
+          
+          return { address: publicKey, network: WalletNetwork.TESTNET };
+        } catch (err) {
+          console.error('onWalletSelected Error:', err);
+          throw err;
+        }
       }
     });
 

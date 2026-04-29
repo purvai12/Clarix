@@ -137,6 +137,16 @@ export function DashboardLayout() {
                 </div>
               )}
 
+              {!walletAddress && (
+                <button
+                  onClick={connectWallet}
+                  className="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-bold text-sm shadow-sm"
+                >
+                  <Wallet className="w-4 h-4" />
+                  Connect Wallet
+                </button>
+              )}
+
               {/* Theme Toggle */}
               {mounted && (
                 <button
@@ -191,6 +201,16 @@ export function DashboardLayout() {
                     {parseFloat(xlmBalance).toLocaleString(undefined, { maximumFractionDigits: 2 })} XLM
                   </span>
                 </div>
+              )}
+
+              {!walletAddress && (
+                <button
+                  onClick={() => { connectWallet(); setMobileMenuOpen(false); }}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground font-bold text-sm mb-2"
+                >
+                  <Wallet className="w-4 h-4" />
+                  Connect Wallet
+                </button>
               )}
               <div className="flex flex-col gap-2">
                 {navItems.map((item) => {
