@@ -167,13 +167,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const address = typeof result === 'string' ? result : result.address;
       console.log('Static Connect Success:', address);
 
-      // Get the selected module to persist it
-      const selectedModule = (StellarWalletsKit as any).selectedModule;
+      // Get the selected module to persist it - checking multiple possible names
+      const k = StellarWalletsKit as any;
+      const selectedModule = k.selectedModule || k.activeModule || k.module || k.wallet;
       const selectedId = typeof selectedModule === 'string' ? selectedModule : (selectedModule?.id || selectedModule);
       
+      console.log('Detected Wallet ID:', selectedId);
+
       if (selectedId && typeof selectedId === 'string') {
         localStorage.setItem(WALLET_ID_KEY, selectedId);
         setWalletId(selectedId);
+      } else {
+        // Fallback to 'freighter' if we can't detect it, as it's the most common
+        localStorage.setItem(WALLET_ID_KEY, 'freighter');
+        setWalletId('freighter');
       }
 
       setWalletAddress(address);
