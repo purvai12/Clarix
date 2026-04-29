@@ -144,7 +144,7 @@ Clarix integrates **PostHog** for real-time product analytics, tracking:
 | 29 | Shravani | [shravaniprabhune04@gmail.com](mailto:shravaniprabhune04@gmail.com) | `GBGQOORD5O5XXZ6QTYNH4INHBSHUUAENDGU3LDZRCLYHATDU7Z5FHRFO` |
 | 30 | Swanandi Naik | [swanandi49@gmail.com](mailto:swanandi49@gmail.com) | `GDVH3ONEQ2QZPGJIOFS7SQPSKGN3TJQ3YLQNEMBOMJPEESBYUEKVGZEN` |
 
-Total Registered Users: 31 — All wallets are verified on the [Stellar Testnet Explorer](https://stellar.expert/explorer/testnet)
+Total Registered Users: 30 — All wallets are verified on the [Stellar Testnet Explorer](https://stellar.expert/explorer/testnet)
 
 ---
 
@@ -154,7 +154,7 @@ User Feedback Response Sheet (Public): [View Live Responses](https://docs.google
 
 | # | User Name | Wallet | Feedback | Commit |
 |---|---|---|---|---|
-| 1 | Yash | `GBWDGDXA...` | Overall great experience | [`834bc87`](https://github.com/purvai12/Clarix/commit/834bc87) |
+| 1 | Yash | `GBWDGDXA...` |  Work on signup page, the fields aren't case sensitive | [`834bc87`](https://github.com/purvai12/Clarix/commit/834bc87) |
 | 2 | Akanksha patil | `GBPUHHUN...` | Add navigation bar & improve speed | [`c9d80ff`](https://github.com/purvai12/Clarix/commit/c9d80ff) |
 | 3 | Avishkar Dinde | `GBS7KYBP...` | No improvements needed | No improvement needed |
 | 4 | Avinash Shinde | `GB6RLO6A...` | Easy to understand, no issues | No improvement needed |
