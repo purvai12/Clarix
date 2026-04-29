@@ -9,7 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <img src="/logo.png" alt="Clarix Logo" className="w-8 h-8 object-contain" />
+              <img src="/logo.png" alt="Clarix Logo" className="w-8 h-8 object-contain bg-black rounded p-1" />
               <span className="text-xl font-robotic tracking-wider uppercase">Clarix</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">

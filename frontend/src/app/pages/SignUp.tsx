@@ -55,7 +55,7 @@ export function SignUp() {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="Clarix Logo" className="w-16 h-16 mx-auto mb-4 object-contain" />
+          <img src="/logo.png" alt="Clarix Logo" className="w-16 h-16 mx-auto mb-4 object-contain bg-black rounded-xl p-2 shadow-lg" />
           <h1 className="text-3xl mb-2">Create your Clarix account</h1>
           <p className="text-muted-foreground">Start protecting your Stellar assets</p>
         </div>

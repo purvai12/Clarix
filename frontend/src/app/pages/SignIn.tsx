@@ -54,7 +54,7 @@ export function SignIn() {
         className="w-full max-w-md"
       >
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="Clarix Logo" className="w-16 h-16 mx-auto mb-4 object-contain" />
+          <img src="/logo.png" alt="Clarix Logo" className="w-16 h-16 mx-auto mb-4 object-contain bg-black rounded-xl p-2 shadow-lg" />
           <h1 className="text-3xl mb-2">Welcome back</h1>
           <p className="text-muted-foreground">Sign in to your Clarix account</p>
         </div>

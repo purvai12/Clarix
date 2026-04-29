@@ -30,7 +30,7 @@ export function Landing() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-6"
             >
-              <img src="/logo.png" alt="Clarix Logo" className="w-24 h-24 object-contain" />
+              <img src="/logo.png" alt="Clarix Logo" className="w-24 h-24 object-contain bg-black rounded-2xl p-4 shadow-xl" />
             </motion.div>
 
             <h1 className="text-6xl md:text-8xl text-white mb-6 tracking-tight">Clarix</h1>
