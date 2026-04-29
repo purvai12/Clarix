@@ -157,12 +157,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const allProps: string[] = [];
     for (const p in localKit) allProps.push(p);
 
-    console.log('Starting connectWallet process...', { 
-      kit: localKit,
-      ownProps: Object.getOwnPropertyNames(localKit),
-      protoProps: Object.getOwnPropertyNames(Object.getPrototypeOf(localKit)),
-      constructorProps: Object.getOwnPropertyNames(StellarWalletsKit).join(', ')
-    });
+    const constructorProps = Object.getOwnPropertyNames(StellarWalletsKit).join(', ');
+    console.log('--- KIT DIAGNOSTICS ---');
+    console.log('Static Methods:', constructorProps);
+    console.log('Prototype Methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(localKit)).join(', '));
     
     let result;
     try {
