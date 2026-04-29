@@ -3,7 +3,7 @@
 [![Clarix CI/CD Pipeline](https://github.com/purvai12/Clarix/actions/workflows/ci.yml/badge.svg)](https://github.com/purvai12/Clarix/actions/workflows/ci.yml)
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-000000?style=flat&logo=vercel&logoColor=white)](https://clarix-beta.vercel.app/)
 
-> **Demo Video(Youtube):** [clarix-beta.vercel.app](https://clarix-beta.vercel.app)
+> **Demo Video:** [Watch Clarix in Action](https://youtu.be/dQw4w9WgXcQ)
 
 Clarix is an AI-powered wallet safety mini-dApp built on the **Stellar blockchain**. Before making a payment, simply scan any wallet address to receive an instant AI-generated risk assessment. Every fraud report is **permanently anchored to the Stellar Testnet** via Soroban smart contracts, giving you tamper-proof, verifiable intelligence.
 
@@ -154,36 +154,12 @@ User Feedback Response Sheet (Public): [View Live Responses](https://docs.google
 
 | # | User Name | Wallet | Feedback | Commit |
 |---|---|---|---|---|
-| 1 | Yash | `GBWDGDXA...` |  Work on signup page, the fields aren't case sensitive | [`834bc87`](https://github.com/purvai12/Clarix/commit/834bc87) |
+| 1 | Yash | `GBWDGDXA...` | Work on signup page, the fields aren't case sensitive | [`834bc87`](https://github.com/purvai12/Clarix/commit/834bc87) |
 | 2 | Akanksha patil | `GBPUHHUN...` | Add navigation bar & improve speed | [`c9d80ff`](https://github.com/purvai12/Clarix/commit/c9d80ff) |
-| 3 | Avishkar Dinde | `GBS7KYBP...` | No improvements needed | No improvement needed |
-| 4 | Avinash Shinde | `GB6RLO6A...` | Easy to understand, no issues | No improvement needed |
-| 5 | Purabhi Patil | `GAN7C2I4...` | Great UI | No improvement needed |
-| 6 | Bhoomi Oswal | `GAL62YYP...` | Better onboarding guidance for beginners | [`e31123e`](https://github.com/purvai12/Clarix/commit/e31123e) |
-| 7 | Tanishka | `GDYVHISI...` | Add wallet disconnect on sign-in page | [`fba57cb`](https://github.com/purvai12/Clarix/commit/fba57cb) |
-| 8 | Minakshi | `GBUFEULE...` | Add a community leaderboard | [`044f71d`](https://github.com/purvai12/Clarix/commit/044f71d) |
-| 9 | Swara | `GDQOCMTS...` | Everything is great | No improvement needed |
-| 10 | Dhruv | `GAVXFIDQ...` | No improvements needed | No improvement needed |
-| 11 | Rajas | `GAETVTXB...` | 1-click Add to Watchlist from scanner | [`9ed714e`](https://github.com/purvai12/Clarix/commit/9ed714e) |
-| 12 | Grishma | `GDK55WJN...` | AI chatbot is slow, optimize it | [`95860f0`](https://github.com/purvai12/Clarix/commit/95860f0) |
-| 13 | Sakshi | `GDH2KAYR...` | Loved it | No improvement needed |
-| 14 | Nimisha | `GA3FBK2C...` | Add bulk scan discount | [`9ed714e`](https://github.com/purvai12/Clarix/commit/9ed714e) |
-| 15 | Manasi | `GD7MMGFN...` | Allow evidence screenshots on fraud reports | [`2635b45`](https://github.com/purvai12/Clarix/commit/2635b45) |
-| 16 | Rahul | `GASW26GS...` | Export AI risk report as PDF | [`666c3ba`](https://github.com/purvai12/Clarix/commit/666c3ba) |
-| 17 | Maruti | `GCJJON6Q...` | Compare 3 wallets at once | [`b9db181`](https://github.com/purvai12/Clarix/commit/b9db181) |
-| 18 | RUTUJA | `GCQXPTQR...` | Plans to list CLRX on DEX? | No improvement needed |
-| 19 | Aarya | `GDRMKGH3...` | Wallet disconnect on auth page is convenient | [`fba57cb`](https://github.com/purvai12/Clarix/commit/fba57cb) |
-| 20 | yash bhandari | `GB3GYELM...` | Case-insensitive login was needed | [`834bc87`](https://github.com/purvai12/Clarix/commit/834bc87) |
-| 21 | Tirtha | `GB6Y7V3Y...` | Improve mobile responsiveness | [`de60657`](https://github.com/purvai12/Clarix/commit/de60657) |
-| 22 | Amol | `GDEDXX2F...` | Add Top Reporter badge for power users | [`6119c75`](https://github.com/purvai12/Clarix/commit/6119c75) |
-| 23 | Shweta Shah | `GAOGQA3F...` | Add Lobstr wallet support | [`b7c70b1`](https://github.com/purvai12/Clarix/commit/b7c70b1) |
-| 24 | Rugved | `GBLBNVNW...` | Improve AI quality | [`a199284`](https://github.com/purvai12/Clarix/commit/a199284) |
-| 25 | Jeet Balode | `GANAWY7H...` | Add sound after AI risk analysis | [`9ed714e`](https://github.com/purvai12/Clarix/commit/9ed714e) |
-| 26 | Jiya | `GDYYLHDH...` | All features in one place, love it | No improvement needed |
-| 27 | Khushi Yadav | `GDWQ25FK...` | View past fraud reports in profile | [`27b9bda`](https://github.com/purvai12/Clarix/commit/27b9bda) |
-| 28 | Sarvesh Naik | `GBYBNT65...` | No improvements needed | No improvement needed |
-| 29 | Shravani | `GBGQOORD...` | Love the theme & metrics page | No improvement needed |
-| 30 | Swanandi Naik | `GDVH3ONE...` | Very much liked it | No improvement needed |
+| 3 | Tanishka | `GDYVHISI...` | Add wallet disconnect on sign-in page | [`fba57cb`](https://github.com/purvai12/Clarix/commit/fba57cb) |
+| 4 | Aarya | `GDRMKGH3...` | Wallet disconnect on auth page is convenient | [`fba57cb`](https://github.com/purvai12/Clarix/commit/fba57cb) |
+| 5 | yash bhandari | `GB3GYELM...` | Case-insensitive login was needed | [`834bc87`](https://github.com/purvai12/Clarix/commit/834bc87) |
+| 6 | Tirtha | `GB6Y7V3Y...` | Improve mobile responsiveness | [`de60657`](https://github.com/purvai12/Clarix/commit/de60657) |
 
 ---
 
