@@ -160,9 +160,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('Starting connectWallet process...', { 
       kit: localKit,
       allProps,
-      hasOpenModal: typeof (localKit as any).openModal === 'function',
-      hasDisplayModal: typeof (localKit as any).displayModal === 'function',
-      hasOpenSelectionModal: typeof (localKit as any).openSelectionModal === 'function'
+      classString: StellarWalletsKit.toString().substring(0, 200),
+      hasModalProperty: !!(localKit as any).modal,
+      modalProps: (localKit as any).modal ? Object.keys((localKit as any).modal) : 'N/A'
     });
     
     let result;
