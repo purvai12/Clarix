@@ -161,7 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       kit: localKit,
       ownProps: Object.getOwnPropertyNames(localKit),
       protoProps: Object.getOwnPropertyNames(Object.getPrototypeOf(localKit)),
-      constructorProps: Object.getOwnPropertyNames(StellarWalletsKit)
+      constructorProps: Object.getOwnPropertyNames(StellarWalletsKit).join(', ')
     });
     
     let result;
