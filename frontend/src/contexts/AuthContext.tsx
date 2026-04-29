@@ -154,10 +154,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ],
     });
 
+    const allProps: string[] = [];
+    for (const p in localKit) allProps.push(p);
+
     console.log('Starting connectWallet process...', { 
       kit: localKit,
-      methods: Object.keys(localKit),
-      hasOpenModal: typeof (localKit as any).openModal === 'function'
+      allProps,
+      hasOpenModal: typeof (localKit as any).openModal === 'function',
+      hasDisplayModal: typeof (localKit as any).displayModal === 'function',
+      hasOpenSelectionModal: typeof (localKit as any).openSelectionModal === 'function'
     });
     
     let result;
