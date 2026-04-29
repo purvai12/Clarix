@@ -139,29 +139,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Add a small delay to ensure extension is fully initialized
     await new Promise(r => setTimeout(r, 500));
     
-    console.log('Starting connectWallet process...', { kitModules: kit.modules });
+    console.log('Starting connectWallet process...', { kit });
     
-    const result = await kit.openModal({
-      modalTitle: 'Connect to Clarix',
-      onWalletSelected: async (option) => {
-        try {
-          console.log('Connecting to:', option.id);
-          kit.setWallet(option.id);
-          
-          // Persistence
-          localStorage.setItem(WALLET_ID_KEY, option.id);
-          setWalletId(option.id);
+    let result;
+    try {
+      result = await kit.openModal({
+        modalTitle: 'Connect to Clarix',
+        onWalletSelected: async (option) => {
+          try {
+            console.log('Connecting to:', option.id);
+            kit.setWallet(option.id);
+            
+            // Persistence
+            localStorage.setItem(WALLET_ID_KEY, option.id);
+            setWalletId(option.id);
 
-          const publicKey = await kit.getPublicKey();
-          console.log('Public Key retrieved:', publicKey);
-          
-          return { address: publicKey, network: WalletNetwork.TESTNET };
-        } catch (err) {
-          console.error('onWalletSelected Error:', err);
-          throw err;
+            const publicKey = await kit.getPublicKey();
+            console.log('Public Key retrieved:', publicKey);
+            
+            return { address: publicKey, network: WalletNetwork.TESTNET };
+          } catch (err) {
+            console.error('onWalletSelected Error:', err);
+            throw err;
+          }
         }
-      }
-    });
+      });
+      console.log('Modal result:', result);
+    } catch (modalErr) {
+      console.error('kit.openModal Error:', modalErr);
+      throw modalErr;
+    }
 
     if (!result || !result.address) {
       throw new Error('Wallet connection failed or was canceled');

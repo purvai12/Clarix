@@ -36,16 +36,27 @@ export const server = new rpc.Server(RPC_URL);
 export const horizonServer = new Horizon.Server(HORIZON_URL);
 
 // ─── Initialize Wallet Kit ───────────────────────────────────────────────────
-export const kit = new StellarWalletsKit({
-  network: WalletNetwork.TESTNET,
-  modules: [
-    new FreighterModule(),
-    new AlbedoModule(),
-    new xBullModule(),
-    new HanaModule(),
-    new LobstrModule(),
-  ],
-});
+// Using a getter to ensure the kit is initialized with all modules correctly.
+let kitInstance: StellarWalletsKit | null = null;
+
+export const getKit = () => {
+  if (!kitInstance) {
+    kitInstance = new StellarWalletsKit({
+      network: WalletNetwork.TESTNET,
+      modules: [
+        new FreighterModule(),
+        new AlbedoModule(),
+        new xBullModule(),
+        new HanaModule(),
+        new LobstrModule(),
+      ],
+    });
+  }
+  return kitInstance;
+};
+
+// Also export the static instance for backward compat
+export const kit = getKit();
 
 // ─── Stellar Expert URLs ─────────────────────────────────────────────────────
 export const stellarExpertTxUrl = (hash: string) =>
