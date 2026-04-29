@@ -78,7 +78,7 @@ export function DashboardLayout() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link to="/app" className="flex items-center gap-2 group">
-              <img src="/logo.png" alt="Clarix Logo" className="w-10 h-10 object-contain transition-transform group-hover:scale-105" />
+              <img src="/logo.png" alt="Clarix Logo" className="w-10 h-10 object-contain opacity-80 group-hover:opacity-100 transition-all group-hover:scale-105" />
               <span className="text-xl font-robotic tracking-wider uppercase text-foreground">Clarix</span>
             </Link>
 
