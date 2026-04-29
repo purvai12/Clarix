@@ -1,13 +1,9 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 import { supabase } from '../lib/supabase';
-import type { User } from '@supabase/supabase-js';
-import {
-  StellarWalletsKit,
-  Networks,
-} from '@creit.tech/stellar-wallets-kit';
-import { defaultModules } from '@creit.tech/stellar-wallets-kit/modules/utils';
-import { getWalletData } from '../lib/stellar';
+import { User } from '@supabase/supabase-js';
+import { Networks as WalletNetwork } from '@creit.tech/stellar-wallets-kit';
+import { getWalletData, kit } from '../lib/stellar';
 
 interface Profile {
   id: string;
@@ -35,13 +31,9 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
+ 
 const WALLET_STORAGE_KEY = 'clarix_wallet_address';
 
-StellarWalletsKit.init({
-  modules: defaultModules(),
-  network: Networks.TESTNET,
-});
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   
@@ -133,7 +125,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ── Wallet connect ────────────────────────────────────────────────────────
   const connectWallet = async (): Promise<string> => {
-    const { address } = await StellarWalletsKit.authModal();
+    // Add a small delay to ensure extension is fully initialized
+    await new Promise(r => setTimeout(r, 500));
+    
+    const result = await kit.openModal({
+      modalTitle: 'Connect to Clarix',
+      onWalletSelected: async (option) => {
+        kit.setWallet(option.id);
+        const publicKey = await kit.getPublicKey();
+        return { address: publicKey, network: WalletNetwork.TESTNET };
+      }
+    });
+
+    if (!result || !result.address) {
+      throw new Error('Wallet connection failed or was canceled');
+    }
+
+    const { address } = result;
     setWalletAddress(address);
     localStorage.setItem(WALLET_STORAGE_KEY, address);
 
@@ -158,7 +166,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ── Wallet disconnect ─────────────────────────────────────────────────────
   const disconnectWallet = async () => {
-    await StellarWalletsKit.disconnect().catch(console.error);
+    // StellarWalletsKit v2 doesn't have a direct static disconnect, 
+    // but we can clear local state.
     setWalletAddress(null);
     setXlmBalance(null);
     localStorage.removeItem(WALLET_STORAGE_KEY);

@@ -30,7 +30,7 @@ export function Landing() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-6"
             >
-              <Shield className="w-16 h-16 text-white" strokeWidth={1.5} />
+              <img src="/logo.png" alt="Clarix Logo" className="w-24 h-24 object-contain" />
             </motion.div>
 
             <h1 className="text-6xl md:text-8xl text-white mb-6 tracking-tight">Clarix</h1>
@@ -112,7 +112,7 @@ export function Landing() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <Shield className="w-12 h-12 mb-6" strokeWidth={1.5} />
+              <img src="/logo.png" alt="Clarix Logo" className="w-12 h-12 mb-6 object-contain" />
               <h3 className="mb-4">Earn CLRX Rewards</h3>
               <p className="text-muted-foreground leading-relaxed">
                 Get 10 CLRX tokens for every verified fraud report. Spend 50 CLRX for verification badge.

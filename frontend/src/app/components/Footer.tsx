@@ -8,10 +8,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-1 md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <Shield className="w-8 h-8 text-primary" />
+            <div className="flex items-center gap-2 mb-4">
+              <img src="/logo.png" alt="Clarix Logo" className="w-8 h-8 object-contain" />
               <span className="text-xl font-robotic tracking-wider uppercase">Clarix</span>
-            </Link>
+            </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               The first AI-powered wallet safety platform on the Stellar blockchain. Protecting your assets with real-time risk assessment.
             </p>

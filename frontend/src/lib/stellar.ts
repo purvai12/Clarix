@@ -13,7 +13,13 @@ import {
 } from '@stellar/stellar-sdk';
 import {
   StellarWalletsKit,
+  Networks as WalletNetwork,
 } from '@creit.tech/stellar-wallets-kit';
+import { FreighterModule } from '@creit.tech/stellar-wallets-kit/modules/freighter';
+import { AlbedoModule } from '@creit.tech/stellar-wallets-kit/modules/albedo';
+import { xBullModule } from '@creit.tech/stellar-wallets-kit/modules/xbull';
+import { HanaModule } from '@creit.tech/stellar-wallets-kit/modules/hana';
+import { LobstrModule } from '@creit.tech/stellar-wallets-kit/modules/lobstr';
 import { createSponsoredTransaction } from './feeSponsorship';
 
 // ─── Contract / account addresses ────────────────────────────────────────────
@@ -28,6 +34,18 @@ const RPC_URL = 'https://soroban-testnet.stellar.org';
 const HORIZON_URL = 'https://horizon-testnet.stellar.org';
 export const server = new rpc.Server(RPC_URL);
 export const horizonServer = new Horizon.Server(HORIZON_URL);
+
+// ─── Initialize Wallet Kit ───────────────────────────────────────────────────
+export const kit = new StellarWalletsKit({
+  network: WalletNetwork.TESTNET,
+  modules: [
+    new FreighterModule(),
+    new AlbedoModule(),
+    new xBullModule(),
+    new HanaModule(),
+    new LobstrModule(),
+  ],
+});
 
 // ─── Stellar Expert URLs ─────────────────────────────────────────────────────
 export const stellarExpertTxUrl = (hash: string) =>
@@ -75,7 +93,7 @@ export async function getPublicKey(): Promise<string> {
 // Freighter/StellarWalletsKit can sign authorization entries, not just the envelope.
 export async function signAndSubmitSWK(txXdr: string, signerAddress?: string): Promise<string> {
   try {
-    const signResult = await StellarWalletsKit.signTransaction(txXdr, {
+    const signResult = await kit.signTransaction(txXdr, {
       networkPassphrase: Networks.TESTNET,
       address: signerAddress,
     });
@@ -228,7 +246,7 @@ export async function fileReport(
   const isGasless = !!import.meta.env.VITE_SPONSOR_SECRET;
 
   if (isGasless) {
-    const signResult = await StellarWalletsKit.signTransaction(prepared.toXDR(), {
+    const signResult = await kit.signTransaction(prepared.toXDR(), {
       networkPassphrase: Networks.TESTNET,
       address: reporterAddress,
     });

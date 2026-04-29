@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./frontend/public/logo.png" alt="Clarix Logo" width="120" />
+</p>
+
 # Clarix — AI-Powered Wallet Safety on the Stellar Blockchain
 
 [![Clarix CI/CD Pipeline](https://github.com/purvai12/Clarix/actions/workflows/ci.yml/badge.svg)](https://github.com/purvai12/Clarix/actions/workflows/ci.yml)

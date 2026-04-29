@@ -19,12 +19,14 @@ export type Database = {
           username: string;
           clrx_balance: number;
           is_verified: boolean;
+          wallet_address: string;
           created_at: string;
         };
         Insert: {
           id: string;
           email: string;
           username: string;
+          wallet_address?: string;
           clrx_balance?: number;
           is_verified?: boolean;
           created_at?: string;
@@ -33,6 +35,7 @@ export type Database = {
           id?: string;
           email?: string;
           username?: string;
+          wallet_address?: string;
           clrx_balance?: number;
           is_verified?: boolean;
           created_at?: string;
