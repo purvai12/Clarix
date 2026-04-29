@@ -142,80 +142,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ── Wallet connect ────────────────────────────────────────────────────────
   const connectWallet = async (): Promise<string> => {
-    // Initialize kit directly to rule out export issues
-    const localKit = new StellarWalletsKit({
-      network: WalletNetwork.TESTNET,
-      modules: [
-        new FreighterModule(),
-        new AlbedoModule(),
-        new xBullModule(),
-        new HanaModule(),
-        new LobstrModule(),
-      ],
-    });
-
-    const allProps: string[] = [];
-    for (const p in localKit) allProps.push(p);
-
-    const constructorProps = Object.getOwnPropertyNames(StellarWalletsKit).join(', ');
-    console.log('--- KIT DIAGNOSTICS ---');
-    console.log('Static Methods:', constructorProps);
-    console.log('Prototype Methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(localKit)).join(', '));
-    
-    let result;
     try {
-      result = await (localKit as any).openModal({
-        modalTitle: 'Connect to Clarix',
-        onWalletSelected: async (option) => {
-          try {
-            console.log('Connecting to:', option.id);
-            kit.setWallet(option.id);
-            
-            // Persistence
-            localStorage.setItem(WALLET_ID_KEY, option.id);
-            setWalletId(option.id);
-
-            const publicKey = await kit.getPublicKey();
-            console.log('Public Key retrieved:', publicKey);
-            
-            return { address: publicKey, network: WalletNetwork.TESTNET };
-          } catch (err) {
-            console.error('onWalletSelected Error:', err);
-            throw err;
-          }
-        }
+      console.log('--- ATTEMPTING STATIC CONNECT ---');
+      
+      // Initialize the static kit
+      (StellarWalletsKit as any).init({
+        network: WalletNetwork.TESTNET,
+        modules: [
+          new FreighterModule(),
+          new AlbedoModule(),
+          new xBullModule(),
+          new HanaModule(),
+          new LobstrModule(),
+        ],
       });
-      console.log('Modal result:', result);
-    } catch (modalErr) {
-      console.error('kit.openModal Error:', modalErr);
-      throw modalErr;
-    }
 
-    if (!result || !result.address) {
-      throw new Error('Wallet connection failed or was canceled');
-    }
+      // In this version, getAddress() or setWallet() likely triggers the modal
+      const address = await (StellarWalletsKit as any).getAddress();
+      console.log('Static Connect Success:', address);
 
-    const { address } = result;
-    setWalletAddress(address);
-    localStorage.setItem(WALLET_STORAGE_KEY, address);
+      // Get the selected module to persist it
+      const selectedId = (StellarWalletsKit as any).selectedModule;
+      if (selectedId) {
+        localStorage.setItem(WALLET_ID_KEY, selectedId);
+        setWalletId(selectedId);
+      }
 
-    // Persist wallet address to profile if user is logged in
-    if (user) {
-      await supabase
-        .from('profiles')
-        .update({ wallet_address: address })
-        .eq('id', user.id);
-      refreshProfile(user.id);
-    }
+      setWalletAddress(address);
+      localStorage.setItem(WALLET_STORAGE_KEY, address);
 
-    // Fetch balance immediately after connect
-    try {
-      const { balance } = await getWalletData(address);
-      setXlmBalance(balance);
-    } catch {
-      /* ignore */
+      // Persist to profile
+      if (user) {
+        await supabase.from('profiles').update({ wallet_address: address }).eq('id', user.id);
+        refreshProfile(user.id);
+      }
+
+      refreshBalance();
+      return address;
+    } catch (err: any) {
+      console.error('Static Connect Error:', err);
+      throw err;
     }
-    return address;
   };
 
   // ── Wallet disconnect ─────────────────────────────────────────────────────
