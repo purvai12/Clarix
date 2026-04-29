@@ -113,7 +113,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // ── Restore Wallet State ──────────────────────────────────────────────────
   useEffect(() => {
     if (walletId) {
-      kit.setWallet(walletId);
+      try {
+        (StellarWalletsKit as any).setWallet(walletId);
+      } catch (e) {
+        console.warn('Failed to restore static wallet:', e);
+      }
     }
   }, [walletId]);
 
@@ -158,7 +162,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       // In this version, getAddress() or setWallet() likely triggers the modal
-      const address = await (StellarWalletsKit as any).getAddress();
+      const result = await (StellarWalletsKit as any).getAddress();
+      const address = typeof result === 'string' ? result : result.address;
       console.log('Static Connect Success:', address);
 
       // Get the selected module to persist it

@@ -108,12 +108,12 @@ export async function signAndSubmitSWK(txXdr: string, signerAddress?: string): P
     console.log('SWK Sign Attempt:', { savedWalletId, signerAddress });
 
     if (savedWalletId) {
-      kit.setWallet(savedWalletId);
+      (StellarWalletsKit as any).setWallet(savedWalletId);
     } else {
       throw new Error('Wallet not configured. Please disconnect and reconnect your wallet.');
     }
 
-    const signResult = await kit.signTransaction(txXdr, {
+    const signResult = await (StellarWalletsKit as any).signTransaction(txXdr, {
       address: signerAddress,
     });
     const signedTxXdr = typeof signResult === 'string' ? signResult : signResult.signedTxXdr;
