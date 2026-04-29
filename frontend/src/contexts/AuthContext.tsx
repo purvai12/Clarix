@@ -33,6 +33,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
  
 const WALLET_STORAGE_KEY = 'clarix_wallet_address';
+const WALLET_ID_KEY = 'clarix_wallet_id';
 
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -44,6 +45,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => localStorage.getItem(WALLET_STORAGE_KEY)
   );
   const [xlmBalance, setXlmBalance]     = useState<string | null>(null);
+  const [walletId, setWalletId]         = useState<string | null>(
+    () => localStorage.getItem(WALLET_ID_KEY)
+  );
 
   // ── Profile loader ────────────────────────────────────────────────────────
   // Accepts an optional userId so it can be called before React state updates.
@@ -100,6 +104,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // ── Restore Wallet State ──────────────────────────────────────────────────
+  useEffect(() => {
+    if (walletId) {
+      kit.setWallet(walletId);
+    }
+  }, [walletId]);
+
   // ── Auth state listener ───────────────────────────────────────────────────
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -132,6 +143,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       modalTitle: 'Connect to Clarix',
       onWalletSelected: async (option) => {
         kit.setWallet(option.id);
+        localStorage.setItem(WALLET_ID_KEY, option.id);
+        setWalletId(option.id);
         const publicKey = await kit.getPublicKey();
         return { address: publicKey, network: WalletNetwork.TESTNET };
       }
@@ -169,8 +182,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // StellarWalletsKit v2 doesn't have a direct static disconnect, 
     // but we can clear local state.
     setWalletAddress(null);
+    setWalletId(null);
     setXlmBalance(null);
     localStorage.removeItem(WALLET_STORAGE_KEY);
+    localStorage.removeItem(WALLET_ID_KEY);
   };
 
   // ── Sign up ───────────────────────────────────────────────────────────────
