@@ -77,13 +77,13 @@ export function DashboardLayout() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Link to="/app" className="flex items-center gap-2 group">
+            <Link to="/app" className="flex items-center gap-2 group flex-shrink-0 mr-4 sm:mr-8">
               <img src="/logo.png" alt="Clarix Logo" className="w-10 h-10 object-contain rounded-lg transition-transform group-hover:scale-110" />
-              <span className="text-xl font-robotic tracking-wider uppercase text-foreground">Clarix</span>
+              <span className="text-xl font-robotic tracking-wider uppercase text-foreground hidden sm:block">Clarix</span>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-0.5">
+            <div className="hidden lg:flex items-center gap-1 overflow-x-auto">
               {navItems.map((item) => {
                 const Icon     = item.icon;
                 const isActive = location.pathname === item.path;
@@ -91,14 +91,14 @@ export function DashboardLayout() {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full transition-colors whitespace-nowrap ${
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-full transition-all whitespace-nowrap ${
                       isActive
-                        ? 'bg-primary text-primary-foreground'
+                        ? 'bg-primary text-primary-foreground shadow-sm'
                         : 'hover:bg-muted text-muted-foreground'
                     }`}
                   >
-                    <Icon className="w-3.5 h-3.5" />
-                    <span className="text-[11px] font-medium uppercase tracking-tight">{item.label}</span>
+                    <Icon className="w-4 h-4" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider">{item.label}</span>
                   </Link>
                 );
               })}
