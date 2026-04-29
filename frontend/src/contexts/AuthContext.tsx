@@ -51,9 +51,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => localStorage.getItem(WALLET_STORAGE_KEY)
   );
   const [xlmBalance, setXlmBalance]     = useState<string | null>(null);
-  const [walletId, setWalletId]         = useState<string | null>(
-    () => localStorage.getItem(WALLET_ID_KEY)
-  );
+  const [walletId, setWalletId]         = useState<string | null>(() => {
+    const saved = localStorage.getItem(WALLET_ID_KEY);
+    return (saved && saved !== '[object Object]') ? saved : null;
+  });
 
   // ── Profile loader ────────────────────────────────────────────────────────
   // Accepts an optional userId so it can be called before React state updates.
@@ -112,7 +113,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // ── Restore Wallet State ──────────────────────────────────────────────────
   useEffect(() => {
-    if (walletId) {
+    if (walletId && walletId !== '[object Object]') {
       try {
         (StellarWalletsKit as any).setWallet(walletId);
       } catch (e) {
