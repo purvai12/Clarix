@@ -39,6 +39,15 @@ Clarix is an AI-powered wallet safety mini-dApp built on the **Stellar blockchai
 
 ---
 
+## Advanced Feature: Gasless Transactions
+Clarix implements **Stellar Fee Sponsorship**, allowing users to report fraud on-chain without holding XLM for network fees.
+
+- **Approach**: The dApp backend (or a treasury account) sponsors the `Fee` and `Sequence Number` for Soroban contract invocations.
+- **Implementation**: See the `signAndSubmitSWK` logic in [stellar.ts](./frontend/src/lib/stellar.ts).
+- **Benefit**: Removes the "onboarding friction" for new users who want to contribute to ecosystem safety immediately.
+
+---
+
 ## Mobile Experience
 Clarix is built with a mobile-first philosophy, ensuring your wallet safety checks are just a tap away on any device.
 
@@ -188,6 +197,8 @@ For full API and AI engine documentation, visit the **Documentation** tab inside
 
 ## Social Presence
 Stay updated with our latest security alerts and platform milestones on X (Twitter).
+
+**Community Contribution:** [View Launch Post on X](https://x.com/purvainaik12/status/2049796914716295540?s=20)
 
 ![Clarix on X](./screenshots/x.png)
 
