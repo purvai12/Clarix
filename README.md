@@ -186,5 +186,12 @@ For full API and AI engine documentation, visit the **Documentation** tab inside
 - [x] **Full Documentation** — [README](./README.md), [Architecture](./architecture.md), and in-app Docs.
 - [x] **30+ Meaningful Commits** — Continuous development history.
 
+## Social Presence
+Stay updated with our latest security alerts and platform milestones on X (Twitter).
+
+![Clarix on X](./screenshots/x.png)
+
+---
+
 ## License
 MIT © 2026 Clarix Inc.
