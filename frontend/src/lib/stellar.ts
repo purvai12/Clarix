@@ -104,13 +104,27 @@ export async function getPublicKey(): Promise<string> {
 // Freighter/StellarWalletsKit can sign authorization entries, not just the envelope.
 export async function signAndSubmitSWK(txXdr: string, signerAddress?: string): Promise<string> {
   try {
-    const savedWalletId = localStorage.getItem('clarix_wallet_id');
+    const savedWalletId = localStorage.getItem('clarix_wallet_id') || 'freighter';
     console.log('SWK Sign Attempt:', { savedWalletId, signerAddress });
 
     if (savedWalletId) {
-      (StellarWalletsKit as any).setWallet(savedWalletId);
-    } else {
-      throw new Error('Wallet not configured. Please disconnect and reconnect your wallet.');
+      try {
+        (StellarWalletsKit as any).setWallet(savedWalletId);
+      } catch (e) {
+        console.warn('Wallet not found, re-initializing...', e);
+        // Force re-init
+        (StellarWalletsKit as any).init({
+          network: WalletNetwork.TESTNET,
+          modules: [
+            new FreighterModule(),
+            new AlbedoModule(),
+            new xBullModule(),
+            new HanaModule(),
+            new LobstrModule(),
+          ],
+        });
+        (StellarWalletsKit as any).setWallet(savedWalletId);
+      }
     }
 
     const signResult = await (StellarWalletsKit as any).signTransaction(txXdr, {
