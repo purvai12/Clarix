@@ -79,7 +79,7 @@ export function DashboardLayout() {
             {/* Logo */}
             <Link to="/app" className="flex items-center gap-2 group flex-shrink-0 mr-2 sm:mr-4">
               <img src="/logo.png" alt="Clarix Logo" className="w-10 h-10 object-contain rounded-lg transition-transform group-hover:scale-110" />
-              <span className="text-xl font-robotic tracking-wider uppercase text-foreground hidden sm:block">Clarix</span>
+              <span className="text-xl font-robotic font-bold text-foreground hidden sm:block">Clarix</span>
             </Link>
 
             {/* Desktop Navigation */}
